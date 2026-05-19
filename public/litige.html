@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livoo — Signaler un problème</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: #f4f6f9; color: #1a1a1a; min-height: 100vh; }
+    header { background: #0f0f0f; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
+    header img { height: 40px; mix-blend-mode: lighten; filter: brightness(2); }
+    .main { max-width: 520px; margin: 40px auto; padding: 0 20px 60px; }
+    .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
+
+    /* ALERTE */
+    .alerte { background: rgba(239,68,68,0.1); border: 1.5px solid #ef4444; border-radius: 16px; padding: 20px; margin-bottom: 20px; display: flex; gap: 15px; align-items: flex-start; }
+    .alerte i { color: #ef4444; font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .alerte h3 { font-size: 15px; font-weight: 800; color: #ef4444; margin-bottom: 5px; }
+    .alerte p { font-size: 13px; color: #888; line-height: 1.6; }
+
+    /* TYPES DE PROBLÈME */
+    .card h2 { font-size: 16px; font-weight: 800; margin-bottom: 20px; }
+    .probleme-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .probleme-option { display: flex; align-items: center; gap: 15px; padding: 16px; border: 2px solid #eee; border-radius: 14px; cursor: pointer; transition: all 0.3s; }
+    .probleme-option:hover { border-color: #ef4444; background: rgba(239,68,68,0.03); }
+    .probleme-option.selected { border-color: #ef4444; background: rgba(239,68,68,0.05); }
+    .probleme-option input { display: none; }
+    .probleme-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .probleme-icon.red { background: rgba(239,68,68,0.15); color: #ef4444; }
+    .probleme-icon.orange { background: rgba(255,107,0,0.15); color: #FF6B00; }
+    .probleme-icon.blue { background: rgba(59,130,246,0.15); color: #3b82f6; }
+    .probleme-icon.purple { background: rgba(168,85,247,0.15); color: #a855f7; }
+    .probleme-text h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .probleme-text p { font-size: 12px; color: #888; }
+
+    /* FORMULAIRE */
+    label { display: block; font-size: 12px; font-weight: 700; color: #888; margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.5px; }
+    textarea { width: 100%; padding: 14px; background: #f4f6f9; border: 1.5px solid #eee; border-radius: 12px; font-size: 14px; font-family: 'Poppins', sans-serif; resize: none; height: 120px; outline: none; transition: border 0.3s; margin-bottom: 15px; }
+    textarea:focus { border-color: #ef4444; background: white; }
+
+    /* PHOTO */
+    .photo-zone { border: 2px dashed #ef4444; border-radius: 12px; padding: 25px; text-align: center; cursor: pointer; background: rgba(239,68,68,0.03); margin-bottom: 15px; transition: all 0.3s; }
+    .photo-zone:hover { background: rgba(239,68,68,0.06); }
+    .photo-zone i { font-size: 28px; color: #ef4444; margin-bottom: 8px; display: block; }
+    .photo-zone p { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .photo-zone small { font-size: 11px; color: #888; }
+    .photos-preview { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+    .photo-thumb { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; border: 2px solid #eee; }
+
+    /* DÉLAI */
+    .delai-box { background: #f4f6f9; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+    .delai-box i { color: #FF6B00; font-size: 20px; }
+    .delai-box p { font-size: 13px; color: #888; line-height: 1.5; }
+    .delai-box strong { color: #1a1a1a; }
+
+    /* BOUTONS */
+    .btn-signaler { width: 100%; padding: 16px; background: #ef4444; border: none; border-radius: 14px; color: white; font-size: 15px; font-weight: 800; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .btn-signaler:hover { background: #dc2626; transform: translateY(-2px); }
+    .btn-annuler { width: 100%; padding: 14px; background: transparent; border: none; color: #888; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; margin-top: 10px; }
+
+    /* CONFIRMATION */
+    .confirmation { display: none; text-align: center; padding: 20px; }
+    .confirmation-icon { font-size: 60px; margin-bottom: 15px; }
+    .confirmation h2 { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+    .confirmation p { color: #888; font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+    .ref-box { background: #f4f6f9; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+    .ref-box p { font-size: 12px; color: #888; margin-bottom: 5px; }
+    .ref-box h3 { font-size: 18px; font-weight: 800; color: #ef4444; }
+    .btn-accueil { background: #FF6B00; color: white; padding: 14px 30px; border-radius: 14px; font-size: 14px; font-weight: 700; text-decoration: none; display: inline-block; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="/images/logo/logo.png" alt="Livoo">
+    <span style="color:#ef4444;font-weight:700;font-size:13px"><i class="fas fa-exclamation-triangle"></i> Signalement</span>
+  </header>
+
+  <div class="main">
+
+    <div class="alerte">
+      <i class="fas fa-clock"></i>
+      <div>
+        <h3>Délai de signalement : 24h</h3>
+        <p>Vous pouvez signaler un problème dans les 24 heures suivant la livraison. Passé ce délai, la commande est considérée comme acceptée.</p>
+      </div>
+    </div>
+
+    <div class="card" id="form-litige">
+      <h2><i class="fas fa-exclamation-triangle" style="color:#ef4444;margin-right:8px"></i> Quel est le problème ?</h2>
+
+      <div class="probleme-options">
+        <div class="probleme-option" onclick="selectionner(this)">
+          <div class="probleme-icon red"><i class="fas fa-times-circle"></i></div>
+          <div class="probleme-text"><h4>Colis non reçu</h4><p>Le livreur dit avoir livré mais je n'ai rien reçu</p></div>
+        </div>
+        <div class="probleme-option" onclick="selectionner(this)">
+          <div class="probleme-icon orange"><i class="fas fa-box-open"></i></div>
+          <div class="probleme-text"><h4>Colis endommagé</h4><p>Le colis est arrivé abîmé ou le contenu est cassé</p></div>
+        </div>
+        <div class="probleme-option" onclick="selectionner(this)">
+          <div class="probleme-icon blue"><i class="fas fa-map-marker-alt"></i></div>
+          <div class="probleme-text"><h4>Mauvais article reçu</h4><p>Ce n'est pas ce que j'avais commandé</p></div>
+        </div>
+        <div class="probleme-option" onclick="selectionner(this)">
+          <div class="probleme-icon purple"><i class="fas fa-comment-slash"></i></div>
+          <div class="probleme-text"><h4>Comportement du livreur</h4><p>Le livreur a eu un comportement inapproprié</p></div>
+        </div>
+      </div>
+
+      <label>Description du problème</label>
+      <textarea placeholder="Décrivez précisément ce qui s'est passé..."></textarea>
+
+      <label>Photos / Preuves</label>
+      <div class="photo-zone" onclick="document.getElementById('photos-input').click()">
+        <i class="fas fa-camera"></i>
+        <p>Ajouter des photos</p>
+        <small>Les photos accélèrent le traitement de votre litige</small>
+      </div>
+      <input type="file" id="photos-input" accept="image/*" multiple style="display:none" onchange="afficherPhotos(event)">
+      <div class="photos-preview" id="photos-preview"></div>
+
+      <div class="delai-box">
+        <i class="fas fa-shield-alt"></i>
+        <p>Livoo analysera les <strong>photos de livraison</strong> prises par le livreur et rendra une décision sous <strong>24 à 48 heures</strong>. Vous serez notifié par SMS.</p>
+      </div>
+
+      <button class="btn-signaler" onclick="envoyerSignalement()">
+        <i class="fas fa-paper-plane"></i> Envoyer le signalement
+      </button>
+      <button class="btn-annuler" onclick="history.back()">Annuler</button>
+    </div>
+
+    <!-- CONFIRMATION -->
+    <div class="card confirmation" id="confirmation">
+      <div class="confirmation-icon">📋</div>
+      <h2>Signalement envoyé !</h2>
+      <p>Notre équipe va analyser votre litige dans les plus brefs délais. Vous recevrez une réponse sous 24 à 48 heures.</p>
+      <div class="ref-box">
+        <p>Numéro de référence de votre litige</p>
+        <h3 id="ref-litige">LTG-XXXXX</h3>
+      </div>
+      <p style="margin-bottom:20px">Conservez ce numéro pour suivre l'avancement de votre dossier.</p>
+      <a href="/" class="btn-accueil">Retour à l'accueil</a>
+    </div>
+
+  </div>
+
+  <script>
+    function selectionner(el) {
+      document.querySelectorAll('.probleme-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+    function afficherPhotos(event) {
+      const preview = document.getElementById('photos-preview');
+      preview.innerHTML = '';
+      Array.from(event.target.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.className = 'photo-thumb';
+          preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    function envoyerSignalement() {
+      const selected = document.querySelector('.probleme-option.selected');
+      if (!selected) { alert('Veuillez sélectionner le type de problème !'); return; }
+      const ref = 'LTG-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+      document.getElementById('ref-litige').textContent = ref;
+      document.getElementById('form-litige').style.display = 'none';
+      document.getElementById('confirmation').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

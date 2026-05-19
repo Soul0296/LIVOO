@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livoo — Nouvelle Livraison</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: #f4f6f9; color: #1a1a1a; }
+    .sidebar {
+      position: fixed; left: 0; top: 0; bottom: 0; width: 260px;
+      background: #0f0f0f; padding: 30px 20px;
+      display: flex; flex-direction: column; gap: 8px;
+      border-right: 1px solid #222;
+    }
+    .sidebar-logo { padding: 10px 15px 30px; }
+    .sidebar-logo img { height: 40px; mix-blend-mode: lighten; filter: brightness(2); }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 15px; border-radius: 12px;
+      color: #888; text-decoration: none; font-size: 14px;
+      font-weight: 600; transition: all 0.3s;
+    }
+    .sidebar-item:hover { background: #1a1a1a; color: white; }
+    .sidebar-item.active { background: #FF6B00; color: white; }
+    .sidebar-item i { width: 20px; text-align: center; }
+    .sidebar-bottom { margin-top: auto; border-top: 1px solid #222; padding-top: 20px; }
+    .main { margin-left: 260px; padding: 40px; max-width: 900px; }
+    .page-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+    .page-sub { color: #888; font-size: 14px; margin-bottom: 35px; }
+    .card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 2px 15px rgba(0,0,0,0.06); margin-bottom: 25px; }
+    .card h2 { font-size: 16px; font-weight: 800; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { display: block; font-size: 12px; font-weight: 700; color: #888; margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.5px; }
+    input, select, textarea {
+      width: 100%; padding: 13px 15px; background: #f4f6f9;
+      border: 1.5px solid #eee; border-radius: 10px;
+      font-size: 14px; font-family: 'Poppins', sans-serif;
+      color: #1a1a1a; outline: none; transition: all 0.3s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: #FF6B00; background: white; }
+    textarea { height: 100px; resize: none; }
+    .prix-calcule {
+      background: linear-gradient(135deg, #FF6B00, #cc5500);
+      border-radius: 12px; padding: 20px; color: white; text-align: center;
+      margin: 10px 0 20px;
+    }
+    .prix-calcule p { font-size: 13px; opacity: 0.9; margin-bottom: 5px; }
+    .prix-calcule h2 { font-size: 36px; font-weight: 800; }
+    .btn-generer {
+      width: 100%; padding: 16px; background: #FF6B00;
+      border: none; border-radius: 12px; color: white;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      font-family: 'Poppins', sans-serif; transition: all 0.3s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-generer:hover { background: #cc5500; transform: translateY(-2px); }
+    .lien-box {
+      display: none; background: #f4f6f9; border: 2px dashed #FF6B00;
+      border-radius: 12px; padding: 20px; margin-top: 20px; text-align: center;
+    }
+    .lien-box p { font-size: 12px; color: #888; font-weight: 600; text-transform: uppercase; margin-bottom: 10px; }
+    .lien-value {
+      background: white; border-radius: 8px; padding: 12px 15px;
+      display: flex; align-items: center; gap: 10px; margin-bottom: 15px;
+    }
+    .lien-value span { flex: 1; color: #FF6B00; font-weight: 700; font-size: 14px; }
+    .btn-copier {
+      background: #FF6B00; color: white; border: none; padding: 10px 18px;
+      border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px;
+      font-family: 'Poppins', sans-serif;
+    }
+    .btns-partage { display: flex; gap: 10px; justify-content: center; }
+    .btn-partage {
+      padding: 10px 20px; border-radius: 10px; border: none;
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      font-family: 'Poppins', sans-serif; display: flex; align-items: center; gap: 8px;
+    }
+    .btn-wa { background: #25D366; color: white; }
+    .btn-fb { background: #1877F2; color: white; }
+    .btn-ig { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
+    .coefs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
+    .coef-item {
+      background: #f4f6f9; border-radius: 10px; padding: 12px;
+      text-align: center; border: 1.5px solid #eee;
+    }
+    .coef-item.selected { border-color: #FF6B00; background: rgba(255,107,0,0.05); }
+    .coef-item h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .coef-item p { font-size: 11px; color: #888; }
+    .coef-item span { font-size: 11px; color: #FF6B00; font-weight: 700; }
+  .photo-upload {
+  border: 2px dashed #FF6B00; border-radius: 12px;
+  padding: 30px; text-align: center; cursor: pointer;
+  background: rgba(255,107,0,0.03); transition: all 0.3s;
+}
+.photo-upload:hover { background: rgba(255,107,0,0.08); }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <img src="/images/logo/logo.png" alt="Livoo">
+    </div>
+    <a class="sidebar-item" href="/dashboard-vendeur.html"><i class="fas fa-home"></i> Tableau de bord</a>
+    <a class="sidebar-item active" href="#"><i class="fas fa-plus-circle"></i> Nouvelle livraison</a>
+    <a class="sidebar-item" href="/mes-commandes.html"><i class="fas fa-box"></i> Mes commandes</a>
+    <a class="sidebar-item" href="/messages.html"><i class="fas fa-comments"></i> Messages</a>
+    <a class="sidebar-item" href="/statistiques.html"><i class="fas fa-chart-bar"></i> Statistiques</a>
+    <div class="sidebar-bottom">
+      <a class="sidebar-item" href="/parametres.html"><i class="fas fa-cog"></i> Paramètres</a>
+      <a class="sidebar-item" href="#" onclick="deconnexion()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+    </div>
+  </div>
+  <div class="main">
+    <div class="page-title">Nouvelle livraison</div>
+    <div class="page-sub">Remplissez les détails du colis pour générer un lien à envoyer à votre client</div>
+    <div class="card">
+      <h2><i class="fas fa-box" style="color:#FF6B00;margin-right:8px"></i> Détails du colis</h2>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Description du colis</label>
+          <textarea id="description" placeholder="Ex: Robe rouge taille M, bien emballée dans un carton..."></textarea>
+        </div>
+        <div class="form-group full">
+  <label>Photo réelle du colis <span style="color:#ef4444">*</span></label>
+  <div class="photo-upload" id="photo-zone" onclick="document.getElementById('photo-input').click()">
+    <i class="fas fa-camera" style="font-size:30px;color:#FF6B00;margin-bottom:10px"></i>
+    <p style="font-weight:700;margin-bottom:5px">Cliquez pour ajouter une photo</p>
+    <small style="color:#888">Photo obligatoire — les livreurs refuseront la commande sans photo du colis</small>
+  </div>
+  <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="afficherPhoto(event)">
+  <img id="photo-preview" style="display:none;width:100%;border-radius:12px;margin-top:10px;max-height:200px;object-fit:cover">
+  <small style="color:#ef4444;font-size:11px;margin-top:5px;display:block">⚠️ Une photo réelle et claire du colis est obligatoire. Sans photo, le livreur sera en droit de refuser la prise en charge.</small>
+</div>
+        <div class="form-group">
+          <label>Volume du colis</label>
+          <select id="volume" onchange="calculerPrix()">
+            <option value="1.0">Petit (boîte à chaussures)</option>
+            <option value="1.5">Moyen (boîte moyenne)</option>
+            <option value="2.2">Grand (gros carton)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Poids estimé</label>
+          <select id="poids" onchange="calculerPrix()">
+            <option value="1.0">Léger (moins de 2kg)</option>
+            <option value="1.3">Moyen (2 à 10kg)</option>
+            <option value="1.8">Lourd (plus de 10kg)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Zone de livraison</label>
+          <select id="zone" onchange="calculerPrix()">
+            <option value="1.0">Urbaine (centre-ville)</option>
+            <option value="1.3">Péri-urbaine (quartiers)</option>
+            <option value="1.7">Rurale (périphérie)</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Adresse de retrait (chez vous)</label>
+          <input type="text" id="adresse" placeholder="Ex: Rue Flatters, Akwa, Douala">
+        </div>
+      </div>
+    </div>
+    <div class="card">
+  <h2><i class="fas fa-link" style="color:#FF6B00;margin-right:8px"></i> Lien généré pour le client</h2>
+  <p style="color:#888;font-size:13px;margin-bottom:20px">Le client recevra ce lien. Il renseignera son adresse et verra le prix de livraison calculé automatiquement.</p>
+  <button class="btn-generer" onclick="genererLien()">
+    <i class="fas fa-link"></i> Générer le lien client
+  </button>
+  <div class="lien-box" id="lien-box">
+    <p>Lien à envoyer à votre client</p>
+    <div class="lien-value">
+      <span id="lien-texte">livoo.cm/commande/...</span>
+      <button class="btn-copier" onclick="copier()"><i class="fas fa-copy"></i> Copier</button>
+    </div>
+    <div class="btns-partage">
+      <button class="btn-partage btn-wa" onclick="partagerWA()"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+      <button class="btn-partage btn-fb" onclick="partagerFB()"><i class="fab fa-facebook"></i> Facebook</button>
+      <button class="btn-partage btn-ig" onclick="partagerIG()"><i class="fab fa-instagram"></i> Instagram</button>
+    </div>
+  </div>
+</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function afficherPhoto(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const preview = document.getElementById('photo-preview');
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+      document.getElementById('photo-zone').style.borderColor = '#22c55e';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+    const BASE = 500; const TARIF_KM = 100;
+    function calculerPrix() {
+      const distance = parseFloat(document.getElementById('distance').value) || 0;
+      const volume = parseFloat(document.getElementById('volume').value);
+      const poids = parseFloat(document.getElementById('poids').value);
+      const zone = parseFloat(document.getElementById('zone').value);
+      const heure = new Date().getHours();
+      const demande = (heure >= 7 && heure <= 9) || (heure >= 17 && heure <= 20) ? 1.3 : 1.0;
+      const prix = Math.round((BASE + distance * TARIF_KM) * volume * poids * zone * demande);
+      document.getElementById('prix-affiche').textContent = prix > 500 ? prix.toLocaleString() + ' FCFA' : '-- FCFA';
+    }
+    function genererLien() {const photo = document.getElementById('photo-input').files[0];
+if (!photo) { alert('Veuillez ajouter une photo du colis !'); return; }
+      const description = document.getElementById('description').value;
+      const adresse = document.getElementById('adresse').value;
+      const distance = document.getElementById('distance').value;
+      if (!description || !adresse || !distance) { alert('Veuillez remplir tous les champs !'); return; }
+      const code = 'LV-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+      const lien = 'livoo.cm/commande/' + code;
+      document.getElementById('lien-texte').textContent = lien;
+      document.getElementById('lien-box').style.display = 'block';
+      document.getElementById('lien-box').scrollIntoView({ behavior: 'smooth' });
+    }
+    function copier() {
+      navigator.clipboard.writeText(document.getElementById('lien-texte').textContent);
+      alert('Lien copié ! Envoyez-le à votre client 🎉');
+    }
+    function partagerWA() { window.open('https://wa.me/?text=Voici votre lien de livraison Livoo : ' + document.getElementById('lien-texte').textContent); }
+    function partagerFB() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + document.getElementById('lien-texte').textContent); }
+    function partagerIG() { copier(); alert('Lien copié ! Collez-le dans votre message Instagram.'); }
+    function deconnexion() { if(confirm('Voulez-vous vraiment vous déconnecter ?')) window.location.href = '/'; }
+  </script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livoo — Livraison rapide au Cameroun</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: #0f0f0f; color: white; }
+
+    /* NAVBAR */
+    nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 15px 60px; background: rgba(0,0,0,0.95);
+      position: fixed; width: 100%; top: 0; z-index: 100;
+      backdrop-filter: blur(10px); border-bottom: 1px solid #222;
+    }
+    .logo img { height: 45px; mix-blend-mode: lighten; }
+    .nav-links a {
+      color: white; text-decoration: none; margin-left: 30px;
+      font-weight: 600; transition: color 0.3s; font-size: 15px;
+    }
+    .nav-links a:hover { color: #FF6B00; }
+    .btn-nav {
+      background: #FF6B00; color: white; padding: 10px 25px;
+      border-radius: 25px; font-weight: 700; text-decoration: none;
+      transition: all 0.3s; margin-left: 30px;
+    }
+    .btn-nav:hover { background: white; color: #FF6B00; transform: scale(1.05); }
+
+    /* HERO */
+   .hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding: 120px 60px 60px;
+  background: linear-gradient(to left, rgba(0,0,0,0.85) 55%, rgba(0,0,0,0.2) 100%),
+            url('/images/livreur.jpg') center/cover no-repeat;
+  gap: 60px;
+}
+    .hero-content { flex: 1; max-width: 600px; margin-left: auto; }
+   .hero-image { display: none; }
+.hero-image img { display: none; }
+  width: 100%; max-width: 600px; border-radius: 20px;
+  object-fit: cover; height: 550px;
+  box-shadow: 0 30px 80px rgba(255,107,0,0.3);
+    }
+    .badge {
+      display: inline-block; background: rgba(255,107,0,0.15);
+      border: 1px solid #FF6B00; color: #FF6B00;
+      padding: 8px 20px; border-radius: 20px; font-size: 13px;
+      margin-bottom: 25px;
+    }
+    .hero h1 {
+      font-size: 56px; font-weight: 800; line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: #FF6B00; }
+    .hero p {
+      font-size: 17px; color: #aaa; margin-bottom: 35px; line-height: 1.7;
+    }
+    .hero-buttons { display: flex; gap: 15px; flex-wrap: wrap; }
+    .btn-primary {
+      background: #FF6B00; color: white; padding: 15px 35px;
+      border-radius: 30px; font-size: 15px; font-weight: 700;
+      text-decoration: none; transition: all 0.3s;
+      box-shadow: 0 10px 30px rgba(255,107,0,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255,107,0,0.6); }
+    .btn-secondary {
+      background: transparent; color: white; padding: 15px 35px;
+      border-radius: 30px; font-size: 15px; font-weight: 700;
+      text-decoration: none; border: 2px solid white; transition: all 0.3s;
+    }
+    .btn-secondary:hover { background: white; color: #0f0f0f; }
+
+    /* STATS */
+    .stats {
+      display: flex; justify-content: center; gap: 0;
+      background: #FF6B00; flex-wrap: wrap;
+    }
+    .stat {
+      text-align: center; padding: 40px 50px;
+      border-right: 1px solid rgba(255,255,255,0.2);
+    }
+    .stat:last-child { border-right: none; }
+    .stat h2 { font-size: 42px; font-weight: 800; color: white; }
+    .stat p { color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 5px; }
+
+    /* COMMENT CA MARCHE */
+    .how { padding: 100px 60px; text-align: center; background: #0f0f0f; }
+    .section-tag {
+      display: inline-block; background: rgba(255,107,0,0.15);
+      color: #FF6B00; padding: 6px 18px; border-radius: 20px;
+      font-size: 13px; font-weight: 600; margin-bottom: 15px;
+    }
+    .how h2 { font-size: 40px; font-weight: 800; margin-bottom: 15px; }
+    .how h2 span { color: #FF6B00; }
+    .how .subtitle { color: #aaa; font-size: 16px; margin-bottom: 60px; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .steps { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+    .step {
+      background: #1a1a1a; border-radius: 20px; padding: 35px 25px;
+      max-width: 240px; transition: all 0.3s; border: 1px solid #2a2a2a;
+      text-align: left;
+    }
+    .step:hover { transform: translateY(-8px); border-color: #FF6B00; box-shadow: 0 20px 50px rgba(255,107,0,0.15); }
+    .step-num {
+      width: 50px; height: 50px; background: #FF6B00;
+      border-radius: 12px; display: flex; align-items: center;
+      justify-content: center; font-size: 20px; font-weight: 800;
+      margin-bottom: 20px;
+    }
+    .step h3 { font-size: 18px; margin-bottom: 10px; }
+    .step p { color: #888; font-size: 13px; line-height: 1.7; }
+
+    /* ACTEURS */
+    .acteurs { padding: 100px 60px; background: #111; }
+    .acteurs-header { text-align: center; margin-bottom: 60px; }
+    .acteurs h2 { font-size: 40px; font-weight: 800; margin-bottom: 15px; }
+    .acteurs h2 span { color: #FF6B00; }
+    .acteurs .subtitle { color: #aaa; font-size: 16px; }
+    .cards { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+    .card {
+      background: #1a1a1a; border-radius: 20px; padding: 0;
+      max-width: 340px; border: 1px solid #2a2a2a; transition: all 0.3s;
+      overflow: hidden;
+    }
+    .card:hover { border-color: #FF6B00; transform: translateY(-5px); box-shadow: 0 20px 50px rgba(255,107,0,0.15); }
+    .card-img { width: 100%; height: 200px; object-fit: cover; }
+    .card-body { padding: 30px; }
+    .card-icon { font-size: 36px; margin-bottom: 15px; }
+    .card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+    .card p { color: #888; font-size: 13px; line-height: 1.7; margin-bottom: 20px; }
+    .card-btn {
+      display: inline-block; background: #FF6B00; color: white;
+      padding: 10px 22px; border-radius: 20px; font-size: 13px;
+      font-weight: 700; text-decoration: none; transition: all 0.3s;
+    }
+    .card-btn:hover { background: white; color: #FF6B00; }
+    .card-btn.outline {
+      background: transparent; border: 2px solid #FF6B00; color: #FF6B00;
+    }
+    .card-btn.outline:hover { background: #FF6B00; color: white; }
+
+    /* CTA */
+    .cta {
+      padding: 100px 60px; text-align: center;
+      background: linear-gradient(135deg, #FF6B00, #cc5500);
+      position: relative; overflow: hidden;
+    }
+    .cta h2 { font-size: 42px; font-weight: 800; margin-bottom: 15px; }
+    .cta p { font-size: 17px; margin-bottom: 40px; opacity: 0.9; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .btn-white {
+      background: white; color: #FF6B00; padding: 16px 45px;
+      border-radius: 30px; font-size: 16px; font-weight: 700;
+      text-decoration: none; transition: all 0.3s; display: inline-block;
+    }
+    .btn-white:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+
+    /* SECTION LIVREUR */
+.livreur-section { display: flex; gap: 80px; padding: 100px 60px; background: #111; align-items: center; }
+.livreur-left { flex: 1; }
+.livreur-left h2 { font-size: 42px; font-weight: 800; margin-bottom: 15px; line-height: 1.2; }
+.livreur-left h2 span { color: #FF6B00; }
+.livreur-left > p { color: #aaa; font-size: 16px; line-height: 1.7; margin-bottom: 35px; }
+.livreur-avantages { display: flex; flex-direction: column; gap: 15px; margin-bottom: 35px; }
+.lav-item { display: flex; align-items: center; gap: 15px; }
+.lav-icon { width: 45px; height: 45px; background: rgba(255,107,0,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #FF6B00; font-size: 18px; flex-shrink: 0; }
+.lav-item h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.lav-item p { font-size: 12px; color: #888; }
+.livreur-btns { display: flex; gap: 15px; flex-wrap: wrap; }
+.livreur-right { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+.livreur-stats-card { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.ls-item { background: #1a1a1a; border-radius: 16px; padding: 20px; text-align: center; border: 1px solid #2a2a2a; transition: all 0.3s; }
+.ls-item:hover { border-color: #FF6B00; transform: translateY(-3px); }
+.ls-item h3 { font-size: 28px; font-weight: 800; color: #FF6B00; margin-bottom: 5px; }
+.ls-item p { font-size: 12px; color: #888; }
+.livreur-temoignage { background: #1a1a1a; border-radius: 16px; padding: 20px; border: 1px solid #2a2a2a; display: flex; gap: 15px; align-items: flex-start; }
+.temoignage-avatar { width: 45px; height: 45px; background: #FF6B00; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: white; flex-shrink: 0; }
+.livreur-temoignage p { font-size: 13px; color: #aaa; line-height: 1.6; margin-bottom: 8px; font-style: italic; }
+.livreur-temoignage strong { font-size: 12px; color: #FF6B00; }
+    /* FOOTER */
+    footer {
+      background: #080808; padding: 50px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 20px; border-top: 1px solid #1a1a1a;
+    }
+    footer img { height: 40px; }
+    footer p { color: #555; font-size: 13px; }
+    footer p span { color: #FF6B00; }
+  /* CARTE */
+    .carte-section { padding: 100px 60px; background: #0f0f0f; }
+    .carte-header { text-align: center; margin-bottom: 40px; }
+    .carte-header h2 { font-size: 40px; font-weight: 800; margin-bottom: 15px; }
+    .carte-header h2 span { color: #FF6B00; }
+    .carte-header .subtitle { color: #aaa; font-size: 16px; }
+    .carte-container { position: relative; }
+    .carte-overlay { margin-top: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+    .livreur-pin { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 12px 20px; display: flex; align-items: center; gap: 12px; transition: all 0.3s; }
+    .livreur-pin:hover { border-color: #FF6B00; transform: translateY(-3px); }
+    .livreur-pin i { color: #FF6B00; font-size: 18px; }
+    .livreur-pin span { font-size: 14px; font-weight: 700; display: block; }
+    .livreur-pin small { color: #888; font-size: 12px; display: block; }
+    </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="logo">
+      <img src="/images/logo/logo.png" alt="Livoo">
+    </div>
+    <div class="nav-links">
+      <a href="#">Accueil</a>
+     <a href="/comment-ca-marche.html">Comment ça marche</a>
+      <a href="#">Devenir livreur</a>
+      <a class="btn-nav" href="#">Je suis vendeur</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="badge">🚀 La livraison nouvelle génération au Cameroun</div>
+      <h1>Vous vendez en ligne ?<br><span>On livre pour vous.</span></h1>
+      <p>Livoo connecte vos clients à vos livreurs en quelques secondes. Pas de compte à créer, pas de stress. Vous vendez sur Facebook, Instagram ou WhatsApp ? Envoyez simplement un lien et on s'occupe du reste.</p>
+      <div class="hero-buttons">
+        <a href="/inscription-vendeur.html" class="btn-primary">Envoyer ma première livraison</a>
+        <a href="#" class="btn-secondary">Devenir livreur</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="/images/livreur.jpg" alt="Livreur Livoo">
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="stat"><h2>2 min</h2><p>Pour trouver un livreur</p></div>
+    <div class="stat"><h2>0 FCFA</h2><p>Pour créer votre compte</p></div>
+    <div class="stat"><h2>MoMo</h2><p>Paiement 100% local</p></div>
+    <div class="stat"><h2>0</h2><p>Compte requis pour le client</p></div>
+  </section>
+
+  <!-- COMMENT CA MARCHE -->
+  <section class="how">
+    <div class="section-tag">Simple comme bonjour</div>
+    <h2>Comment ça <span>marche ?</span></h2>
+    <p class="subtitle">De la commande à la livraison, tout est automatique. Vous n'avez rien à gérer.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Vous créez la commande</h3>
+        <p>En 30 secondes, décrivez votre colis sur Livoo. La plateforme calcule le prix et génère un lien unique.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Votre client valide</h3>
+        <p>Il clique sur le lien, entre son adresse et paie les frais de livraison via MTN MoMo ou Orange Money. Sans créer de compte.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Livoo trouve un livreur</h3>
+        <p>Notre algorithme localise automatiquement le livreur disponible le plus proche de vous en temps réel.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>C'est livré !</h3>
+        <p>Le livreur récupère votre colis et le dépose chez votre client. Vous êtes notifié à chaque étape.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTEURS -->
+  <section class="acteurs">
+    <div class="acteurs-header">
+      <div class="section-tag">Pour tout le monde</div>
+      <h2>Une plateforme pour <span>chaque besoin</span></h2>
+      <p class="subtitle">Que vous soyez vendeur, client ou livreur, Livoo a été conçu pour vous.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <img src="/images/vendeur.jpg" alt="Vendeur" class="card-img">
+        <div class="card-body">
+          <div class="card-icon">🛍️</div>
+          <h3>Vous êtes vendeur ?</h3>
+          <p>Vous vendez sur Facebook, Instagram ou WhatsApp ? Livoo vous donne une équipe de livreurs professionnels sans embaucher personne. Créez votre compte gratuitement et commencez à livrer aujourd'hui.</p>
+          <a href="#" class="card-btn">Créer mon compte vendeur</a>
+        </div>
+      </div>
+      <div class="card">
+        <img src="/images/client.jpg" alt="Client" class="card-img">
+        <div class="card-body">
+          <div class="card-icon">📦</div>
+          <h3>Vous êtes client ?</h3>
+          <p>Votre vendeur vous a envoyé un lien Livoo ? Entrez simplement votre adresse et attendez votre colis. Pas de compte, pas de téléchargement. C'est aussi simple que ça.</p>
+          <a href="/comment-ca-marche.html" </a>
+        </div>
+      </div>
+      <div class="card">
+        <img src="/images/livreur.jpg" alt="Livreur" class="card-img">
+        <div class="card-body">
+          <div class="card-icon">🏍️</div>
+          <h3>Vous voulez gagner ?</h3>
+          <p>Rejoignez le réseau de livreurs Livoo. Travaillez quand vous voulez, dans votre quartier. Plus vous livrez bien, plus vous recevez de commandes importantes.</p>
+          <a href="#" class="card-btn">Je deviens livreur</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Arrêtez de perdre des ventes.</h2>
+    <p>Rejoignez Livoo aujourd'hui et offrez à vos clients une expérience de livraison professionnelle. Gratuit pour commencer.</p>
+    <a href="#" class="btn-white">Créer mon compte gratuitement</a>
+  </section>
+<!-- SECTION LIVREUR -->
+<section class="livreur-section">
+  <div class="livreur-left">
+    <div class="section-tag">🏍️ Devenez livreur Livoo</div>
+    <h2>Transformez votre moto<br><span>en source de revenus.</span></h2>
+    <p>Rejoignez des centaines de livreurs qui gagnent leur vie avec Livoo. Travaillez à votre rythme, dans votre quartier, et encaissez chaque jour.</p>
+    <div class="livreur-avantages">
+      <div class="lav-item">
+        <div class="lav-icon"><i class="fas fa-wallet"></i></div>
+        <div><h4>50 000 — 150 000 FCFA/mois</h4><p>Revenus estimés selon votre activité</p></div>
+      </div>
+      <div class="lav-item">
+        <div class="lav-icon"><i class="fas fa-clock"></i></div>
+        <div><h4>Horaires 100% libres</h4><p>Vous décidez quand vous travaillez</p></div>
+      </div>
+      <div class="lav-item">
+        <div class="lav-icon"><i class="fas fa-map-marker-alt"></i></div>
+        <div><h4>Votre quartier uniquement</h4><p>Pas de longues distances imposées</p></div>
+      </div>
+      <div class="lav-item">
+        <div class="lav-icon"><i class="fas fa-coins"></i></div>
+        <div><h4>Paiement immédiat</h4><p>Vous encaissez directement après chaque livraison</p></div>
+      </div>
+    </div>
+    <div class="livreur-btns">
+      <a href="/inscription-livreur.html" class="btn-primary">Je deviens livreur →</a>
+      <a href="/comment-ca-marche.html" class="btn-secondary">En savoir plus</a>
+    </div>
+  </div>
+  <div class="livreur-right">
+    <div class="livreur-stats-card">
+      <div class="ls-item">
+        <h3>+500</h3>
+        <p>Livreurs actifs</p>
+      </div>
+      <div class="ls-item">
+        <h3>4.8★</h3>
+        <p>Note moyenne</p>
+      </div>
+      <div class="ls-item">
+        <h3>2 min</h3>
+        <p>Temps moyen par course</p>
+      </div>
+      <div class="ls-item">
+        <h3>0 FCFA</h3>
+        <p>Pour s'inscrire</p>
+      </div>
+    </div>
+    <div class="livreur-temoignage">
+      <div class="temoignage-avatar">M</div>
+      <div>
+        <p>"Avec Livoo je gagne entre 80 000 et 120 000 FCFA par mois en travaillant seulement le matin. C'est ma meilleure décision !"</p>
+        <strong>Martin K. — Livreur à Douala depuis 6 mois</strong>
+      </div>
+    </div>
+  </div>
+</section>
+  <!-- CARTE -->
+  <section class="carte-section">
+    <div class="carte-header">
+      <div class="section-tag">📍 Livreurs disponibles</div>
+      <h2>Des livreurs <span>près de vous</span></h2>
+      <p class="subtitle">Trouvez un livreur disponible dans votre zone en temps réel</p>
+    </div>
+    <div class="carte-container">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d15927.123456!2d9.7679!3d4.0511!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2scm!4v1234567890"
+        width="100%" height="450" style="border:0;border-radius:20px;" allowfullscreen="" loading="lazy">
+      </iframe>
+      <div class="carte-overlay">
+        <div class="livreurs-dispo">
+          <div class="livreur-pin"><i class="fas fa-motorcycle"></i><span>Martin K.</span><small>Akwa — Disponible</small></div>
+          <div class="livreur-pin"><i class="fas fa-motorcycle"></i><span>Eric T.</span><small>Bonapriso — Disponible</small></div>
+          <div class="livreur-pin"><i class="fas fa-motorcycle"></i><span>Paul N.</span><small>Deido — Disponible</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- FOOTER -->
+  <footer>
+    <img src="/images/logo/logo.png" alt="Livoo">
+    <p>© 2026 <span>Livoo</span> — Douala, Cameroun. Tous droits réservés.</p>
+    <p>Livraison rapide • Paiement sécurisé • 100% local</p>
+  </footer>
+
+</body>
+</html>

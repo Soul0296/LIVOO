@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livoo — Dashboard Vendeur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: #f4f6f9; color: #1a1a1a; }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed; left: 0; top: 0; bottom: 0; width: 260px;
+      background: #0f0f0f; padding: 30px 20px;
+      display: flex; flex-direction: column; gap: 8px;
+      border-right: 1px solid #222;
+    }
+    .sidebar-logo { padding: 10px 15px 30px; }
+    .sidebar-logo img { height: 40px; mix-blend-mode: lighten; }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 15px; border-radius: 12px;
+      color: #888; text-decoration: none; font-size: 14px;
+      font-weight: 600; transition: all 0.3s; cursor: pointer;
+    }
+    .sidebar-item:hover { background: #1a1a1a; color: white; }
+    .sidebar-item.active { background: #FF6B00; color: white; }
+    .sidebar-item i { width: 20px; text-align: center; font-size: 16px; }
+    .sidebar-bottom {
+      margin-top: auto; border-top: 1px solid #222; padding-top: 20px;
+    }
+
+    /* MAIN */
+    .main { margin-left: 260px; padding: 40px; }
+
+    /* HEADER */
+    .header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 35px;
+    }
+    .header-left h1 { font-size: 26px; font-weight: 800; color: #1a1a1a; }
+    .header-left p { color: #888; font-size: 14px; margin-top: 4px; }
+    .btn-nouvelle {
+      background: #FF6B00; color: white; padding: 14px 28px;
+      border-radius: 12px; font-size: 14px; font-weight: 700;
+      border: none; cursor: pointer; font-family: 'Poppins', sans-serif;
+      transition: all 0.3s; display: flex; align-items: center; gap: 10px;
+    }
+    .btn-nouvelle:hover { background: #cc5500; transform: translateY(-2px); }
+
+    /* STATS CARDS */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 20px; margin-bottom: 35px;
+    }
+    .stat-card {
+      background: white; border-radius: 16px; padding: 25px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+    }
+    .stat-card .stat-icon {
+      width: 45px; height: 45px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; margin-bottom: 15px;
+    }
+    .stat-card .stat-icon.orange { background: rgba(255,107,0,0.15); color: #FF6B00; }
+    .stat-card .stat-icon.green { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .stat-card .stat-icon.blue { background: rgba(59,130,246,0.15); color: #3b82f6; }
+    .stat-card .stat-icon.purple { background: rgba(168,85,247,0.15); color: #a855f7; }
+    .stat-card h3 { font-size: 28px; font-weight: 800; color: #1a1a1a; }
+    .stat-card p { font-size: 13px; color: #888; margin-top: 4px; }
+
+    /* GRILLE PRINCIPALE */
+    .grid-main { display: grid; grid-template-columns: 1fr 380px; gap: 25px; }
+
+    /* TABLEAU COMMANDES */
+    .card {
+      background: white; border-radius: 16px; padding: 25px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+    }
+    .card-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px;
+    }
+    .card-header h2 { font-size: 16px; font-weight: 800; }
+    .card-header a { color: #FF6B00; font-size: 13px; text-decoration: none; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      text-align: left; padding: 12px 15px;
+      font-size: 12px; color: #888; font-weight: 600;
+      border-bottom: 1px solid #f0f0f0; text-transform: uppercase;
+    }
+    td { padding: 14px 15px; font-size: 13px; border-bottom: 1px solid #f9f9f9; }
+    tr:last-child td { border-bottom: none; }
+    .badge {
+      padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;
+    }
+    .badge.en-cours { background: rgba(59,130,246,0.15); color: #3b82f6; }
+    .badge.livre { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .badge.attente { background: rgba(255,107,0,0.15); color: #FF6B00; }
+    .badge.litige { background: rgba(239,68,68,0.15); color: #ef4444; }
+    .btn-lien {
+      background: #f4f6f9; border: none; padding: 7px 14px;
+      border-radius: 8px; font-size: 12px; font-weight: 600;
+      cursor: pointer; color: #1a1a1a; transition: all 0.3s;
+      font-family: 'Poppins', sans-serif;
+    }
+    .btn-lien:hover { background: #FF6B00; color: white; }
+
+    /* PANEL DROITE */
+    .panel-right { display: flex; flex-direction: column; gap: 25px; }
+
+    /* CRÉER LIVRAISON */
+    .create-form label {
+      display: block; font-size: 12px; font-weight: 600;
+      color: #888; margin-bottom: 6px; text-transform: uppercase;
+    }
+    .create-form input,
+    .create-form select,
+    .create-form textarea {
+      width: 100%; padding: 12px 15px; background: #f4f6f9;
+      border: 1px solid #eee; border-radius: 10px;
+      font-size: 13px; font-family: 'Poppins', sans-serif;
+      color: #1a1a1a; margin-bottom: 15px; outline: none;
+      transition: border 0.3s;
+    }
+    .create-form input:focus,
+    .create-form select:focus,
+    .create-form textarea:focus { border-color: #FF6B00; background: white; }
+    .create-form textarea { height: 80px; resize: none; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn-generer {
+      width: 100%; padding: 14px; background: #FF6B00;
+      border: none; border-radius: 10px; color: white;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      font-family: 'Poppins', sans-serif; transition: all 0.3s;
+    }
+    .btn-generer:hover { background: #cc5500; }
+
+    /* LIEN GÉNÉRÉ */
+    .lien-genere {
+      display: none; margin-top: 15px;
+      background: #f4f6f9; border-radius: 10px; padding: 15px;
+      border: 1px dashed #FF6B00;
+    }
+    .lien-genere p { font-size: 11px; color: #888; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
+    .lien-box {
+      display: flex; align-items: center; gap: 10px;
+      background: white; border-radius: 8px; padding: 10px 15px;
+    }
+    .lien-box span { flex: 1; font-size: 12px; color: #FF6B00; font-weight: 600; word-break: break-all; }
+    .btn-copier {
+      background: #FF6B00; color: white; border: none;
+      padding: 8px 14px; border-radius: 8px; font-size: 12px;
+      cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* PROFIL */
+    .profil-card {
+      display: flex; align-items: center; gap: 15px;
+      padding-bottom: 20px; border-bottom: 1px solid #f0f0f0; margin-bottom: 20px;
+    }
+    .profil-avatar {
+      width: 50px; height: 50px; background: #FF6B00;
+      border-radius: 12px; display: flex; align-items: center;
+      justify-content: center; font-size: 20px; font-weight: 800; color: white;
+    }
+    .profil-info h3 { font-size: 15px; font-weight: 700; }
+    .profil-info p { font-size: 12px; color: #888; }
+    .profil-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .profil-stat {
+      background: #f4f6f9; border-radius: 10px; padding: 12px;
+      text-align: center;
+    }
+    .profil-stat h4 { font-size: 20px; font-weight: 800; color: #FF6B00; }
+    .profil-stat p { font-size: 11px; color: #888; }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 1000;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: white; border-radius: 20px; padding: 35px;
+      max-width: 420px; width: 90%; text-align: center;
+    }
+    .modal-icon { font-size: 50px; margin-bottom: 15px; color: #FF6B00; }
+    .modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+    .modal p { color: #888; font-size: 14px; margin-bottom: 25px; }
+    .modal-lien {
+      background: #f4f6f9; border-radius: 10px; padding: 15px;
+      display: flex; gap: 10px; align-items: center; margin-bottom: 20px;
+    }
+    .modal-lien span { flex: 1; font-size: 13px; color: #FF6B00; font-weight: 600; text-align: left; word-break: break-all; }
+    .modal-btns { display: flex; gap: 10px; }
+    .modal-btns button {
+      flex: 1; padding: 12px; border-radius: 10px; font-size: 14px;
+      font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif;
+      border: none; transition: all 0.3s;
+    }
+    .btn-partager { background: #FF6B00; color: white; }
+    .btn-fermer { background: #f4f6f9; color: #1a1a1a; }
+    body.dark { background: #0f0f0f !important; color: white !important; }
+body.dark .card { background: #1a1a1a !important; border-color: #2a2a2a !important; }
+body.dark .card h2 { color: white !important; }
+body.dark table { color: white !important; }
+body.dark td, body.dark th { color: #ccc !important; border-color: #2a2a2a !important; }
+body.dark input, body.dark select, body.dark textarea { background: #0f0f0f !important; border-color: #333 !important; color: white !important; }
+body.dark .stat-card { background: #1a1a1a !important; }
+body.dark .stat-card p { color: #888 !important; }
+  </style>
+</head>
+<script>
+if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+</script>
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <img src="/images/logo/logo.png" alt="Livoo">
+    </div>
+    <a class="sidebar-item active" href="#">
+      <i class="fas fa-home"></i> Tableau de bord
+    </a>
+    <a class="sidebar-item" href="/nouvelle-livraison.html"><i class="fas fa-plus-circle"></i> Nouvelle livraison</a>
+    </a>
+      <a class="sidebar-item" href="/mes-commandes.html"><i class="fas fa-box"></i> Mes commandes</a>
+    </a>
+      <a class="sidebar-item" href="/messages.html"><i class="fas fa-comments"></i> Messages</a>
+    </a>
+   <a class="sidebar-item" href="/statistiques.html"><i class="fas fa-chart-bar"></i> Statistiques</a>
+    </a>
+    <div class="sidebar-bottom">
+      <a class="sidebar-item" href="#">
+        <a class="sidebar-item" href="/parametres.html"><i class="fas fa-cog"></i> Paramètres</a>
+      </a>
+      <a class="sidebar-item" href="/">
+        <i class="fas fa-sign-out-alt"></i> Déconnexion
+      </a>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-left">
+        <h1>👋 Bonjour, Jean Baptiste !</h1>
+        <p>Voici un aperçu de votre activité aujourd'hui</p>
+      </div>
+      <button class="btn-nouvelle" onclick="document.getElementById('modal-overlay').classList.add('show')">
+        <i class="fas fa-plus"></i> Nouvelle livraison
+      </button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon orange"><i class="fas fa-box"></i></div>
+        <h3>12</h3>
+        <p>Commandes totales</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+        <h3>9</h3>
+        <p>Livraisons réussies</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue"><i class="fas fa-motorcycle"></i></div>
+        <h3>2</h3>
+        <p>En cours</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple"><i class="fas fa-star"></i></div>
+        <h3>4.8</h3>
+        <p>Note moyenne</p>
+      </div>
+    </div>
+
+    <!-- GRILLE PRINCIPALE -->
+    <div class="grid-main">
+
+      <!-- TABLEAU COMMANDES -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Commandes récentes</h2>
+          <a href="#">Voir tout →</a>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Commande</th>
+              <th>Client</th>
+              <th>Zone</th>
+              <th>Statut</th>
+              <th>Lien</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>#LV-001</strong></td>
+              <td>Marie K.</td>
+              <td>Akwa, Douala</td>
+              <td><span class="badge livre">Livré</span></td>
+              <td><button class="btn-lien" onclick="copierLien('LV-001')"><i class="fas fa-copy"></i> Copier</button></td>
+            </tr>
+            <tr>
+              <td><strong>#LV-002</strong></td>
+              <td>Paul N.</td>
+              <td>Bonapriso</td>
+              <td><span class="badge en-cours">En cours</span></td>
+              <td><button class="btn-lien" onclick="copierLien('LV-002')"><i class="fas fa-copy"></i> Copier</button></td>
+            </tr>
+            <tr>
+              <td><strong>#LV-003</strong></td>
+              <td>Sylvie M.</td>
+              <td>Bastos, Yaoundé</td>
+              <td><span class="badge attente">En attente</span></td>
+              <td><button class="btn-lien" onclick="copierLien('LV-003')"><i class="fas fa-copy"></i> Copier</button></td>
+            </tr>
+            <tr>
+              <td><strong>#LV-004</strong></td>
+              <td>Eric T.</td>
+              <td>Deido, Douala</td>
+              <td><span class="badge livre">Livré</span></td>
+              <td><button class="btn-lien" onclick="copierLien('LV-004')"><i class="fas fa-copy"></i> Copier</button></td>
+            </tr>
+            <tr>
+              <td><strong>#LV-005</strong></td>
+              <td>Aïcha B.</td>
+              <td>Omnisport</td>
+              <td><span class="badge litige">Litige</span></td>
+              <td><button class="btn-lien" onclick="copierLien('LV-005')"><i class="fas fa-copy"></i> Copier</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PANEL DROITE -->
+      <div class="panel-right">
+
+        <!-- PROFIL -->
+        <div class="card">
+          <div class="profil-card">
+            <div class="profil-avatar">J</div>
+            <div class="profil-info">
+              <h3>Jean Baptiste</h3>
+              <p>Vendeur — Douala</p>
+            </div>
+          </div>
+          <div class="profil-stats">
+            <div class="profil-stat">
+              <h4>12</h4>
+              <p>Commandes</p>
+            </div>
+            <div class="profil-stat">
+              <h4>9</h4>
+              <p>Livrées</p>
+            </div>
+            <div class="profil-stat">
+              <h4>4.8★</h4>
+              <p>Note</p>
+            </div>
+            <div class="profil-stat">
+              <h4>0</h4>
+              <p>Litiges</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CRÉER LIVRAISON RAPIDE -->
+        <div class="card">
+          <div class="card-header">
+            <h2>Livraison rapide</h2>
+          </div>
+          <div class="create-form">
+            <label>Description du colis</label>
+            <textarea id="description" placeholder="Ex: Robe rouge taille M, emballée..."></textarea>
+            <div class="row-2">
+              <div>
+                <label>Volume</label>
+                <select id="volume">
+                  <option value="petit">Petit</option>
+                  <option value="moyen">Moyen</option>
+                  <option value="grand">Grand</option>
+                </select>
+              </div>
+              <div>
+                <label>Poids</label>
+                <select id="poids">
+                  <option value="leger">Léger</option>
+                  <option value="moyen">Moyen</option>
+                  <option value="lourd">Lourd</option>
+                </select>
+              </div>
+            </div>
+            <label>Adresse de retrait</label>
+            <input type="text" id="adresse" placeholder="Ex: Rue Flatters, Akwa">
+            <button class="btn-generer" onclick="genererLien()">
+              <i class="fas fa-link"></i> Générer le lien client
+            </button>
+            <div class="lien-genere" id="lien-genere">
+              <p>Lien à envoyer au client</p>
+              <div class="lien-box">
+                <span id="lien-texte"></span>
+                <button class="btn-copier" onclick="copierLienRapide()">Copier</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL NOUVELLE LIVRAISON -->
+  <div class="modal-overlay" id="modal-overlay" onclick="fermerModal(event)">
+    <div class="modal">
+      <div class="modal-icon"><i class="fas fa-box"></i></div>
+      <h3>Nouvelle livraison créée !</h3>
+      <p>Copiez ce lien et envoyez-le à votre client sur WhatsApp, Instagram ou Facebook.</p>
+      <div class="modal-lien">
+        <span id="modal-lien-texte">livoo.cm/commande/LV-006</span>
+        <button class="btn-copier" onclick="copierModalLien()">Copier</button>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-partager" onclick="partager()"><i class="fas fa-share"></i> Partager</button>
+        <button class="btn-fermer" onclick="fermerModalBtn()">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function genererLien() {
+      const description = document.getElementById('description').value;
+      const adresse = document.getElementById('adresse').value;
+      if (!description || !adresse) {
+        alert('Veuillez remplir la description et l\'adresse !');
+        return;
+      }
+      const code = 'LV-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+      const lien = 'livoo.cm/commande/' + code;
+      document.getElementById('lien-texte').textContent = lien;
+      document.getElementById('lien-genere').style.display = 'block';
+    }
+
+    function copierLienRapide() {
+      const lien = document.getElementById('lien-texte').textContent;
+      navigator.clipboard.writeText(lien);
+      alert('Lien copié ! Envoyez-le à votre client 🎉');
+    }
+
+    function copierLien(code) {
+      navigator.clipboard.writeText('livoo.cm/commande/' + code);
+      alert('Lien copié !');
+    }
+
+    function copierModalLien() {
+      const lien = document.getElementById('modal-lien-texte').textContent;
+      navigator.clipboard.writeText(lien);
+      alert('Lien copié !');
+    }
+
+    function partager() {
+      const lien = document.getElementById('modal-lien-texte').textContent;
+      if (navigator.share) {
+        navigator.share({ title: 'Ma livraison Livoo', url: lien });
+      } else {
+        navigator.clipboard.writeText(lien);
+        alert('Lien copié pour partage !');
+      }
+    }
+
+    function fermerModal(event) {
+      if (event.target === document.getElementById('modal-overlay')) {
+        document.getElementById('modal-overlay').classList.remove('show');
+      }
+    }
+
+    function fermerModalBtn() {
+      document.getElementById('modal-overlay').classList.remove('show');
+    }
+  </script>
+
+<script>
+if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+</script>
+
+</body>
+</html>

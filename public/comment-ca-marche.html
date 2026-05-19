@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livoo — Comment ça marche</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: #0f0f0f; color: white; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 60px; background: rgba(0,0,0,0.95); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #222; }
+    nav img { height: 45px; mix-blend-mode: lighten; filter: brightness(2); }
+    .nav-links a { color: white; text-decoration: none; margin-left: 30px; font-weight: 600; font-size: 15px; transition: color 0.3s; }
+    .nav-links a:hover { color: #FF6B00; }
+    .btn-nav { background: #FF6B00; color: white !important; padding: 10px 25px; border-radius: 25px; font-weight: 700 !important; }
+
+    /* HERO */
+    .hero { text-align: center; padding: 80px 60px 60px; background: linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 100%); }
+    .hero .tag { display: inline-block; background: rgba(255,107,0,0.15); border: 1px solid #FF6B00; color: #FF6B00; padding: 6px 18px; border-radius: 20px; font-size: 13px; margin-bottom: 20px; }
+    .hero h1 { font-size: 52px; font-weight: 800; margin-bottom: 15px; }
+    .hero h1 span { color: #FF6B00; }
+    .hero p { color: #aaa; font-size: 17px; max-width: 600px; margin: 0 auto 40px; line-height: 1.7; }
+    .tabs { display: flex; justify-content: center; gap: 10px; }
+    .tab { padding: 12px 30px; border-radius: 25px; border: 2px solid #2a2a2a; background: transparent; color: #888; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
+    .tab.active { background: #FF6B00; color: white; border-color: #FF6B00; }
+    .tab:hover { border-color: #FF6B00; color: #FF6B00; }
+
+    /* SECTIONS */
+    .section { padding: 80px 60px; display: none; }
+    .section.active { display: block; }
+    .section-title { text-align: center; margin-bottom: 60px; }
+    .section-title h2 { font-size: 36px; font-weight: 800; margin-bottom: 10px; }
+    .section-title h2 span { color: #FF6B00; }
+    .section-title p { color: #aaa; font-size: 15px; }
+
+    /* ÉTAPES */
+    .etapes-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 0; }
+    .etape-item { display: flex; gap: 30px; position: relative; }
+    .etape-item:not(:last-child)::after { content: ''; position: absolute; left: 27px; top: 60px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, #FF6B00, transparent); }
+    .etape-num { width: 56px; height: 56px; background: #FF6B00; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; flex-shrink: 0; margin-top: 5px; }
+    .etape-content { flex: 1; background: #1a1a1a; border-radius: 16px; padding: 25px; margin-bottom: 20px; border: 1px solid #2a2a2a; transition: all 0.3s; }
+    .etape-content:hover { border-color: #FF6B00; transform: translateX(5px); }
+    .etape-content h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+    .etape-content p { color: #888; font-size: 14px; line-height: 1.7; }
+    .etape-content .tip { background: rgba(255,107,0,0.1); border-left: 3px solid #FF6B00; padding: 10px 15px; border-radius: 0 8px 8px 0; margin-top: 12px; font-size: 13px; color: #FF6B00; }
+
+    /* FAQ */
+    .faq { max-width: 700px; margin: 0 auto; }
+    .faq-item { background: #1a1a1a; border-radius: 12px; margin-bottom: 10px; border: 1px solid #2a2a2a; overflow: hidden; }
+    .faq-question { padding: 18px 20px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.3s; }
+    .faq-question:hover { background: #222; }
+    .faq-question i { color: #FF6B00; transition: transform 0.3s; }
+    .faq-question.open i { transform: rotate(45deg); }
+    .faq-reponse { display: none; padding: 0 20px 18px; color: #888; font-size: 14px; line-height: 1.7; }
+    .faq-reponse.show { display: block; }
+
+    /* CTA */
+    .cta-section { background: linear-gradient(135deg, #FF6B00, #cc5500); padding: 80px 60px; text-align: center; }
+    .cta-section h2 { font-size: 38px; font-weight: 800; margin-bottom: 15px; }
+    .cta-section p { font-size: 16px; opacity: 0.9; margin-bottom: 35px; }
+    .cta-btns { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+    .btn-white { background: white; color: #FF6B00; padding: 15px 35px; border-radius: 30px; font-size: 15px; font-weight: 700; text-decoration: none; transition: all 0.3s; }
+    .btn-white:hover { transform: scale(1.05); }
+    .btn-outline-white { background: transparent; color: white; padding: 15px 35px; border-radius: 30px; font-size: 15px; font-weight: 700; text-decoration: none; border: 2px solid white; transition: all 0.3s; }
+    .btn-outline-white:hover { background: white; color: #FF6B00; }
+
+    footer { background: #080808; padding: 30px 60px; text-align: center; color: #555; font-size: 13px; border-top: 1px solid #1a1a1a; }
+    footer span { color: #FF6B00; }
+  </style>
+</head>
+if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark');
+}
+<body>
+  <nav>
+    <a href="/"><img src="/images/logo/logo.png" alt="Livoo"></a>
+    <div class="nav-links">
+      <a href="/">Accueil</a>
+      <a href="/comment-ca-marche.html">Comment ça marche</a>
+      <a href="/inscription-livreur.html">Devenir livreur</a>
+      <a href="/inscription-vendeur.html" class="btn-nav">Je suis vendeur</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="tag">📖 Guide d'utilisation</div>
+    <h1>Comment utiliser <span>Livoo ?</span></h1>
+    <p>Découvrez comment fonctionne Livoo selon votre profil. Simple, rapide et efficace.</p>
+    <div class="tabs">
+      <button class="tab active" onclick="afficherSection('vendeur', this)"><i class="fas fa-store"></i> Je suis vendeur</button>
+      <button class="tab" onclick="afficherSection('client', this)"><i class="fas fa-user"></i> Je suis client</button>
+      <button class="tab" onclick="afficherSection('livreur', this)"><i class="fas fa-motorcycle"></i> Je suis livreur</button>
+    </div>
+  </div>
+
+  <!-- VENDEUR -->
+  <div class="section active" id="section-vendeur">
+    <div class="section-title">
+      <h2>Guide du <span>Vendeur</span></h2>
+      <p>Suivez ces étapes pour envoyer votre première livraison</p>
+    </div>
+    <div class="etapes-list">
+      <div class="etape-item">
+        <div class="etape-num">1</div>
+        <div class="etape-content">
+          <h3>Créez votre compte gratuitement</h3>
+          <p>Rendez-vous sur la page d'inscription vendeur. Renseignez votre nom, numéro de téléphone, votre ville et votre zone de vente. L'inscription prend moins de 2 minutes et est 100% gratuite.</p>
+          <div class="tip">💡 Vous pouvez utiliser votre numéro WhatsApp directement</div>
+        </div>
+      </div>
+      <div class="etape-item">
+        <div class="etape-num">2</div>
+        <div class="etape-content">
+          <h3>Créez une nouvelle livraison</h3>
+          <p>Depuis votre tableau de bord, cliquez sur "Nouvelle livraison". Décrivez votre colis, indiquez son volume, son poids et votre adresse de retrait. La plateforme calcule automatiquement le prix de livraison.</p>
+          <div class="tip">💡 Soyez précis dans la description pour éviter les litiges</div>
+        </div>
+      </div>
+      <div class="etape-item">
+        <div class="etape-num">3</div>
+        <div class="etape-content">
+          <h3>Envoyez le lien à votre client</h3>
+          <p>Livoo génère un lien unique pour chaque commande. Copiez-le et envoyez-le à votre client via WhatsApp, Instagram, Facebook ou n'importe quelle messagerie. Votre client n'a pas besoin de créer un compte.</p>
+          <div class="tip">💡 Utilisez les boutons de partage direct WhatsApp/Facebook/Instagram</div>
+        </div>
+      </div>
+      <div class="etape-item">
+        <div class="etape-num">4</div>
+        <div class="etape-content">
+          <h3>Un livreur est trouvé automatiquement</h3>
+          <p>Dès que votre client valide la commande, notre algorithme cherche le livreur le plus proche de vous. Vous êtes notifié en temps réel à chaque étape : livreur trouvé, en route, colis récupéré, livré.</p>
+        </div>
+      </div>
+      <div class="etape-item">
+        <div class="etape-num">5</div>
+        <div class="etape-content">
+          <h3>Suivez votre livraison</h3>
+          <p>Dans "Mes commandes", suivez le statut en temps réel. Vous pouvez contacter votre livreur via la messagerie intégrée. En cas de problème, signalez-le directement depuis l'interface.</p>
+          <div class="tip">💡 Un problème ? Cliquez sur "Signaler" pour ouvrir un litige</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLIENT -->
+  <div class="section" id="section-client">
+    <div class="section-title">
+      <h2>Guide du <span>Client</span></h2>
+      <p>Vous avez reçu un lien Livoo ? Voici comment procéder</p>
+    </div>
+    <div class="etapes-list">
+      <div class="etape-item">
+        <div class="etape-num">1</div>
+        <div class="etape-content">
+          <h3>Cliquez sur le lien reçu</h3>
+          <p>Votre vendeur vous a envoyé un lien qui commence par "livoo.cm/commande/...". Cliquez dessus depuis votre téléphone ou ordinateur. Aucune application à télécharger, aucun compte à créer.</p>
+          <div class="tip">💡 Le lien fonctionne directement dans votre navigateur</div>
+        </div>
+      </div>
+      <div class="etape-item">
+        <div class="etape-num">2</div>
+        <div class="etape-content">
+          <h3>Entrez votre adresse de livraison</h3>
+          <p>Sur la page de commande, renseignez votre adresse ou quartier précis. Vous pouvez utiliser un repère connu (carrefour, école, église...). Plus votre adresse est précise, plus rapide sera la livraison.</p>
+        </div>
+      </div>
+      <div class="etape-item">
+        <div class="etape-num">3</div>
+        <div class="etape-content">
+          <h3>Vérifiez le prix et confirmez</h3>
+          <p>Le prix de livraison s'affiche automatiquement selon la distance. Vérifiez le montant et confirmez votre commande. Vous serez contacté par le livreur à son arrivée.</p>
+          <div class="tip">💡 Vous payez le livreur directement en liquide ou via Orange Money à la réception</div>
+        </div>
+      </div>
+      <div class="etape-item">
+        <div class="etape-num">4</div>
+        <div class="etape-content">
+          <h3>Recevez votre colis et confirmez</h3>
+          <p>Le livreur vous remet votre colis en main propre. Vérifiez que tout est en ordre puis confirmez la réception sur votre lien. Cette confirmation libère le paiement et note la livraison.</p>
+          <div class="tip">💡 Un problème avec le colis ? Signalez-le avant de confirmer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVREUR -->
+  <div class="section" id="section-livreur">
+    <div class="section-title">
+      <h2>Guide du <span>Livreur</span></h2>
+      <p>Comment commencer à livrer et maximiser vos revenus</p>
+    </div>
+    <div class="etapes-list">
+      <div class="etape-item">
+        <div class="etape-num">1</div>
+        <div class="etape-content">
+          <h3>Créez votre compte livreur</h3>
+          <p>Inscrivez-vous avec vos informations personnelles, votre type de véhicule, votre zone de livraison et votre numéro Mobile Money. Acceptez les conditions générales et les règles de la plateforme.</p>
+          <div class="tip">💡 Ayez votre immatriculation à portée de main lors de l'inscription</div>
+        </div>
+      </div>
+      <div class="etape-item">
+        <div class="etape-num">2</div>
+        <div class="etape-content">
+          <h3>Rechargez votre compte Livoo</h3>
+          <p>Pour recevoir des commandes, vous devez recharger votre compte Livoo via MTN MoMo ou Orange Money. Plus votre solde est élevé, plus vous recevez de commandes importantes. La commission Livoo est déduite automatiquement de votre solde.</p>
+          <div class="tip">💡 Solde à 0 = plus de commandes. Rechargez régulièrement !</div>
+        </div>
+      </div>
+      <div class="etape-item">
+        <div class="etape-num">3</div>
+        <div class="etape-content">
+          <h3>Acceptez une course</h3>
+          <p>Vous recevez une notification avec les détails de la commande : adresse du vendeur, zone de livraison et montant. Vous avez un délai limité pour accepter. Si vous n'acceptez pas, la course est proposée au livreur suivant.</p>
+        </div>
+      </div>
+      <div class="etape-item">
+        <div class="etape-num">4</div>
+        <div class="etape-content">
+          <h3>Prenez les photos obligatoires</h3>
+          <p>Avant de récupérer le colis chez le vendeur, prenez une photo. Avant de remettre le colis au client, prenez une nouvelle photo. Ces photos sont obligatoires et protègent tout le monde en cas de litige.</p>
+          <div class="tip">💡 Sans photos, vous êtes automatiquement responsable en cas de litige</div>
+        </div>
+      </div>
+      <div class="etape-item">
+        <div class="etape-num">5</div>
+        <div class="etape-content">
+          <h3>Livrez et recevez votre paiement</h3>
+          <p>Remettez le colis au client et récupérez votre paiement directement en liquide ou via Orange Money. Marquez la livraison comme terminée dans l'application. Le client vous notera de 1 à 5 étoiles.</p>
+          <div class="tip">💡 Bonne note = plus de commandes. Soyez ponctuel et professionnel !</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div style="padding: 80px 60px; background: #111;">
+    <div class="section-title">
+      <h2>Questions <span>fréquentes</span></h2>
+      <p>Vous avez une question ? La réponse est probablement ici</p>
+    </div>
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Est-ce que Livoo est gratuit pour les vendeurs ? <i class="fas fa-plus"></i></div>
+        <div class="faq-reponse">Oui, l'inscription et l'utilisation de Livoo sont totalement gratuites pour les vendeurs. Seuls les frais de livraison sont payés par le client au livreur directement.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Le client doit-il créer un compte ? <i class="fas fa-plus"></i></div>
+        <div class="faq-reponse">Non ! Le client n'a besoin de rien. Il clique simplement sur le lien reçu, entre son adresse et attend son colis. Pas de téléchargement, pas de compte.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Comment se passe le paiement ? <i class="fas fa-plus"></i></div>
+        <div class="faq-reponse">Le client paie le livreur directement à la livraison, en liquide ou via Orange Money. Le livreur, lui, recharge son compte Livoo via MTN MoMo ou Orange Money, et la commission Livoo est automatiquement déduite de son solde.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Que se passe-t-il si le colis est endommagé ? <i class="fas fa-plus"></i></div>
+        <div class="faq-reponse">Si le colis est endommagé lors du transport, le livreur en est responsable. Grâce aux photos obligatoires avant/après livraison, Livoo peut arbitrer le litige. Le livreur fautif est sanctionné sur son score de points.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Dans quelles villes Livoo est-il disponible ? <i class="fas fa-plus"></i></div>
+        <div class="faq-reponse">Livoo est actuellement disponible à Douala et Yaoundé. D'autres villes comme Bafoussam et Garoua seront ajoutées prochainement.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Comment devenir livreur Livoo ? <i class="fas fa-plus"></i></div>
+        <div class="faq-reponse">Rendez-vous sur la page d'inscription livreur, remplissez vos informations, acceptez les conditions et rechargez votre compte pour commencer à recevoir des commandes immédiatement.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h2>Prêt à commencer ?</h2>
+    <p>Rejoignez Livoo aujourd'hui — vendeur, client ou livreur</p>
+    <div class="cta-btns">
+      <a href="/inscription-vendeur.html" class="btn-white">Je suis vendeur</a>
+      <a href="/inscription-livreur.html" class="btn-outline-white">Je suis livreur</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 <span>Livoo</span> — Douala, Cameroun. Tous droits réservés.</p>
+  </footer>
+
+  <script>
+    function afficherSection(id, btn) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('section-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+    function toggleFaq(el) {
+      el.classList.toggle('open');
+      const rep = el.nextElementSibling;
+      rep.classList.toggle('show');
+    }
+  </script>
+</body>
+</html>

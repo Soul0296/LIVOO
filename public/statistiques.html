@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livoo — Statistiques</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: #f4f6f9; color: #1a1a1a; }
+    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 260px; background: #0f0f0f; padding: 30px 20px; display: flex; flex-direction: column; gap: 8px; border-right: 1px solid #222; }
+    .sidebar-logo { padding: 10px 15px 30px; }
+    .sidebar-logo img { height: 40px; mix-blend-mode: lighten; filter: brightness(2); }
+    .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 12px; color: #888; text-decoration: none; font-size: 14px; font-weight: 600; transition: all 0.3s; }
+    .sidebar-item:hover { background: #1a1a1a; color: white; }
+    .sidebar-item.active { background: #FF6B00; color: white; }
+    .sidebar-item i { width: 20px; text-align: center; }
+    .sidebar-bottom { margin-top: auto; border-top: 1px solid #222; padding-top: 20px; }
+    .main { margin-left: 260px; padding: 40px; }
+    .page-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+    .page-sub { color: #888; font-size: 14px; margin-bottom: 35px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+    .stat-card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.06); }
+    .stat-icon { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 15px; }
+    .stat-icon.orange { background: rgba(255,107,0,0.15); color: #FF6B00; }
+    .stat-icon.green { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .stat-icon.blue { background: rgba(59,130,246,0.15); color: #3b82f6; }
+    .stat-icon.red { background: rgba(239,68,68,0.15); color: #ef4444; }
+    .stat-card h3 { font-size: 32px; font-weight: 800; }
+    .stat-card p { font-size: 13px; color: #888; margin-top: 4px; }
+    .trend { font-size: 12px; font-weight: 700; margin-top: 8px; }
+    .trend.up { color: #22c55e; }
+    .trend.down { color: #ef4444; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px; }
+    .card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.06); }
+    .card h2 { font-size: 16px; font-weight: 800; margin-bottom: 20px; }
+    .bar-chart { display: flex; flex-direction: column; gap: 12px; }
+    .bar-item { display: flex; align-items: center; gap: 12px; }
+    .bar-label { width: 80px; font-size: 12px; font-weight: 600; color: #888; flex-shrink: 0; }
+    .bar-track { flex: 1; background: #f4f6f9; border-radius: 10px; height: 10px; overflow: hidden; }
+    .bar-fill { height: 100%; background: linear-gradient(to right, #FF6B00, #cc5500); border-radius: 10px; transition: width 1s ease; }
+    .bar-val { width: 50px; text-align: right; font-size: 12px; font-weight: 700; color: #FF6B00; }
+    .zones-list { display: flex; flex-direction: column; gap: 10px; }
+    .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f4f6f9; border-radius: 10px; }
+    .zone-item .nom { font-size: 13px; font-weight: 600; }
+    .zone-item .count { background: #FF6B00; color: white; border-radius: 20px; padding: 3px 12px; font-size: 12px; font-weight: 700; }
+    .periode-btns { display: flex; gap: 8px; margin-bottom: 20px; }
+    .periode-btn { padding: 6px 16px; border-radius: 20px; border: 1.5px solid #eee; background: white; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
+    .periode-btn.active { background: #FF6B00; color: white; border-color: #FF6B00; }
+  body.dark { background: #0f0f0f !important; color: white !important; }
+body.dark .card { background: #1a1a1a !important; border-color: #2a2a2a !important; }
+body.dark .card h2 { color: white !important; }
+body.dark table { color: white !important; }
+body.dark td, body.dark th { color: #ccc !important; border-color: #2a2a2a !important; }
+body.dark input, body.dark select, body.dark textarea { background: #0f0f0f !important; border-color: #333 !important; color: white !important; }
+body.dark .stat-card { background: #1a1a1a !important; }
+body.dark .stat-card p { color: #888 !important; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-logo"><img src="/images/logo/logo.png" alt="Livoo"></div>
+    <a class="sidebar-item" href="/dashboard-vendeur.html"><i class="fas fa-home"></i> Tableau de bord</a>
+    <a class="sidebar-item" href="/nouvelle-livraison.html"><i class="fas fa-plus-circle"></i> Nouvelle livraison</a>
+    <a class="sidebar-item" href="/mes-commandes.html"><i class="fas fa-box"></i> Mes commandes</a>
+    <a class="sidebar-item" href="/messages.html"><i class="fas fa-comments"></i> Messages</a>
+    <a class="sidebar-item active" href="#"><i class="fas fa-chart-bar"></i> Statistiques</a>
+    <div class="sidebar-bottom">
+      <a class="sidebar-item" href="/parametres.html"><i class="fas fa-cog"></i> Paramètres</a>
+      <a class="sidebar-item" href="#" onclick="deconnexion()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+    </div>
+  </div>
+  <div class="main">
+    <div class="page-title">Statistiques</div>
+    <div class="page-sub">Analysez vos performances de livraison</div>
+    <div class="periode-btns">
+      <button class="periode-btn active">7 jours</button>
+      <button class="periode-btn">30 jours</button>
+      <button class="periode-btn">3 mois</button>
+      <button class="periode-btn">Tout</button>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon orange"><i class="fas fa-box"></i></div>
+        <h3>47</h3>
+        <p>Commandes totales</p>
+        <div class="trend up"><i class="fas fa-arrow-up"></i> +12% ce mois</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+        <h3>41</h3>
+        <p>Livraisons réussies</p>
+        <div class="trend up"><i class="fas fa-arrow-up"></i> Taux 87%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue"><i class="fas fa-clock"></i></div>
+        <h3>18 min</h3>
+        <p>Délai moyen livraison</p>
+        <div class="trend up"><i class="fas fa-arrow-up"></i> -3 min vs mois dernier</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon red"><i class="fas fa-exclamation-triangle"></i></div>
+        <h3>2</h3>
+        <p>Litiges ouverts</p>
+        <div class="trend down"><i class="fas fa-arrow-down"></i> En cours de résolution</div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h2><i class="fas fa-chart-bar" style="color:#FF6B00;margin-right:8px"></i> Commandes par jour</h2>
+        <div class="bar-chart">
+          <div class="bar-item"><div class="bar-label">Lundi</div><div class="bar-track"><div class="bar-fill" style="width:60%"></div></div><div class="bar-val">6</div></div>
+          <div class="bar-item"><div class="bar-label">Mardi</div><div class="bar-track"><div class="bar-fill" style="width:80%"></div></div><div class="bar-val">8</div></div>
+          <div class="bar-item"><div class="bar-label">Mercredi</div><div class="bar-track"><div class="bar-fill" style="width:50%"></div></div><div class="bar-val">5</div></div>
+          <div class="bar-item"><div class="bar-label">Jeudi</div><div class="bar-track"><div class="bar-fill" style="width:90%"></div></div><div class="bar-val">9</div></div>
+          <div class="bar-item"><div class="bar-label">Vendredi</div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><div class="bar-val">10</div></div>
+          <div class="bar-item"><div class="bar-label">Samedi</div><div class="bar-track"><div class="bar-fill" style="width:70%"></div></div><div class="bar-val">7</div></div>
+          <div class="bar-item"><div class="bar-label">Dimanche</div><div class="bar-track"><div class="bar-fill" style="width:20%"></div></div><div class="bar-val">2</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2><i class="fas fa-map-marker-alt" style="color:#FF6B00;margin-right:8px"></i> Zones les plus livrées</h2>
+        <div class="zones-list">
+          <div class="zone-item"><div><div class="nom">Akwa, Douala</div></div><span class="count">14 livraisons</span></div>
+          <div class="zone-item"><div><div class="nom">Bonapriso, Douala</div></div><span class="count">11 livraisons</span></div>
+          <div class="zone-item"><div><div class="nom">Bastos, Yaoundé</div></div><span class="count">8 livraisons</span></div>
+          <div class="zone-item"><div><div class="nom">Deido, Douala</div></div><span class="count">7 livraisons</span></div>
+          <div class="zone-item"><div><div class="nom">Omnisport, Yaoundé</div></div><span class="count">5 livraisons</span></div>
+          <div class="zone-item"><div><div class="nom">Autres zones</div></div><span class="count">2 livraisons</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.querySelectorAll('.periode-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.periode-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+    function deconnexion() { if(confirm('Voulez-vous vraiment vous déconnecter ?')) window.location.href = '/'; }
+  </script>
+<script>
+if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+</script>
+
+</body>
+</html>
