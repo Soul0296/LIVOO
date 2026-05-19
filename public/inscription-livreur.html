@@ -124,6 +124,12 @@ body.dark .stat-card p { color: #888 !important; }
             </select>
           </div>
           <div class="form-group"><label>Immatriculation</label><input type="text" id="immatriculation" placeholder="Ex: LT 1234 A"></div>
+          <div class="form-group full">
+  <label><i class="fas fa-building"></i> Agence de rattachement</label>
+  <select id="agence">
+    <option value="">Sélectionnez d'abord votre ville</option>
+  </select>
+</div>
           <div class="form-group full"><label>Zone de livraison principale</label>
             <select id="zone">
               <option value="">Sélectionnez votre zone</option>
@@ -188,8 +194,49 @@ body.dark .stat-card p { color: #888 !important; }
     </div>
   </div>
   <script>
+    // Liste des agences par ville
+const agencesParVille = {
+  "Akwa, Douala": ["Agence Livoo Douala (Akwa)", "Agence Livoo Douala (Bonapriso)"],
+  "Bonapriso, Douala": ["Agence Livoo Douala (Akwa)", "Agence Livoo Douala (Bonapriso)"],
+  "Deido, Douala": ["Agence Livoo Douala (Deido)", "Agence Livoo Douala (Akwa)"],
+  "Bassa, Douala": ["Agence Livoo Douala (Bassa)", "Agence Livoo Douala (Akwa)"],
+  "Bastos, Yaoundé": ["Agence Livoo Yaoundé (Bastos)", "Agence Livoo Yaoundé (Mvog-Mbi)"],
+  "Omnisport, Yaoundé": ["Agence Livoo Yaoundé (Omnisport)", "Agence Livoo Yaoundé (Bastos)"],
+  "Centre-ville, Yaoundé": ["Agence Livoo Yaoundé (Centre-ville)", "Agence Livoo Yaoundé (Mvog-Mbi)"],
+  "Autre zone": ["Agence Livoo Nationale"]
+};
+
+// Mettre à jour le menu déroulant des agences
+function mettreAJourAgences() {
+  const zone = document.getElementById('zone').value;
+  const agenceSelect = document.getElementById('agence');
+  
+  agenceSelect.innerHTML = '<option value="">Sélectionnez une agence</option>';
+  
+  if (zone && agencesParVille[zone]) {
+    agencesParVille[zone].forEach(agence => {
+      const option = document.createElement('option');
+      option.value = agence;
+      option.textContent = agence;
+      agenceSelect.appendChild(option);
+    });
+  } else if (zone === "Autre zone") {
+    const option = document.createElement('option');
+    option.value = "Agence Livoo Nationale";
+    option.textContent = "Agence Livoo Nationale";
+    agenceSelect.appendChild(option);
+  }
+}
+
+// Écouter le changement de zone
+document.addEventListener('DOMContentLoaded', function() {
+  const zoneSelect = document.getElementById('zone');
+  if (zoneSelect) {
+    zoneSelect.addEventListener('change', mettreAJourAgences);
+  }
+});
     function inscrire() {
-      const champs = ['nom', 'naissance', 'telephone', 'adresse', 'vehicule', 'zone', 'operateur', 'momo'];
+      const champs = ['nom', 'naissance', 'telephone', 'adresse', 'vehicule', 'zone', 'operateur', 'momo', 'agence'];
       for (let id of champs) {
         if (!document.getElementById(id).value) { alert('Veuillez remplir tous les champs obligatoires !'); return; }
       }
