@@ -2,22 +2,63 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Livoo — Mes Commandes</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background: #f4f6f9; color: #1a1a1a; }
-    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 260px; background: #0f0f0f; padding: 30px 20px; display: flex; flex-direction: column; gap: 8px; border-right: 1px solid #222; }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed; left: 0; top: 0; bottom: 0; width: 260px;
+      background: #0f0f0f; padding: 30px 20px;
+      display: flex; flex-direction: column; gap: 8px;
+      border-right: 1px solid #222;
+      transition: transform 0.3s ease;
+      z-index: 100;
+    }
     .sidebar-logo { padding: 10px 15px 30px; }
-    .sidebar-logo img { height: 40px; mix-blend-mode: lighten; filter: brightness(2); }
-    .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 12px; color: #888; text-decoration: none; font-size: 14px; font-weight: 600; transition: all 0.3s; }
+    .sidebar-logo img { height: 50px; width: auto; mix-blend-mode: lighten; filter: brightness(2); }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 15px; border-radius: 12px;
+      color: #888; text-decoration: none; font-size: 14px;
+      font-weight: 600; transition: all 0.3s;
+    }
     .sidebar-item:hover { background: #1a1a1a; color: white; }
     .sidebar-item.active { background: #FF6B00; color: white; }
     .sidebar-item i { width: 20px; text-align: center; }
     .sidebar-bottom { margin-top: auto; border-top: 1px solid #222; padding-top: 20px; }
-    .main { margin-left: 260px; padding: 40px; }
+
+    /* MENU BURGER */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 101;
+      background: #FF6B00;
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .menu-toggle { display: flex; }
+      .main { margin-left: 0; padding: 20px; padding-top: 70px; }
+    }
+
+    .main { margin-left: 260px; padding: 40px; transition: margin-left 0.3s ease; }
     .page-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
     .page-sub { color: #888; font-size: 14px; margin-bottom: 35px; }
     .filtres { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
@@ -30,9 +71,9 @@
     .commande-card.en-cours { border-left-color: #3b82f6; }
     .commande-card.attente { border-left-color: #FF6B00; }
     .commande-card.litige { border-left-color: #ef4444; }
-    .commande-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .commande-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
     .commande-id { font-size: 16px; font-weight: 800; }
-    .badge { padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .badge { padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block; }
     .badge.livre { background: rgba(34,197,94,0.15); color: #22c55e; }
     .badge.en-cours { background: rgba(59,130,246,0.15); color: #3b82f6; }
     .badge.attente { background: rgba(255,107,0,0.15); color: #FF6B00; }
@@ -40,8 +81,8 @@
     .commande-infos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 15px; }
     .info-item p { font-size: 11px; color: #888; font-weight: 600; text-transform: uppercase; margin-bottom: 3px; }
     .info-item span { font-size: 13px; font-weight: 600; }
-    .timeline { display: flex; align-items: center; gap: 5px; margin-bottom: 15px; }
-    .tl-step { display: flex; flex-direction: column; align-items: center; flex: 1; }
+    .timeline { display: flex; align-items: center; gap: 5px; margin-bottom: 15px; flex-wrap: wrap; }
+    .tl-step { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 50px; }
     .tl-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; margin-bottom: 4px; }
     .tl-circle.done { background: #22c55e; color: white; }
     .tl-circle.active { background: #FF6B00; color: white; }
@@ -49,7 +90,7 @@
     .tl-label { font-size: 9px; color: #888; text-align: center; font-weight: 600; }
     .tl-line { flex: 1; height: 2px; background: #eee; margin-bottom: 18px; }
     .tl-line.done { background: #22c55e; }
-    .commande-actions { display: flex; gap: 10px; }
+    .commande-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
     .btn-action { padding: 8px 16px; border-radius: 8px; border: none; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; display: flex; align-items: center; gap: 6px; transition: all 0.3s; }
     .btn-details { background: #f4f6f9; color: #1a1a1a; }
     .btn-details:hover { background: #e0e0e0; }
@@ -57,145 +98,50 @@
     .btn-lien:hover { background: #FF6B00; color: white; }
     .btn-signaler { background: rgba(239,68,68,0.1); color: #ef4444; }
     .btn-signaler:hover { background: #ef4444; color: white; }
-  body.dark { background: #0f0f0f !important; color: white !important; }
-body.dark .card { background: #1a1a1a !important; border-color: #2a2a2a !important; }
-body.dark .card h2 { color: white !important; }
-body.dark table { color: white !important; }
-body.dark td, body.dark th { color: #ccc !important; border-color: #2a2a2a !important; }
-body.dark input, body.dark select, body.dark textarea { background: #0f0f0f !important; border-color: #333 !important; color: white !important; }
-body.dark .stat-card { background: #1a1a1a !important; }
-body.dark .stat-card p { color: #888 !important; }
-  @media (max-width: 768px) {
-  .main { padding: 0 15px 60px; margin: 20px auto; }
-  .adresse-options { flex-direction: column; }
-}
+
+    @media (max-width: 768px) {
+      .commande-infos { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .timeline { display: none; }
+      .commande-card { padding: 15px; }
+      .page-title { font-size: 22px; }
+    }
+    @media (max-width: 480px) {
+      .commande-infos { grid-template-columns: 1fr; }
+      .filtre-btn { padding: 6px 12px; font-size: 11px; }
+    }
+
+    body.dark { background: #0f0f0f !important; color: white !important; }
+    body.dark .commande-card { background: #1a1a1a !important; border-color: #2a2a2a !important; }
+    body.dark .commande-card .commande-id { color: white; }
+    body.dark .filtre-btn { background: #1a1a1a; color: #888; border-color: #333; }
+    body.dark .btn-details { background: #2a2a2a; color: white; }
   </style>
 </head>
 <body>
-<div class="sidebar">
-    <div class="sidebar-logo" style="line-height: 0;"><img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;"></div>
+
+  <!-- MENU BURGER -->
+  <div class="menu-toggle" onclick="toggleSidebar()">☰</div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo" style="line-height: 0;">
+      <a href="/index.html">
+        <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
+      </a>
+    </div>
     <a class="sidebar-item" href="/dashboard-vendeur.html"><i class="fas fa-home"></i> Tableau de bord</a>
     <a class="sidebar-item" href="/nouvelle-livraison.html"><i class="fas fa-plus-circle"></i> Nouvelle livraison</a>
-    <a class="sidebar-item" active href="#"><i class="fas fa-box"></i> Mes commandes</a>
+    <a class="sidebar-item active" href="/mes-commandes.html"><i class="fas fa-box"></i> Mes commandes</a>
     <a class="sidebar-item" href="/messages.html"><i class="fas fa-comments"></i> Messages</a>
     <a class="sidebar-item" href="/statistiques.html"><i class="fas fa-chart-bar"></i> Statistiques</a>
     <div class="sidebar-bottom">
       <a class="sidebar-item" href="/parametres.html"><i class="fas fa-cog"></i> Paramètres</a>
-      <a class="sidebar-item" href="#" onclick="deconnexion()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+      <a class="sidebar-item" href="/index.html" onclick="return confirm('Déconnexion ?')"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
     </div>
   </div>
-  <div class="main">
-    <div class="page-title">Mes commandes</div>
-    <div class="page-sub">Suivez toutes vos livraisons en temps réel</div>
-    <div class="filtres">
-      <button class="filtre-btn active" onclick="filtrer('tous', this)">Toutes (5)</button>
-      <button class="filtre-btn" onclick="filtrer('en-cours', this)">En cours (2)</button>
-      <button class="filtre-btn" onclick="filtrer('attente', this)">En attente (1)</button>
-      <button class="filtre-btn" onclick="filtrer('livre', this)">Livrées (1)</button>
-      <button class="filtre-btn" onclick="filtrer('litige', this)">Litiges (1)</button>
-    </div>
-    <div class="commandes-liste" id="liste">
 
-      <div class="commande-card en-cours" data-statut="en-cours">
-        <div class="commande-top">
-          <div class="commande-id">#LV-002 — Robe rouge taille M</div>
-          <span class="badge en-cours"><i class="fas fa-motorcycle"></i> En cours</span>
-        </div>
-        <div class="commande-infos">
-          <div class="info-item"><p>Client</p><span>Paul Nkomo</span></div>
-          <div class="info-item"><p>Zone</p><span>Bonapriso, Douala</span></div>
-          <div class="info-item"><p>Livreur</p><span>Martin K.</span></div>
-          <div class="info-item"><p>Prix livraison</p><span>1 500 FCFA</span></div>
-        </div>
-        <div class="timeline">
-          <div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">Créée</div></div>
-          <div class="tl-line done"></div>
-          <div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">Validée</div></div>
-          <div class="tl-line done"></div>
-          <div class="tl-step"><div class="tl-circle active"><i class="fas fa-motorcycle"></i></div><div class="tl-label">En route</div></div>
-          <div class="tl-line"></div>
-          <div class="tl-step"><div class="tl-circle pending"><i class="fas fa-box"></i></div><div class="tl-label">Livré</div></div>
-        </div>
-        <div class="commande-actions">
-          <button class="btn-action btn-details"><i class="fas fa-eye"></i> Détails</button>
-          <button class="btn-action btn-lien"><i class="fas fa-copy"></i> Copier lien</button>
-          <button class="btn-action btn-signaler"><i class="fas fa-flag"></i> Signaler</button>
-        </div>
-      </div>
-
-      <div class="commande-card livre" data-statut="livre">
-        <div class="commande-top">
-          <div class="commande-id">#LV-001 — Chaussures Nike</div>
-          <span class="badge livre"><i class="fas fa-check-circle"></i> Livré</span>
-        </div>
-        <div class="commande-infos">
-          <div class="info-item"><p>Client</p><span>Marie Kamga</span></div>
-          <div class="info-item"><p>Zone</p><span>Akwa, Douala</span></div>
-          <div class="info-item"><p>Livreur</p><span>Eric T.</span></div>
-          <div class="info-item"><p>Prix livraison</p><span>1 200 FCFA</span></div>
-        </div>
-        <div class="timeline">
-          <div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">Créée</div></div>
-          <div class="tl-line done"></div>
-          <div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">Validée</div></div>
-          <div class="tl-line done"></div>
-          <div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">En route</div></div>
-          <div class="tl-line done"></div>
-          <div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">Livré</div></div>
-        </div>
-        <div class="commande-actions">
-          <button class="btn-action btn-details"><i class="fas fa-eye"></i> Détails</button>
-          <button class="btn-action btn-lien"><i class="fas fa-copy"></i> Copier lien</button>
-        </div>
-      </div>
-
-      <div class="commande-card attente" data-statut="attente">
-        <div class="commande-top">
-          <div class="commande-id">#LV-003 — Sac à main</div>
-          <span class="badge attente"><i class="fas fa-clock"></i> En attente</span>
-        </div>
-        <div class="commande-infos">
-          <div class="info-item"><p>Client</p><span>Sylvie Mba</span></div>
-          <div class="info-item"><p>Zone</p><span>Bastos, Yaoundé</span></div>
-          <div class="info-item"><p>Livreur</p><span>En recherche...</span></div>
-          <div class="info-item"><p>Prix livraison</p><span>2 000 FCFA</span></div>
-        </div>
-        <div class="timeline">
-          <div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">Créée</div></div>
-          <div class="tl-line done"></div>
-          <div class="tl-step"><div class="tl-circle active"><i class="fas fa-search"></i></div><div class="tl-label">Validée</div></div>
-          <div class="tl-line"></div>
-          <div class="tl-step"><div class="tl-circle pending"><i class="fas fa-motorcycle"></i></div><div class="tl-label">En route</div></div>
-          <div class="tl-line"></div>
-          <div class="tl-step"><div class="tl-circle pending"><i class="fas fa-box"></i></div><div class="tl-label">Livré</div></div>
-        </div>
-        <div class="commande-actions">
-          <button class="btn-action btn-details"><i class="fas fa-eye"></i> Détails</button>
-          <button class="btn-action btn-lien"><i class="fas fa-copy"></i> Copier lien</button>
-          <button class="btn-action btn-signaler"><i class="fas fa-flag"></i> Signaler</button>
-        </div>
-      </div>
-
-      <div class="commande-card litige" data-statut="litige">
-        <div class="commande-top">
-          <div class="commande-id">#LV-005 — Téléphone Samsung</div>
-          <span class="badge litige"><i class="fas fa-exclamation-triangle"></i> Litige</span>
-        </div>
-        <div class="commande-infos">
-          <div class="info-item"><p>Client</p><span>Aïcha Bello</span></div>
-          <div class="info-item"><p>Zone</p><span>Omnisport, Yaoundé</span></div>
-          <div class="info-item"><p>Problème</p><span>Colis endommagé</span></div>
-          <div class="info-item"><p>Prix livraison</p><span>1 800 FCFA</span></div>
-        </div>
-        <div class="commande-actions">
-          <button class="btn-action btn-details"><i class="fas fa-eye"></i> Voir le litige</button>
-          <button class="btn-action btn-signaler"><i class="fas fa-headset"></i> Contacter support</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
   <script>
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
     function filtrer(statut, btn) {
       document.querySelectorAll('.filtre-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
@@ -203,10 +149,55 @@ body.dark .stat-card p { color: #888 !important; }
         card.style.display = statut === 'tous' || card.dataset.statut === statut ? 'block' : 'none';
       });
     }
-    function deconnexion() { if(confirm('Voulez-vous vraiment vous déconnecter ?')) window.location.href = '/'; }
+    function copierLien(id) { navigator.clipboard.writeText('livoo.cm/commande/' + id); alert('Lien copié !'); }
+    function allerLitige() { window.location.href = '/litige.html'; }
   </script>
-<script>
-if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
-</script>
+
+  <div class="main">
+    <div class="page-title">Mes commandes</div>
+    <div class="page-sub">Suivez toutes vos livraisons en temps réel</div>
+
+    <div class="filtres">
+      <button class="filtre-btn active" onclick="filtrer('tous', this)">Toutes (5)</button>
+      <button class="filtre-btn" onclick="filtrer('en-cours', this)">En cours (2)</button>
+      <button class="filtre-btn" onclick="filtrer('attente', this)">En attente (1)</button>
+      <button class="filtre-btn" onclick="filtrer('livre', this)">Livrées (1)</button>
+      <button class="filtre-btn" onclick="filtrer('litige', this)">Litiges (1)</button>
+    </div>
+
+    <div class="commandes-liste" id="liste">
+      <div class="commande-card en-cours" data-statut="en-cours">
+        <div class="commande-top"><div class="commande-id">#LV-002 — Robe rouge taille M</div><span class="badge en-cours"><i class="fas fa-motorcycle"></i> En cours</span></div>
+        <div class="commande-infos"><div class="info-item"><p>Client</p><span>Paul Nkomo</span></div><div class="info-item"><p>Zone</p><span>Bonapriso, Douala</span></div><div class="info-item"><p>Livreur</p><span>Martin K.</span></div><div class="info-item"><p>Prix</p><span>1 500 FCFA</span></div></div>
+        <div class="timeline"><div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">Créée</div></div><div class="tl-line done"></div><div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">Validée</div></div><div class="tl-line done"></div><div class="tl-step"><div class="tl-circle active"><i class="fas fa-motorcycle"></i></div><div class="tl-label">En route</div></div><div class="tl-line"></div><div class="tl-step"><div class="tl-circle pending"><i class="fas fa-box"></i></div><div class="tl-label">Livré</div></div></div>
+        <div class="commande-actions"><button class="btn-action btn-details"><i class="fas fa-eye"></i> Détails</button><button class="btn-action btn-lien" onclick="copierLien('LV-002')"><i class="fas fa-copy"></i> Copier lien</button><button class="btn-action btn-signaler" onclick="allerLitige()"><i class="fas fa-flag"></i> Signaler</button></div>
+      </div>
+
+      <div class="commande-card livre" data-statut="livre">
+        <div class="commande-top"><div class="commande-id">#LV-001 — Chaussures Nike</div><span class="badge livre"><i class="fas fa-check-circle"></i> Livré</span></div>
+        <div class="commande-infos"><div class="info-item"><p>Client</p><span>Marie Kamga</span></div><div class="info-item"><p>Zone</p><span>Akwa, Douala</span></div><div class="info-item"><p>Livreur</p><span>Eric T.</span></div><div class="info-item"><p>Prix</p><span>1 200 FCFA</span></div></div>
+        <div class="timeline"><div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">Créée</div></div><div class="tl-line done"></div><div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">Validée</div></div><div class="tl-line done"></div><div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">En route</div></div><div class="tl-line done"></div><div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">Livré</div></div></div>
+        <div class="commande-actions"><button class="btn-action btn-details"><i class="fas fa-eye"></i> Détails</button><button class="btn-action btn-lien" onclick="copierLien('LV-001')"><i class="fas fa-copy"></i> Copier lien</button></div>
+      </div>
+
+      <div class="commande-card attente" data-statut="attente">
+        <div class="commande-top"><div class="commande-id">#LV-003 — Sac à main</div><span class="badge attente"><i class="fas fa-clock"></i> En attente</span></div>
+        <div class="commande-infos"><div class="info-item"><p>Client</p><span>Sylvie Mba</span></div><div class="info-item"><p>Zone</p><span>Bastos, Yaoundé</span></div><div class="info-item"><p>Livreur</p><span>En recherche...</span></div><div class="info-item"><p>Prix</p><span>2 000 FCFA</span></div></div>
+        <div class="timeline"><div class="tl-step"><div class="tl-circle done"><i class="fas fa-check"></i></div><div class="tl-label">Créée</div></div><div class="tl-line done"></div><div class="tl-step"><div class="tl-circle active"><i class="fas fa-search"></i></div><div class="tl-label">Validée</div></div><div class="tl-line"></div><div class="tl-step"><div class="tl-circle pending"><i class="fas fa-motorcycle"></i></div><div class="tl-label">En route</div></div><div class="tl-line"></div><div class="tl-step"><div class="tl-circle pending"><i class="fas fa-box"></i></div><div class="tl-label">Livré</div></div></div>
+        <div class="commande-actions"><button class="btn-action btn-details"><i class="fas fa-eye"></i> Détails</button><button class="btn-action btn-lien" onclick="copierLien('LV-003')"><i class="fas fa-copy"></i> Copier lien</button><button class="btn-action btn-signaler" onclick="allerLitige()"><i class="fas fa-flag"></i> Signaler</button></div>
+      </div>
+
+      <div class="commande-card litige" data-statut="litige">
+        <div class="commande-top"><div class="commande-id">#LV-005 — Téléphone Samsung</div><span class="badge litige"><i class="fas fa-exclamation-triangle"></i> Litige</span></div>
+        <div class="commande-infos"><div class="info-item"><p>Client</p><span>Aïcha Bello</span></div><div class="info-item"><p>Zone</p><span>Omnisport, Yaoundé</span></div><div class="info-item"><p>Problème</p><span>Colis endommagé</span></div><div class="info-item"><p>Prix</p><span>1 800 FCFA</span></div></div>
+        <div class="commande-actions"><button class="btn-action btn-details"><i class="fas fa-eye"></i> Voir le litige</button><button class="btn-action btn-signaler" onclick="allerLitige()"><i class="fas fa-headset"></i> Contacter support</button></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+  </script>
+
 </body>
 </html>

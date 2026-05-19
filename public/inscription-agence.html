@@ -2,27 +2,70 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Livoo — Créer une agence</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background: #0f0f0f; color: white; min-height: 100vh; }
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 60px; background: rgba(0,0,0,0.95); border-bottom: 1px solid #222; }
-    nav img { height: 45px; mix-blend-mode: lighten; filter: brightness(2); }
-    .main { display: flex; align-items: flex-start; justify-content: center; padding: 60px 20px; gap: 60px; max-width: 1100px; margin: 0 auto; }
-    .left { flex: 1; padding-top: 20px; }
-    .tag { display: inline-block; background: rgba(255,107,0,0.15); border: 1px solid #FF6B00; color: #FF6B00; padding: 6px 18px; border-radius: 20px; font-size: 13px; margin-bottom: 20px; }
+
+    /* NAVBAR */
+    nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 15px 60px; background: rgba(0,0,0,0.95);
+      border-bottom: 1px solid #222;
+    }
+    .logo img { height: 50px; width: auto; mix-blend-mode: lighten; filter: brightness(2); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-links a {
+      color: white; text-decoration: none;
+      font-weight: 600; font-size: 14px;
+    }
+    .nav-links a:hover { color: #FF6B00; }
+    .btn-nav {
+      background: #FF6B00; color: white; padding: 8px 22px;
+      border-radius: 25px; font-weight: 700;
+    }
+
+    /* MENU BURGER */
+    .menu-toggle {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .main {
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 60px 20px; gap: 60px; max-width: 1100px; margin: 0 auto;
+      flex-wrap: wrap;
+    }
+    .left { flex: 1; min-width: 280px; padding-top: 20px; }
+    .tag {
+      display: inline-block; background: rgba(255,107,0,0.15);
+      border: 1px solid #FF6B00; color: #FF6B00;
+      padding: 6px 18px; border-radius: 20px; font-size: 13px; margin-bottom: 20px;
+    }
     .left h1 { font-size: 38px; font-weight: 800; line-height: 1.2; margin-bottom: 15px; }
     .left h1 span { color: #FF6B00; }
     .left p { color: #888; font-size: 15px; line-height: 1.7; margin-bottom: 30px; }
     .avantages { display: flex; flex-direction: column; gap: 12px; }
-    .avantage { display: flex; align-items: center; gap: 15px; background: #1a1a1a; padding: 15px 20px; border-radius: 12px; border: 1px solid #2a2a2a; }
+    .avantage {
+      display: flex; align-items: center; gap: 15px;
+      background: #1a1a1a; padding: 15px 20px; border-radius: 12px;
+      border: 1px solid #2a2a2a;
+      flex-wrap: wrap;
+    }
     .av-icon { width: 40px; height: 40px; background: #FF6B00; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; flex-shrink: 0; }
     .av-text h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
     .av-text p { font-size: 12px; color: #888; margin: 0; }
-    .form-card { flex: 1; background: #1a1a1a; border-radius: 24px; padding: 40px; border: 1px solid #2a2a2a; }
+
+    .form-card { flex: 1; min-width: 320px; background: #1a1a1a; border-radius: 24px; padding: 40px; border: 1px solid #2a2a2a; }
     .form-card h2 { font-size: 22px; font-weight: 800; margin-bottom: 5px; }
     .form-card > p { color: #888; font-size: 13px; margin-bottom: 25px; }
     .section-label { font-size: 11px; font-weight: 700; color: #FF6B00; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; margin-top: 20px; }
@@ -30,20 +73,25 @@
     .form-group { margin-bottom: 5px; }
     .form-group.full { grid-column: 1 / -1; }
     label { display: block; font-size: 12px; font-weight: 600; color: #aaa; margin-bottom: 6px; }
-    input, select, textarea { width: 100%; padding: 13px 15px; background: #0f0f0f; border: 1.5px solid #333; border-radius: 10px; font-size: 14px; font-family: 'Poppins', sans-serif; color: white; outline: none; transition: all 0.3s; }
+    input, select, textarea {
+      width: 100%; padding: 13px 15px; background: #0f0f0f;
+      border: 1.5px solid #333; border-radius: 10px;
+      font-size: 14px; font-family: 'Poppins', sans-serif;
+      color: white; outline: none; transition: all 0.3s;
+    }
     input:focus, select:focus, textarea:focus { border-color: #FF6B00; }
     input::placeholder, textarea::placeholder { color: #555; }
     select option { background: #1a1a1a; }
     textarea { height: 80px; resize: none; }
     .commission-box { background: #0f0f0f; border: 1px solid #333; border-radius: 12px; padding: 20px; margin: 20px 0; }
     .commission-box h4 { font-size: 14px; font-weight: 700; color: #FF6B00; margin-bottom: 12px; }
-    .commission-row { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid #222; }
+    .commission-row { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid #222; flex-wrap: wrap; gap: 8px; }
     .commission-row:last-child { border-bottom: none; font-weight: 800; color: white; }
     .commission-row span:first-child { color: #888; }
     .cgu-box { background: #0f0f0f; border: 1px solid #333; border-radius: 12px; padding: 20px; margin: 20px 0; }
     .cgu-box h4 { font-size: 14px; font-weight: 700; color: #FF6B00; margin-bottom: 15px; }
-    .cgu-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
-    .cgu-item input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; accent-color: #FF6B00; cursor: pointer; flex-shrink: 0; }
+    .cgu-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+    .cgu-item input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; accent-color: #FF6B00; flex-shrink: 0; }
     .cgu-item label { font-size: 13px; color: #aaa; cursor: pointer; margin: 0; }
     .cgu-item label a { color: #FF6B00; text-decoration: none; }
     .btn-submit { width: 100%; padding: 16px; background: #FF6B00; border: none; border-radius: 12px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.3s; margin-top: 10px; }
@@ -52,121 +100,136 @@
     .success-icon { font-size: 60px; color: #FF6B00; margin-bottom: 20px; }
     .success h3 { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
     .success p { color: #888; font-size: 14px; }
+
+    @media (max-width: 768px) {
+      nav { padding: 15px 20px; }
+      .menu-toggle { display: block; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: #0f0f0f;
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        border-bottom: 1px solid #222;
+        z-index: 99;
+      }
+      .nav-links.show { display: flex; }
+      .nav-links a { margin: 0; }
+      .main { flex-direction: column; padding: 30px 15px; gap: 30px; }
+      .left { text-align: center; }
+      .left h1 { font-size: 28px; }
+      .form-card { padding: 25px 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      input, select, textarea { padding: 12px; }
+      .cgu-item label { font-size: 12px; }
+    }
+    @media (max-width: 480px) {
+      .left h1 { font-size: 24px; }
+      .form-card { padding: 20px 15px; }
+    }
   </style>
 </head>
 <body>
+
 <nav>
-    <div class="logo" style="line-height: 0;">
-        <a href="/"><img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;"></a>
-    </div>
-    <a href="/inscription-livreur.html" style="color:#FF6B00;font-weight:700;font-size:14px;text-decoration:none">Vous êtes livreur ? →</a>
+  <div class="logo" style="line-height: 0;">
+    <a href="/index.html">
+      <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
+    </a>
+  </div>
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  <div class="nav-links" id="navLinks">
+    <a href="/index.html">Accueil</a>
+    <a href="/comment-ca-marche.html">Comment ça marche</a>
+    <a href="/inscription-livreur.html">Devenir livreur</a>
+    <a href="/inscription-vendeur.html" class="btn-nav">Je suis vendeur</a>
+  </div>
 </nav>
-  <div class="main">
-    <div class="left">
-      <div class="tag">🏢 Espace Agence</div>
-      <h1>Créez votre agence<br><span>et recrutez des livreurs.</span></h1>
-      <p>En tant qu'agence Livoo, vous recrutez et gérez des livreurs dans votre zone. Vous touchez une commission sur chaque livraison effectuée par vos livreurs.</p>
-      <div class="avantages">
-        <div class="avantage">
-          <div class="av-icon"><i class="fas fa-percentage"></i></div>
-          <div class="av-text"><h4>Commission automatique</h4><p>Vous gagnez sur chaque livraison de vos livreurs</p></div>
-        </div>
-        <div class="avantage">
-          <div class="av-icon"><i class="fas fa-users"></i></div>
-          <div class="av-text"><h4>Gérez votre équipe</h4><p>Dashboard dédié pour suivre tous vos livreurs</p></div>
-        </div>
-        <div class="avantage">
-          <div class="av-icon"><i class="fas fa-chart-line"></i></div>
-          <div class="av-text"><h4>Statistiques en temps réel</h4><p>Suivez les performances de votre agence</p></div>
-        </div>
-        <div class="avantage">
-          <div class="av-icon"><i class="fas fa-shield-alt"></i></div>
-          <div class="av-text"><h4>Support Livoo dédié</h4><p>Une équipe disponible pour vous accompagner</p></div>
-        </div>
-      </div>
-    </div>
-    <div class="form-card">
-      <div id="form-content">
-        <h2>Créer mon agence</h2>
-        <p>Remplissez toutes les informations pour soumettre votre demande</p>
 
-        <div class="section-label"><i class="fas fa-building"></i> Informations de l'agence</div>
-        <div class="form-grid">
-          <div class="form-group full"><label>Nom de l'agence</label><input type="text" id="nom-agence" placeholder="Ex: Rapid Express Douala"></div>
-          <div class="form-group"><label>Ville principale</label>
-            <select id="ville">
-              <option value="">Sélectionnez</option>
-              <option>Douala</option>
-              <option>Yaoundé</option>
-              <option>Bafoussam</option>
-              <option>Garoua</option>
-            </select>
-          </div>
-          <div class="form-group"><label>Zone de couverture</label><input type="text" id="zone" placeholder="Ex: Akwa, Bonapriso"></div>
-          <div class="form-group full"><label>Adresse physique</label><input type="text" id="adresse" placeholder="Adresse complète de l'agence"></div>
-          <div class="form-group full"><label>Description</label><textarea id="description" placeholder="Décrivez votre agence..."></textarea></div>
-        </div>
+<script>
+  function toggleMenu() { document.getElementById('navLinks').classList.toggle('show'); }
+</script>
 
-        <div class="section-label"><i class="fas fa-user"></i> Responsable de l'agence</div>
-        <div class="form-grid">
-          <div class="form-group"><label>Nom complet</label><input type="text" id="responsable" placeholder="Jean Dupont"></div>
-          <div class="form-group"><label>Téléphone</label><input type="tel" id="telephone" placeholder="6XXXXXXXX"></div>
-          <div class="form-group"><label>Email</label><input type="email" id="email" placeholder="agence@email.com"></div>
-          <div class="form-group"><label>Mobile Money</label><input type="tel" id="momo" placeholder="6XXXXXXXX"></div>
-        </div>
-
-        <div class="commission-box">
-          <h4><i class="fas fa-calculator"></i> Structure des commissions</h4>
-          <div class="commission-row"><span>Commission Livoo</span><span>15%</span></div>
-          <div class="commission-row"><span>Commission Agence</span><span>5%</span></div>
-          <div class="commission-row"><span>Revenu livreur</span><span>80%</span></div>
-          <div class="commission-row"><span>Total frais de livraison</span><span>100%</span></div>
-        </div>
-
-        <div class="cgu-box">
-          <h4><i class="fas fa-file-contract"></i> Conditions partenariat</h4>
-          <div class="cgu-item">
-            <input type="checkbox" id="cgu1">
-            <label for="cgu1">J'accepte les <a href="#">Conditions Générales de Partenariat</a> Livoo</label>
-          </div>
-          <div class="cgu-item">
-            <input type="checkbox" id="cgu2">
-            <label for="cgu2">Je m'engage à recruter uniquement des livreurs <strong>vérifiés et sérieux</strong></label>
-          </div>
-          <div class="cgu-item">
-            <input type="checkbox" id="cgu3">
-            <label for="cgu3">Je comprends que Livoo peut <strong>suspendre mon agence</strong> en cas de manquements</label>
-          </div>
-          <div class="cgu-item">
-            <input type="checkbox" id="cgu4">
-            <label for="cgu4">Je certifie que toutes les informations fournies sont <strong>exactes</strong></label>
-          </div>
-        </div>
-
-        <button class="btn-submit" onclick="inscrire()">
-          <i class="fas fa-check"></i> Soumettre ma demande
-        </button>
-      </div>
-      <div class="success" id="success">
-        <div class="success-icon"><i class="fas fa-check-circle"></i></div>
-        <h3>Demande envoyée !</h3>
-        <p>Votre demande de création d'agence est en cours d'examen par l'équipe Livoo. Vous recevrez une réponse sous 48h.</p>
-      </div>
+<div class="main">
+  <div class="left">
+    <div class="tag">🏢 Espace Agence</div>
+    <h1>Créez votre agence<br><span>et recrutez des livreurs.</span></h1>
+    <p>En tant qu'agence Livoo, vous recrutez et gérez des livreurs dans votre zone. Vous touchez une commission sur chaque livraison effectuée par vos livreurs.</p>
+    <div class="avantages">
+      <div class="avantage"><div class="av-icon"><i class="fas fa-percentage"></i></div><div class="av-text"><h4>Commission automatique</h4><p>Vous gagnez sur chaque livraison de vos livreurs</p></div></div>
+      <div class="avantage"><div class="av-icon"><i class="fas fa-users"></i></div><div class="av-text"><h4>Gérez votre équipe</h4><p>Dashboard dédié pour suivre tous vos livreurs</p></div></div>
+      <div class="avantage"><div class="av-icon"><i class="fas fa-chart-line"></i></div><div class="av-text"><h4>Statistiques en temps réel</h4><p>Suivez les performances de votre agence</p></div></div>
+      <div class="avantage"><div class="av-icon"><i class="fas fa-shield-alt"></i></div><div class="av-text"><h4>Support Livoo dédié</h4><p>Une équipe disponible pour vous accompagner</p></div></div>
     </div>
   </div>
-  <script>
-    function inscrire() {
-      const champs = ['nom-agence', 'ville', 'zone', 'adresse', 'responsable', 'telephone', 'email', 'momo'];
-      for (let id of champs) {
-        if (!document.getElementById(id).value) { alert('Veuillez remplir tous les champs !'); return; }
-      }
-      const cgus = ['cgu1', 'cgu2', 'cgu3', 'cgu4'];
-      for (let id of cgus) {
-        if (!document.getElementById(id).checked) { alert('Veuillez accepter toutes les conditions !'); return; }
-      }
-      document.getElementById('form-content').style.display = 'none';
-      document.getElementById('success').style.display = 'block';
+
+  <div class="form-card">
+    <div id="form-content">
+      <h2>Créer mon agence</h2>
+      <p>Remplissez toutes les informations pour soumettre votre demande</p>
+
+      <div class="section-label"><i class="fas fa-building"></i> Informations de l'agence</div>
+      <div class="form-grid">
+        <div class="form-group full"><label>Nom de l'agence</label><input type="text" id="nom-agence" placeholder="Ex: Rapid Express Douala"></div>
+        <div class="form-group"><label>Ville principale</label><select id="ville"><option value="">Sélectionnez</option><option>Douala</option><option>Yaoundé</option><option>Bafoussam</option><option>Garoua</option></select></div>
+        <div class="form-group"><label>Zone de couverture</label><input type="text" id="zone" placeholder="Ex: Akwa, Bonapriso"></div>
+        <div class="form-group full"><label>Adresse physique</label><input type="text" id="adresse" placeholder="Adresse complète de l'agence"></div>
+        <div class="form-group full"><label>Description</label><textarea id="description" placeholder="Décrivez votre agence..."></textarea></div>
+      </div>
+
+      <div class="section-label"><i class="fas fa-user"></i> Responsable de l'agence</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Nom complet</label><input type="text" id="responsable" placeholder="Jean Dupont"></div>
+        <div class="form-group"><label>Téléphone</label><input type="tel" id="telephone" placeholder="6XXXXXXXX"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="email" placeholder="agence@email.com"></div>
+        <div class="form-group"><label>Mobile Money</label><input type="tel" id="momo" placeholder="6XXXXXXXX"></div>
+      </div>
+
+      <div class="commission-box">
+        <h4><i class="fas fa-calculator"></i> Structure des commissions</h4>
+        <div class="commission-row"><span>Commission Livoo</span><span>15%</span></div>
+        <div class="commission-row"><span>Commission Agence</span><span>5%</span></div>
+        <div class="commission-row"><span>Revenu livreur</span><span>80%</span></div>
+        <div class="commission-row"><span>Total frais de livraison</span><span>100%</span></div>
+      </div>
+
+      <div class="cgu-box">
+        <h4><i class="fas fa-file-contract"></i> Conditions partenariat</h4>
+        <div class="cgu-item"><input type="checkbox" id="cgu1"><label for="cgu1">J'accepte les <a href="#">Conditions Générales de Partenariat</a> Livoo</label></div>
+        <div class="cgu-item"><input type="checkbox" id="cgu2"><label for="cgu2">Je m'engage à recruter uniquement des livreurs <strong>vérifiés et sérieux</strong></label></div>
+        <div class="cgu-item"><input type="checkbox" id="cgu3"><label for="cgu3">Je comprends que Livoo peut <strong>suspendre mon agence</strong> en cas de manquements</label></div>
+        <div class="cgu-item"><input type="checkbox" id="cgu4"><label for="cgu4">Je certifie que toutes les informations fournies sont <strong>exactes</strong></label></div>
+      </div>
+
+      <button class="btn-submit" onclick="inscrire()"><i class="fas fa-check"></i> Soumettre ma demande</button>
+    </div>
+    <div class="success" id="success">
+      <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+      <h3>Demande envoyée !</h3>
+      <p>Votre demande de création d'agence est en cours d'examen par l'équipe Livoo. Vous recevrez une réponse sous 48h.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function inscrire() {
+    const champs = ['nom-agence', 'ville', 'zone', 'adresse', 'responsable', 'telephone', 'email', 'momo'];
+    for (let id of champs) {
+      if (!document.getElementById(id).value) { alert('Veuillez remplir tous les champs !'); return; }
     }
-  </script>
+    const cgus = ['cgu1', 'cgu2', 'cgu3', 'cgu4'];
+    for (let id of cgus) {
+      if (!document.getElementById(id).checked) { alert('Veuillez accepter toutes les conditions !'); return; }
+    }
+    document.getElementById('form-content').style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+    setTimeout(() => { window.location.href = '/dashboard-agence.html'; }, 3000);
+  }
+</script>
+
 </body>
 </html>

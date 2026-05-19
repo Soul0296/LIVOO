@@ -2,9 +2,10 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Livoo — Livraison rapide au Cameroun</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background: #0f0f0f; color: white; }
@@ -16,34 +17,41 @@
       position: fixed; width: 100%; top: 0; z-index: 100;
       backdrop-filter: blur(10px); border-bottom: 1px solid #222;
     }
-    .logo img { height: 70px; mix-blend-mode: lighten; }
+    .logo img { height: 50px; width: auto; mix-blend-mode: lighten; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
     .nav-links a {
-      color: white; text-decoration: none; margin-left: 30px;
+      color: white; text-decoration: none;
       font-weight: 600; transition: color 0.3s; font-size: 15px;
     }
     .nav-links a:hover { color: #FF6B00; }
     .btn-nav {
       background: #FF6B00; color: white; padding: 10px 25px;
       border-radius: 25px; font-weight: 700; text-decoration: none;
-      transition: all 0.3s; margin-left: 30px;
+      transition: all 0.3s;
     }
     .btn-nav:hover { background: white; color: #FF6B00; transform: scale(1.05); }
 
-    /* HERO */
-   .hero {
-  min-height: 100vh; display: flex; align-items: center;
-  padding: 120px 60px 60px;
-  background: linear-gradient(to left, rgba(0,0,0,0.85) 55%, rgba(0,0,0,0.2) 100%),
-            url('/images/livreur.jpg') center/cover no-repeat;
-  gap: 60px;
-}
-    .hero-content { flex: 1; max-width: 600px; margin-left: auto; }
-   .hero-image { display: none; }
-.hero-image img { display: none; }
-  width: 100%; max-width: 600px; border-radius: 20px;
-  object-fit: cover; height: 550px;
-  box-shadow: 0 30px 80px rgba(255,107,0,0.3);
+    /* MENU BURGER POUR MOBILE */
+    .menu-toggle {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: white;
     }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 120px 60px 60px;
+      background: linear-gradient(to left, rgba(0,0,0,0.85) 55%, rgba(0,0,0,0.2) 100%),
+                  url('/images/livreur.jpg') center/cover no-repeat;
+      gap: 60px;
+    }
+    .hero-content { flex: 1; max-width: 600px; margin-left: auto; }
     .badge {
       display: inline-block; background: rgba(255,107,0,0.15);
       border: 1px solid #FF6B00; color: #FF6B00;
@@ -63,13 +71,13 @@
       background: #FF6B00; color: white; padding: 15px 35px;
       border-radius: 30px; font-size: 15px; font-weight: 700;
       text-decoration: none; transition: all 0.3s;
-      box-shadow: 0 10px 30px rgba(255,107,0,0.4);
+      box-shadow: 0 10px 30px rgba(255,107,0,0.4); display: inline-block;
     }
     .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255,107,0,0.6); }
     .btn-secondary {
       background: transparent; color: white; padding: 15px 35px;
       border-radius: 30px; font-size: 15px; font-weight: 700;
-      text-decoration: none; border: 2px solid white; transition: all 0.3s;
+      text-decoration: none; border: 2px solid white; transition: all 0.3s; display: inline-block;
     }
     .btn-secondary:hover { background: white; color: #0f0f0f; }
 
@@ -81,6 +89,8 @@
     .stat {
       text-align: center; padding: 40px 50px;
       border-right: 1px solid rgba(255,255,255,0.2);
+      flex: 1;
+      min-width: 120px;
     }
     .stat:last-child { border-right: none; }
     .stat h2 { font-size: 42px; font-weight: 800; color: white; }
@@ -100,7 +110,7 @@
     .step {
       background: #1a1a1a; border-radius: 20px; padding: 35px 25px;
       max-width: 240px; transition: all 0.3s; border: 1px solid #2a2a2a;
-      text-align: left;
+      text-align: left; flex: 1;
     }
     .step:hover { transform: translateY(-8px); border-color: #FF6B00; box-shadow: 0 20px 50px rgba(255,107,0,0.15); }
     .step-num {
@@ -122,7 +132,7 @@
     .card {
       background: #1a1a1a; border-radius: 20px; padding: 0;
       max-width: 340px; border: 1px solid #2a2a2a; transition: all 0.3s;
-      overflow: hidden;
+      overflow: hidden; flex: 1;
     }
     .card:hover { border-color: #FF6B00; transform: translateY(-5px); box-shadow: 0 20px 50px rgba(255,107,0,0.15); }
     .card-img { width: 100%; height: 200px; object-fit: cover; }
@@ -157,31 +167,48 @@
     .btn-white:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
 
     /* SECTION LIVREUR */
-.livreur-section { display: flex; gap: 80px; padding: 100px 60px; background: #111; align-items: center; }
-.livreur-left { flex: 1; }
-.livreur-left h2 { font-size: 42px; font-weight: 800; margin-bottom: 15px; line-height: 1.2; }
-.livreur-left h2 span { color: #FF6B00; }
-.livreur-left > p { color: #aaa; font-size: 16px; line-height: 1.7; margin-bottom: 35px; }
-.livreur-avantages { display: flex; flex-direction: column; gap: 15px; margin-bottom: 35px; }
-.lav-item { display: flex; align-items: center; gap: 15px; }
-.lav-icon { width: 45px; height: 45px; background: rgba(255,107,0,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #FF6B00; font-size: 18px; flex-shrink: 0; }
-.lav-item h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-.lav-item p { font-size: 12px; color: #888; }
-.livreur-btns { display: flex; gap: 15px; flex-wrap: wrap; }
-.livreur-right { flex: 1; display: flex; flex-direction: column; gap: 20px; }
-.livreur-stats-card { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-.ls-item { background: #1a1a1a; border-radius: 16px; padding: 20px; text-align: center; border: 1px solid #2a2a2a; transition: all 0.3s; }
-.ls-item:hover { border-color: #FF6B00; transform: translateY(-3px); }
-.ls-item h3 { font-size: 28px; font-weight: 800; color: #FF6B00; margin-bottom: 5px; }
-.ls-item p { font-size: 12px; color: #888; }
-.livreur-temoignage { background: #1a1a1a; border-radius: 16px; padding: 20px; border: 1px solid #2a2a2a; display: flex; gap: 15px; align-items: flex-start; }
-.temoignage-avatar { width: 45px; height: 45px; background: #FF6B00; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: white; flex-shrink: 0; }
-.livreur-temoignage p { font-size: 13px; color: #aaa; line-height: 1.6; margin-bottom: 8px; font-style: italic; }
-.livreur-temoignage strong { font-size: 12px; color: #FF6B00; }
-/* ANIMATIONS SCROLL */
-.animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
-.animate-on-scroll.visible { opacity: 1; transform: translateY(0); }    
-/* FOOTER */
+    .livreur-section { display: flex; gap: 80px; padding: 100px 60px; background: #111; align-items: center; flex-wrap: wrap; }
+    .livreur-left { flex: 1; min-width: 280px; }
+    .livreur-left h2 { font-size: 42px; font-weight: 800; margin-bottom: 15px; line-height: 1.2; }
+    .livreur-left h2 span { color: #FF6B00; }
+    .livreur-left > p { color: #aaa; font-size: 16px; line-height: 1.7; margin-bottom: 35px; }
+    .livreur-avantages { display: flex; flex-direction: column; gap: 15px; margin-bottom: 35px; }
+    .lav-item { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+    .lav-icon { width: 45px; height: 45px; background: rgba(255,107,0,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #FF6B00; font-size: 18px; flex-shrink: 0; }
+    .lav-item h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .lav-item p { font-size: 12px; color: #888; }
+    .livreur-btns { display: flex; gap: 15px; flex-wrap: wrap; }
+    .livreur-right { flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 20px; }
+    .livreur-stats-card { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
+    .ls-item { background: #1a1a1a; border-radius: 16px; padding: 20px; text-align: center; border: 1px solid #2a2a2a; transition: all 0.3s; }
+    .ls-item:hover { border-color: #FF6B00; transform: translateY(-3px); }
+    .ls-item h3 { font-size: 28px; font-weight: 800; color: #FF6B00; margin-bottom: 5px; }
+    .ls-item p { font-size: 12px; color: #888; }
+    .livreur-temoignage { background: #1a1a1a; border-radius: 16px; padding: 20px; border: 1px solid #2a2a2a; display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap; }
+    .temoignage-avatar { width: 45px; height: 45px; background: #FF6B00; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: white; flex-shrink: 0; }
+    .livreur-temoignage p { font-size: 13px; color: #aaa; line-height: 1.6; margin-bottom: 8px; font-style: italic; }
+    .livreur-temoignage strong { font-size: 12px; color: #FF6B00; }
+
+    /* CARTE */
+    .carte-section { padding: 100px 60px; background: #0f0f0f; }
+    .carte-header { text-align: center; margin-bottom: 40px; }
+    .carte-header h2 { font-size: 40px; font-weight: 800; margin-bottom: 15px; }
+    .carte-header h2 span { color: #FF6B00; }
+    .carte-header .subtitle { color: #aaa; font-size: 16px; }
+    .carte-container { position: relative; }
+    .carte-overlay { margin-top: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+    .livreurs-dispo { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+    .livreur-pin { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 12px 20px; display: flex; align-items: center; gap: 12px; transition: all 0.3s; flex-wrap: wrap; }
+    .livreur-pin:hover { border-color: #FF6B00; transform: translateY(-3px); }
+    .livreur-pin i { color: #FF6B00; font-size: 18px; }
+    .livreur-pin span { font-size: 14px; font-weight: 700; display: block; }
+    .livreur-pin small { color: #888; font-size: 12px; display: block; }
+
+    /* ANIMATIONS SCROLL */
+    .animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .animate-on-scroll.visible { opacity: 1; transform: translateY(0); }    
+
+    /* FOOTER */
     footer {
       background: #080808; padding: 50px 60px;
       display: flex; justify-content: space-between; align-items: center;
@@ -190,52 +217,91 @@
     footer img { height: 40px; }
     footer p { color: #555; font-size: 13px; }
     footer p span { color: #FF6B00; }
-  /* CARTE */
-    .carte-section { padding: 100px 60px; background: #0f0f0f; }
-    .carte-header { text-align: center; margin-bottom: 40px; }
-    .carte-header h2 { font-size: 40px; font-weight: 800; margin-bottom: 15px; }
-    .carte-header h2 span { color: #FF6B00; }
-    .carte-header .subtitle { color: #aaa; font-size: 16px; }
-    .carte-container { position: relative; }
-    .carte-overlay { margin-top: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
-    .livreur-pin { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 12px 20px; display: flex; align-items: center; gap: 12px; transition: all 0.3s; }
-    .livreur-pin:hover { border-color: #FF6B00; transform: translateY(-3px); }
-    .livreur-pin i { color: #FF6B00; font-size: 18px; }
-    .livreur-pin span { font-size: 14px; font-weight: 700; display: block; }
-    .livreur-pin small { color: #888; font-size: 12px; display: block; }
-   /* RESPONSIVE MOBILE */
-@media (max-width: 768px) {
-  nav { padding: 15px 20px; }
-  .nav-links { display: none; }
-  .hero { padding: 100px 20px 60px; flex-direction: column; }
-  .hero h1 { font-size: 36px; }
-  .stats { gap: 0; }
-  .stat { padding: 25px 20px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.2); }
-  .how { padding: 60px 20px; }
-  .steps { flex-direction: column; align-items: center; }
-  .acteurs { padding: 60px 20px; }
-  .cards { flex-direction: column; align-items: center; }
-  .livreur-section { flex-direction: column; padding: 60px 20px; gap: 40px; }
-  .carte-section { padding: 60px 20px; }
-  .cta { padding: 60px 20px; }
-  footer { padding: 30px 20px; flex-direction: column; text-align: center; }
-}
-   </style>
+
+    /* ========== RESPONSIVE MOBILE ========== */
+    @media (max-width: 768px) {
+      nav { padding: 15px 20px; }
+      .menu-toggle { display: block; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: rgba(0,0,0,0.95);
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid #222;
+      }
+      .nav-links.show { display: flex; }
+      .nav-links a { margin: 0; }
+      .btn-nav { margin: 0; text-align: center; }
+      
+      .hero { padding: 100px 20px 60px; flex-direction: column; text-align: center; }
+      .hero-content { margin-left: 0; max-width: 100%; }
+      .hero h1 { font-size: 36px; }
+      .hero-buttons { justify-content: center; }
+      
+      .stats { gap: 0; }
+      .stat { padding: 25px 20px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.2); width: 100%; }
+      .stat:last-child { border-bottom: none; }
+      
+      .how { padding: 60px 20px; }
+      .how h2 { font-size: 32px; }
+      .steps { flex-direction: column; align-items: center; }
+      .step { max-width: 100%; width: 100%; }
+      
+      .acteurs { padding: 60px 20px; }
+      .acteurs h2 { font-size: 32px; }
+      .cards { flex-direction: column; align-items: center; }
+      .card { max-width: 100%; width: 100%; }
+      
+      .livreur-section { flex-direction: column; padding: 60px 20px; gap: 40px; }
+      .livreur-left h2 { font-size: 32px; }
+      .livreur-stats-card { grid-template-columns: 1fr 1fr; }
+      
+      .carte-section { padding: 60px 20px; }
+      .carte-header h2 { font-size: 32px; }
+      iframe { height: 300px; }
+      
+      .cta { padding: 60px 20px; }
+      .cta h2 { font-size: 32px; }
+      
+      footer { padding: 30px 20px; flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 28px; }
+      .btn-primary, .btn-secondary { padding: 12px 25px; font-size: 14px; text-align: center; width: 100%; }
+      .hero-buttons { flex-direction: column; width: 100%; }
+      .stat h2 { font-size: 32px; }
+      .livreur-stats-card { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
   <!-- NAVBAR -->
   <nav>
     <div class="logo" style="line-height: 0;">
-  <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto; object-fit: contain;">
-</div>
-    <div class="nav-links">
+      <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto; object-fit: contain;">
+    </div>
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <div class="nav-links" id="navLinks">
       <a href="#">Accueil</a>
-     <a href="/comment-ca-marche.html">Comment ça marche</a>
+      <a href="/comment-ca-marche.html">Comment ça marche</a>
       <a href="#">Devenir livreur</a>
       <a class="btn-nav" href="#">Je suis vendeur</a>
     </div>
   </nav>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('show');
+    }
+  </script>
 
   <!-- HERO -->
   <section class="hero">
@@ -247,9 +313,6 @@
         <a href="/inscription-vendeur.html" class="btn-primary">Envoyer ma première livraison</a>
         <a href="#" class="btn-secondary">Devenir livreur</a>
       </div>
-    </div>
-    <div class="hero-image">
-      <img src="/images/livreur.jpg" alt="Livreur Livoo">
     </div>
   </section>
 
@@ -313,7 +376,6 @@
           <div class="card-icon">📦</div>
           <h3>Vous êtes client ?</h3>
           <p>Votre vendeur vous a envoyé un lien Livoo ? Entrez simplement votre adresse et attendez votre colis. Pas de compte, pas de téléchargement. C'est aussi simple que ça.</p>
-          <a href="/comment-ca-marche.html" </a>
         </div>
       </div>
       <div class="card">
@@ -334,63 +396,65 @@
     <p>Rejoignez Livoo aujourd'hui et offrez à vos clients une expérience de livraison professionnelle. Gratuit pour commencer.</p>
     <a href="#" class="btn-white">Créer mon compte gratuitement</a>
   </section>
-<!-- SECTION LIVREUR -->
-<section class="livreur-section">
-  <div class="livreur-left">
-    <div class="section-tag">🏍️ Devenez livreur Livoo</div>
-    <h2>Transformez votre moto<br><span>en source de revenus.</span></h2>
-    <p>Rejoignez des centaines de livreurs qui gagnent leur vie avec Livoo. Travaillez à votre rythme, dans votre quartier, et encaissez chaque jour.</p>
-    <div class="livreur-avantages">
-      <div class="lav-item">
-        <div class="lav-icon"><i class="fas fa-wallet"></i></div>
-        <div><h4>50 000 — 150 000 FCFA/mois</h4><p>Revenus estimés selon votre activité</p></div>
+
+  <!-- SECTION LIVREUR -->
+  <section class="livreur-section">
+    <div class="livreur-left">
+      <div class="section-tag">🏍️ Devenez livreur Livoo</div>
+      <h2>Transformez votre moto<br><span>en source de revenus.</span></h2>
+      <p>Rejoignez des centaines de livreurs qui gagnent leur vie avec Livoo. Travaillez à votre rythme, dans votre quartier, et encaissez chaque jour.</p>
+      <div class="livreur-avantages">
+        <div class="lav-item">
+          <div class="lav-icon"><i class="fas fa-wallet"></i></div>
+          <div><h4>50 000 — 150 000 FCFA/mois</h4><p>Revenus estimés selon votre activité</p></div>
+        </div>
+        <div class="lav-item">
+          <div class="lav-icon"><i class="fas fa-clock"></i></div>
+          <div><h4>Horaires 100% libres</h4><p>Vous décidez quand vous travaillez</p></div>
+        </div>
+        <div class="lav-item">
+          <div class="lav-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div><h4>Votre quartier uniquement</h4><p>Pas de longues distances imposées</p></div>
+        </div>
+        <div class="lav-item">
+          <div class="lav-icon"><i class="fas fa-coins"></i></div>
+          <div><h4>Paiement immédiat</h4><p>Vous encaissez directement après chaque livraison</p></div>
+        </div>
       </div>
-      <div class="lav-item">
-        <div class="lav-icon"><i class="fas fa-clock"></i></div>
-        <div><h4>Horaires 100% libres</h4><p>Vous décidez quand vous travaillez</p></div>
-      </div>
-      <div class="lav-item">
-        <div class="lav-icon"><i class="fas fa-map-marker-alt"></i></div>
-        <div><h4>Votre quartier uniquement</h4><p>Pas de longues distances imposées</p></div>
-      </div>
-      <div class="lav-item">
-        <div class="lav-icon"><i class="fas fa-coins"></i></div>
-        <div><h4>Paiement immédiat</h4><p>Vous encaissez directement après chaque livraison</p></div>
-      </div>
-    </div>
-    <div class="livreur-btns">
-      <a href="/inscription-livreur.html" class="btn-primary">Je deviens livreur →</a>
-      <a href="/comment-ca-marche.html" class="btn-secondary">En savoir plus</a>
-    </div>
-  </div>
-  <div class="livreur-right">
-    <div class="livreur-stats-card">
-      <div class="ls-item">
-        <h3>+500</h3>
-        <p>Livreurs actifs</p>
-      </div>
-      <div class="ls-item">
-        <h3>4.8★</h3>
-        <p>Note moyenne</p>
-      </div>
-      <div class="ls-item">
-        <h3>2 min</h3>
-        <p>Temps moyen par course</p>
-      </div>
-      <div class="ls-item">
-        <h3>0 FCFA</h3>
-        <p>Pour s'inscrire</p>
+      <div class="livreur-btns">
+        <a href="/inscription-livreur.html" class="btn-primary">Je deviens livreur →</a>
+        <a href="/comment-ca-marche.html" class="btn-secondary">En savoir plus</a>
       </div>
     </div>
-    <div class="livreur-temoignage">
-      <div class="temoignage-avatar">M</div>
-      <div>
-        <p>"Avec Livoo je gagne entre 80 000 et 120 000 FCFA par mois en travaillant seulement le matin. C'est ma meilleure décision !"</p>
-        <strong>Martin K. — Livreur à Douala depuis 6 mois</strong>
+    <div class="livreur-right">
+      <div class="livreur-stats-card">
+        <div class="ls-item">
+          <h3>+500</h3>
+          <p>Livreurs actifs</p>
+        </div>
+        <div class="ls-item">
+          <h3>4.8★</h3>
+          <p>Note moyenne</p>
+        </div>
+        <div class="ls-item">
+          <h3>2 min</h3>
+          <p>Temps moyen par course</p>
+        </div>
+        <div class="ls-item">
+          <h3>0 FCFA</h3>
+          <p>Pour s'inscrire</p>
+        </div>
+      </div>
+      <div class="livreur-temoignage">
+        <div class="temoignage-avatar">M</div>
+        <div>
+          <p>"Avec Livoo je gagne entre 80 000 et 120 000 FCFA par mois en travaillant seulement le matin. C'est ma meilleure décision !"</p>
+          <strong>Martin K. — Livreur à Douala depuis 6 mois</strong>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
   <!-- CARTE -->
   <section class="carte-section">
     <div class="carte-header">
@@ -412,6 +476,7 @@
       </div>
     </div>
   </section>
+
   <!-- FOOTER -->
   <footer>
     <img src="/images/logo/logo_transparent.png" alt="Livoo">
@@ -419,19 +484,19 @@
     <p>Livraison rapide • Paiement sécurisé • 100% local</p>
   </footer>
 
-<script>
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.1 });
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
 
-document.querySelectorAll('.step, .card, .stat, .lav-item, .ls-item, .livreur-temoignage, .livreur-stats-card').forEach(el => {
-  el.classList.add('animate-on-scroll');
-  observer.observe(el);
-});
-</script>
+    document.querySelectorAll('.step, .card, .stat, .lav-item, .ls-item, .livreur-temoignage, .livreur-stats-card').forEach(el => {
+      el.classList.add('animate-on-scroll');
+      observer.observe(el);
+    });
+  </script>
 </body>
 </html>

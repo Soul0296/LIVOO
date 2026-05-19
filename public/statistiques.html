@@ -2,22 +2,63 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Livoo — Statistiques</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background: #f4f6f9; color: #1a1a1a; }
-    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 260px; background: #0f0f0f; padding: 30px 20px; display: flex; flex-direction: column; gap: 8px; border-right: 1px solid #222; }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed; left: 0; top: 0; bottom: 0; width: 260px;
+      background: #0f0f0f; padding: 30px 20px;
+      display: flex; flex-direction: column; gap: 8px;
+      border-right: 1px solid #222;
+      transition: transform 0.3s ease;
+      z-index: 100;
+    }
     .sidebar-logo { padding: 10px 15px 30px; }
-    .sidebar-logo img { height: 40px; mix-blend-mode: lighten; filter: brightness(2); }
-    .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 12px; color: #888; text-decoration: none; font-size: 14px; font-weight: 600; transition: all 0.3s; }
+    .sidebar-logo img { height: 50px; width: auto; mix-blend-mode: lighten; filter: brightness(2); }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 15px; border-radius: 12px;
+      color: #888; text-decoration: none; font-size: 14px;
+      font-weight: 600; transition: all 0.3s;
+    }
     .sidebar-item:hover { background: #1a1a1a; color: white; }
     .sidebar-item.active { background: #FF6B00; color: white; }
     .sidebar-item i { width: 20px; text-align: center; }
     .sidebar-bottom { margin-top: auto; border-top: 1px solid #222; padding-top: 20px; }
-    .main { margin-left: 260px; padding: 40px; }
+
+    /* MENU BURGER */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 101;
+      background: #FF6B00;
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .menu-toggle { display: flex; }
+      .main { margin-left: 0; padding: 20px; padding-top: 70px; }
+    }
+
+    .main { margin-left: 260px; padding: 40px; transition: margin-left 0.3s ease; }
     .page-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
     .page-sub { color: #888; font-size: 14px; margin-bottom: 35px; }
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
@@ -36,76 +77,93 @@
     .card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 2px 15px rgba(0,0,0,0.06); }
     .card h2 { font-size: 16px; font-weight: 800; margin-bottom: 20px; }
     .bar-chart { display: flex; flex-direction: column; gap: 12px; }
-    .bar-item { display: flex; align-items: center; gap: 12px; }
+    .bar-item { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .bar-label { width: 80px; font-size: 12px; font-weight: 600; color: #888; flex-shrink: 0; }
     .bar-track { flex: 1; background: #f4f6f9; border-radius: 10px; height: 10px; overflow: hidden; }
     .bar-fill { height: 100%; background: linear-gradient(to right, #FF6B00, #cc5500); border-radius: 10px; transition: width 1s ease; }
     .bar-val { width: 50px; text-align: right; font-size: 12px; font-weight: 700; color: #FF6B00; }
     .zones-list { display: flex; flex-direction: column; gap: 10px; }
-    .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f4f6f9; border-radius: 10px; }
+    .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f4f6f9; border-radius: 10px; flex-wrap: wrap; gap: 8px; }
     .zone-item .nom { font-size: 13px; font-weight: 600; }
     .zone-item .count { background: #FF6B00; color: white; border-radius: 20px; padding: 3px 12px; font-size: 12px; font-weight: 700; }
-    .periode-btns { display: flex; gap: 8px; margin-bottom: 20px; }
+    .periode-btns { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
     .periode-btn { padding: 6px 16px; border-radius: 20px; border: 1.5px solid #eee; background: white; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
     .periode-btn.active { background: #FF6B00; color: white; border-color: #FF6B00; }
-  body.dark { background: #0f0f0f !important; color: white !important; }
-body.dark .card { background: #1a1a1a !important; border-color: #2a2a2a !important; }
-body.dark .card h2 { color: white !important; }
-body.dark table { color: white !important; }
-body.dark td, body.dark th { color: #ccc !important; border-color: #2a2a2a !important; }
-body.dark input, body.dark select, body.dark textarea { background: #0f0f0f !important; border-color: #333 !important; color: white !important; }
-body.dark .stat-card { background: #1a1a1a !important; }
-body.dark .stat-card p { color: #888 !important; }
+
+    body.dark { background: #0f0f0f !important; color: white !important; }
+    body.dark .card { background: #1a1a1a !important; border-color: #2a2a2a !important; }
+    body.dark .card h2 { color: white !important; }
+    body.dark .stat-card { background: #1a1a1a !important; }
+    body.dark .stat-card p { color: #888 !important; }
+    body.dark .zone-item { background: #0f0f0f; }
+    body.dark .bar-track { background: #0f0f0f; }
+
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .page-title { font-size: 22px; }
+      .stat-card { padding: 20px; }
+      .stat-card h3 { font-size: 24px; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .periode-btn { font-size: 11px; padding: 4px 12px; }
+    }
   </style>
 </head>
 <body>
-<div class="sidebar">
-    <div class="sidebar-logo" style="line-height: 0;"><img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;"></div>
+
+  <!-- MENU BURGER -->
+  <div class="menu-toggle" onclick="toggleSidebar()">☰</div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo" style="line-height: 0;">
+      <a href="/index.html">
+        <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
+      </a>
+    </div>
     <a class="sidebar-item" href="/dashboard-vendeur.html"><i class="fas fa-home"></i> Tableau de bord</a>
     <a class="sidebar-item" href="/nouvelle-livraison.html"><i class="fas fa-plus-circle"></i> Nouvelle livraison</a>
     <a class="sidebar-item" href="/mes-commandes.html"><i class="fas fa-box"></i> Mes commandes</a>
     <a class="sidebar-item" href="/messages.html"><i class="fas fa-comments"></i> Messages</a>
-    <a class="sidebar-item" active href="#"><i class="fas fa-chart-bar"></i> Statistiques</a>
+    <a class="sidebar-item" active href="/statistiques.html"><i class="fas fa-chart-bar"></i> Statistiques</a>
     <div class="sidebar-bottom">
       <a class="sidebar-item" href="/parametres.html"><i class="fas fa-cog"></i> Paramètres</a>
-      <a class="sidebar-item" href="#" onclick="deconnexion()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+      <a class="sidebar-item" href="/index.html" onclick="return confirm('Déconnexion ?')"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
     </div>
   </div>
+
+  <script>
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+    document.querySelectorAll('.periode-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.periode-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        alert('Données de la période : ' + this.textContent);
+      });
+    });
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+  </script>
+
   <div class="main">
     <div class="page-title">Statistiques</div>
     <div class="page-sub">Analysez vos performances de livraison</div>
+
     <div class="periode-btns">
       <button class="periode-btn active">7 jours</button>
       <button class="periode-btn">30 jours</button>
       <button class="periode-btn">3 mois</button>
       <button class="periode-btn">Tout</button>
     </div>
+
     <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon orange"><i class="fas fa-box"></i></div>
-        <h3>47</h3>
-        <p>Commandes totales</p>
-        <div class="trend up"><i class="fas fa-arrow-up"></i> +12% ce mois</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
-        <h3>41</h3>
-        <p>Livraisons réussies</p>
-        <div class="trend up"><i class="fas fa-arrow-up"></i> Taux 87%</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon blue"><i class="fas fa-clock"></i></div>
-        <h3>18 min</h3>
-        <p>Délai moyen livraison</p>
-        <div class="trend up"><i class="fas fa-arrow-up"></i> -3 min vs mois dernier</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon red"><i class="fas fa-exclamation-triangle"></i></div>
-        <h3>2</h3>
-        <p>Litiges ouverts</p>
-        <div class="trend down"><i class="fas fa-arrow-down"></i> En cours de résolution</div>
-      </div>
+      <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-box"></i></div><h3>47</h3><p>Commandes totales</p><div class="trend up"><i class="fas fa-arrow-up"></i> +12% ce mois</div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fas fa-check-circle"></i></div><h3>41</h3><p>Livraisons réussies</p><div class="trend up"><i class="fas fa-arrow-up"></i> Taux 87%</div></div>
+      <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-clock"></i></div><h3>18 min</h3><p>Délai moyen livraison</p><div class="trend up"><i class="fas fa-arrow-up"></i> -3 min vs mois dernier</div></div>
+      <div class="stat-card"><div class="stat-icon red"><i class="fas fa-exclamation-triangle"></i></div><h3>2</h3><p>Litiges ouverts</p><div class="trend down"><i class="fas fa-arrow-down"></i> En cours de résolution</div></div>
     </div>
+
     <div class="grid-2">
       <div class="card">
         <h2><i class="fas fa-chart-bar" style="color:#FF6B00;margin-right:8px"></i> Commandes par jour</h2>
@@ -119,31 +177,20 @@ body.dark .stat-card p { color: #888 !important; }
           <div class="bar-item"><div class="bar-label">Dimanche</div><div class="bar-track"><div class="bar-fill" style="width:20%"></div></div><div class="bar-val">2</div></div>
         </div>
       </div>
+
       <div class="card">
         <h2><i class="fas fa-map-marker-alt" style="color:#FF6B00;margin-right:8px"></i> Zones les plus livrées</h2>
         <div class="zones-list">
-          <div class="zone-item"><div><div class="nom">Akwa, Douala</div></div><span class="count">14 livraisons</span></div>
-          <div class="zone-item"><div><div class="nom">Bonapriso, Douala</div></div><span class="count">11 livraisons</span></div>
-          <div class="zone-item"><div><div class="nom">Bastos, Yaoundé</div></div><span class="count">8 livraisons</span></div>
-          <div class="zone-item"><div><div class="nom">Deido, Douala</div></div><span class="count">7 livraisons</span></div>
-          <div class="zone-item"><div><div class="nom">Omnisport, Yaoundé</div></div><span class="count">5 livraisons</span></div>
-          <div class="zone-item"><div><div class="nom">Autres zones</div></div><span class="count">2 livraisons</span></div>
+          <div class="zone-item"><div class="nom">Akwa, Douala</div><span class="count">14 livraisons</span></div>
+          <div class="zone-item"><div class="nom">Bonapriso, Douala</div><span class="count">11 livraisons</span></div>
+          <div class="zone-item"><div class="nom">Bastos, Yaoundé</div><span class="count">8 livraisons</span></div>
+          <div class="zone-item"><div class="nom">Deido, Douala</div><span class="count">7 livraisons</span></div>
+          <div class="zone-item"><div class="nom">Omnisport, Yaoundé</div><span class="count">5 livraisons</span></div>
+          <div class="zone-item"><div class="nom">Autres zones</div><span class="count">2 livraisons</span></div>
         </div>
       </div>
     </div>
   </div>
-  <script>
-    document.querySelectorAll('.periode-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.periode-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-      });
-    });
-    function deconnexion() { if(confirm('Voulez-vous vraiment vous déconnecter ?')) window.location.href = '/'; }
-  </script>
-<script>
-if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
-</script>
 
 </body>
 </html>

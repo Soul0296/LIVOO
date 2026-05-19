@@ -2,32 +2,63 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Livoo — Paramètres</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background: #f4f6f9; color: #1a1a1a; }
-    body.dark { background: #0f0f0f; color: white; }
-    body.dark .main-content { background: #0f0f0f; }
-    body.dark .card { background: #1a1a1a; border-color: #2a2a2a; }
-    body.dark .card h2 { color: white; }
-    body.dark label { color: #ccc; }
-    body.dark input, body.dark select { background: #0f0f0f; border-color: #333; color: white; }
-    body.dark .section-title { color: #aaa; }
-    body.dark .toggle-row { border-color: #2a2a2a; }
-    body.dark .toggle-row span { color: #ccc; }
-    body.dark .toggle-row small { color: #666; }
-    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 260px; background: #0f0f0f; padding: 30px 20px; display: flex; flex-direction: column; gap: 8px; border-right: 1px solid #222; }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed; left: 0; top: 0; bottom: 0; width: 260px;
+      background: #0f0f0f; padding: 30px 20px;
+      display: flex; flex-direction: column; gap: 8px;
+      border-right: 1px solid #222;
+      transition: transform 0.3s ease;
+      z-index: 100;
+    }
     .sidebar-logo { padding: 10px 15px 30px; }
-    .sidebar-logo img { height: 40px; mix-blend-mode: lighten; filter: brightness(2); }
-    .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 12px; color: #888; text-decoration: none; font-size: 14px; font-weight: 600; transition: all 0.3s; }
+    .sidebar-logo img { height: 50px; width: auto; mix-blend-mode: lighten; filter: brightness(2); }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 15px; border-radius: 12px;
+      color: #888; text-decoration: none; font-size: 14px;
+      font-weight: 600; transition: all 0.3s;
+    }
     .sidebar-item:hover { background: #1a1a1a; color: white; }
     .sidebar-item.active { background: #FF6B00; color: white; }
     .sidebar-item i { width: 20px; text-align: center; }
     .sidebar-bottom { margin-top: auto; border-top: 1px solid #222; padding-top: 20px; }
-    .main { margin-left: 260px; padding: 40px; max-width: 800px; }
+
+    /* MENU BURGER */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 101;
+      background: #FF6B00;
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .menu-toggle { display: flex; }
+      .main { margin-left: 0; padding: 20px; padding-top: 70px; }
+    }
+
+    .main { margin-left: 260px; padding: 40px; max-width: 800px; transition: margin-left 0.3s ease; }
     .page-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
     .page-sub { color: #888; font-size: 14px; margin-bottom: 35px; }
     .card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 2px 15px rgba(0,0,0,0.06); margin-bottom: 25px; border: 1px solid #f0f0f0; }
@@ -37,9 +68,9 @@
     .form-group { margin-bottom: 5px; }
     .form-group.full { grid-column: 1 / -1; }
     label { display: block; font-size: 12px; font-weight: 700; color: #888; margin-bottom: 7px; text-transform: uppercase; }
-    input, select { width: 100%; padding: 13px 15px; background: #f4f6f9; border: 1.5px solid #eee; border-radius: 10px; font-size: 14px; font-family: 'Poppins', sans-serif; color: #1a1a1a; outline: none; transition: all 0.3s; }
+    input, select { width: 100%; padding: 13px 15px; background: #f4f6f9; border: 1.5px solid #eee; border-radius: 10px; font-size: 14px; font-family: 'Poppins', sans-serif; color: #1a1a1a; outline: none; }
     input:focus, select:focus { border-color: #FF6B00; background: white; }
-    .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #f0f0f0; }
+    .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap; gap: 15px; }
     .toggle-row:last-child { border-bottom: none; }
     .toggle-info span { font-size: 14px; font-weight: 600; display: block; margin-bottom: 3px; }
     .toggle-info small { font-size: 12px; color: #888; }
@@ -49,13 +80,13 @@
     .toggle-slider:before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s; }
     .toggle input:checked + .toggle-slider { background: #FF6B00; }
     .toggle input:checked + .toggle-slider:before { transform: translateX(22px); }
-    .btn-save { background: #FF6B00; color: white; padding: 14px 30px; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
-    .btn-save:hover { background: #cc5500; transform: translateY(-2px); }
-    .btn-danger { background: rgba(239,68,68,0.1); color: #ef4444; padding: 14px 30px; border: 1.5px solid #ef4444; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
+    .btn-save { background: #FF6B00; color: white; padding: 14px 30px; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; }
+    .btn-save:hover { background: #cc5500; }
+    .btn-danger { background: rgba(239,68,68,0.1); color: #ef4444; padding: 14px 30px; border: 1.5px solid #ef4444; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; }
     .btn-danger:hover { background: #ef4444; color: white; }
-    .avatar-section { display: flex; align-items: center; gap: 20px; margin-bottom: 25px; }
+    .avatar-section { display: flex; align-items: center; gap: 20px; margin-bottom: 25px; flex-wrap: wrap; }
     .avatar-big { width: 70px; height: 70px; background: #FF6B00; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; color: white; }
-    .btn-photo { background: #f4f6f9; border: 1.5px solid #eee; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; }
+    .btn-photo { background: #f4f6f9; border: 1.5px solid #eee; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
     .theme-options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 5px; }
     .theme-option { border: 2px solid #eee; border-radius: 12px; padding: 15px; cursor: pointer; text-align: center; transition: all 0.3s; }
     .theme-option.selected { border-color: #FF6B00; background: rgba(255,107,0,0.05); }
@@ -63,21 +94,49 @@
     .theme-preview.light { background: linear-gradient(135deg, #f4f6f9, #ffffff); border: 1px solid #eee; }
     .theme-preview.dark { background: linear-gradient(135deg, #0f0f0f, #1a1a1a); }
     .theme-option span { font-size: 13px; font-weight: 700; }
+
+    body.dark { background: #0f0f0f; color: white; }
+    body.dark .card { background: #1a1a1a; border-color: #2a2a2a; }
+    body.dark .card h2 { color: white; border-bottom-color: #2a2a2a; }
+    body.dark label { color: #ccc; }
+    body.dark input, body.dark select { background: #0f0f0f; border-color: #333; color: white; }
+    body.dark .toggle-row { border-color: #2a2a2a; }
+    body.dark .btn-photo { background: #0f0f0f; border-color: #333; color: #aaa; }
+
+    @media (max-width: 768px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .page-title { font-size: 22px; }
+      .card { padding: 20px; }
+    }
   </style>
 </head>
 <body id="body">
-<div class="sidebar">
-    <div class="sidebar-logo" style="line-height: 0;"><img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;"></div>
+
+  <!-- MENU BURGER -->
+  <div class="menu-toggle" onclick="toggleSidebar()">☰</div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo" style="line-height: 0;">
+      <a href="/index.html">
+        <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
+      </a>
+    </div>
     <a class="sidebar-item" href="/dashboard-vendeur.html"><i class="fas fa-home"></i> Tableau de bord</a>
     <a class="sidebar-item" href="/nouvelle-livraison.html"><i class="fas fa-plus-circle"></i> Nouvelle livraison</a>
     <a class="sidebar-item" href="/mes-commandes.html"><i class="fas fa-box"></i> Mes commandes</a>
     <a class="sidebar-item" href="/messages.html"><i class="fas fa-comments"></i> Messages</a>
     <a class="sidebar-item" href="/statistiques.html"><i class="fas fa-chart-bar"></i> Statistiques</a>
     <div class="sidebar-bottom">
-      <a class="sidebar-item active" href="#"><i class="fas fa-cog"></i> Paramètres</a>
-      <a class="sidebar-item" href="#" onclick="deconnexion()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+      <a class="sidebar-item active" href="/parametres.html"><i class="fas fa-cog"></i> Paramètres</a>
+      <a class="sidebar-item" href="/index.html" onclick="return confirm('Déconnexion ?')"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
     </div>
   </div>
+
+  <script>
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+  </script>
+
   <div class="main">
     <div class="page-title">Paramètres</div>
     <div class="page-sub">Gérez votre compte et vos préférences</div>
@@ -89,7 +148,7 @@
         <div>
           <div style="font-size:16px;font-weight:800;margin-bottom:4px">Jean Baptiste</div>
           <div style="font-size:13px;color:#888;margin-bottom:10px">Vendeur depuis Avril 2026</div>
-          <button class="btn-photo"><i class="fas fa-camera"></i> Changer la photo</button>
+          <button class="btn-photo" onclick="alert('Fonctionnalité à venir')"><i class="fas fa-camera"></i> Changer la photo</button>
         </div>
       </div>
       <div class="form-grid">
@@ -106,7 +165,7 @@
     <div class="card">
       <h2><i class="fas fa-paint-brush"></i> Apparence</h2>
       <div class="theme-options">
-        <div class="theme-option selected" id="theme-light" onclick="changerTheme('light')">
+        <div class="theme-option" id="theme-light" onclick="changerTheme('light')">
           <div class="theme-preview light"></div>
           <span>Mode clair</span>
         </div>
@@ -119,26 +178,11 @@
 
     <div class="card">
       <h2><i class="fas fa-bell"></i> Notifications</h2>
-      <div class="toggle-row">
-        <div class="toggle-info"><span>Nouvelle commande</span><small>Être notifié quand un client valide votre lien</small></div>
-        <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-      </div>
-      <div class="toggle-row">
-        <div class="toggle-info"><span>Livraison en cours</span><small>Suivre en temps réel votre livreur</small></div>
-        <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-      </div>
-      <div class="toggle-row">
-        <div class="toggle-info"><span>Livraison confirmée</span><small>Être notifié quand le client confirme la réception</small></div>
-        <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-      </div>
-      <div class="toggle-row">
-        <div class="toggle-info"><span>Messages</span><small>Recevoir les messages de vos livreurs et clients</small></div>
-        <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-      </div>
-      <div class="toggle-row">
-        <div class="toggle-info"><span>Promotions Livoo</span><small>Offres et actualités de la plateforme</small></div>
-        <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
-      </div>
+      <div class="toggle-row"><div class="toggle-info"><span>Nouvelle commande</span><small>Être notifié quand un client valide votre lien</small></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><span>Livraison en cours</span><small>Suivre en temps réel votre livreur</small></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><span>Livraison confirmée</span><small>Être notifié quand le client confirme la réception</small></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><span>Messages</span><small>Recevoir les messages de vos livreurs et clients</small></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><span>Promotions Livoo</span><small>Offres et actualités de la plateforme</small></div><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
     </div>
 
     <div class="card">
@@ -155,28 +199,26 @@
       <h2><i class="fas fa-exclamation-triangle" style="color:#ef4444"></i> Zone de danger</h2>
       <p style="color:#888;font-size:14px;margin-bottom:20px">Ces actions sont irréversibles. Procédez avec précaution.</p>
       <div style="display:flex;gap:15px;flex-wrap:wrap">
-        <button class="btn-danger"><i class="fas fa-pause"></i> Suspendre mon compte</button>
+        <button class="btn-danger" onclick="alert('Fonctionnalité à venir')"><i class="fas fa-pause"></i> Suspendre mon compte</button>
         <button class="btn-danger" onclick="supprimerCompte()"><i class="fas fa-trash"></i> Supprimer mon compte</button>
       </div>
     </div>
   </div>
 
   <script>
-   function changerTheme(theme) {
-  document.getElementById('theme-light').classList.remove('selected');
-  document.getElementById('theme-dark').classList.remove('selected');
-  document.getElementById('theme-' + theme).classList.add('selected');
-  localStorage.setItem('theme', theme);
-  if (theme === 'dark') {
-    document.getElementById('body').classList.add('dark');
-  } else {
-    document.getElementById('body').classList.remove('dark');
-  }
-}
-if (localStorage.getItem('theme') === 'dark') changerTheme('dark');
+    function changerTheme(theme) {
+      document.getElementById('theme-light').classList.remove('selected');
+      document.getElementById('theme-dark').classList.remove('selected');
+      document.getElementById('theme-' + theme).classList.add('selected');
+      localStorage.setItem('theme', theme);
+      if (theme === 'dark') { document.getElementById('body').classList.add('dark'); }
+      else { document.getElementById('body').classList.remove('dark'); }
+    }
+    if (localStorage.getItem('theme') === 'dark') { changerTheme('dark'); }
+    else { document.getElementById('theme-light').classList.add('selected'); }
     function sauvegarder() { alert('Modifications sauvegardées avec succès !'); }
-    function supprimerCompte() { if(confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')) { alert('Compte supprimé.'); window.location.href = '/'; } }
-    function deconnexion() { if(confirm('Voulez-vous vraiment vous déconnecter ?')) window.location.href = '/'; }
+    function supprimerCompte() { if(confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')) { alert('Compte supprimé.'); window.location.href = '/index.html'; } }
   </script>
+
 </body>
 </html>

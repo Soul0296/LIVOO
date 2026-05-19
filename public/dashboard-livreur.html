@@ -2,25 +2,66 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Livoo — Dashboard Livreur</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background: #f4f6f9; color: #1a1a1a; }
-    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 260px; background: #0f0f0f; padding: 30px 20px; display: flex; flex-direction: column; gap: 8px; border-right: 1px solid #222; }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed; left: 0; top: 0; bottom: 0; width: 260px;
+      background: #0f0f0f; padding: 30px 20px;
+      display: flex; flex-direction: column; gap: 8px;
+      border-right: 1px solid #222;
+      transition: transform 0.3s ease;
+      z-index: 100;
+    }
     .sidebar-logo { padding: 10px 15px 30px; }
-    .sidebar-logo img { height: 40px; mix-blend-mode: lighten; filter: brightness(2); }
-    .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 12px; color: #888; text-decoration: none; font-size: 14px; font-weight: 600; transition: all 0.3s; }
+    .sidebar-logo img { height: 50px; width: auto; mix-blend-mode: lighten; filter: brightness(2); }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 15px; border-radius: 12px;
+      color: #888; text-decoration: none; font-size: 14px;
+      font-weight: 600; transition: all 0.3s;
+    }
     .sidebar-item:hover { background: #1a1a1a; color: white; }
     .sidebar-item.active { background: #FF6B00; color: white; }
     .sidebar-item i { width: 20px; text-align: center; }
     .sidebar-bottom { margin-top: auto; border-top: 1px solid #222; padding-top: 20px; }
-    .main { margin-left: 260px; padding: 40px; }
+
+    /* MENU BURGER */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 101;
+      background: #FF6B00;
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .menu-toggle { display: flex; }
+      .main { margin-left: 0; padding: 20px; padding-top: 70px; }
+    }
+
+    .main { margin-left: 260px; padding: 40px; transition: margin-left 0.3s ease; }
 
     /* HEADER */
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
     .header-left h1 { font-size: 24px; font-weight: 800; }
     .header-left p { color: #888; font-size: 14px; margin-top: 4px; }
     .disponibilite { display: flex; align-items: center; gap: 12px; background: white; padding: 12px 20px; border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
@@ -33,12 +74,11 @@
     .toggle input:checked + .toggle-slider:before { transform: translateX(24px); }
 
     /* SOLDE */
-    .solde-banner { background: linear-gradient(135deg, #FF6B00, #cc5500); border-radius: 20px; padding: 25px 30px; color: white; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+    .solde-banner { background: linear-gradient(135deg, #FF6B00, #cc5500); border-radius: 20px; padding: 25px 30px; color: white; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
     .solde-info h2 { font-size: 36px; font-weight: 800; }
     .solde-info p { font-size: 13px; opacity: 0.9; margin-top: 4px; }
     .solde-info small { font-size: 11px; opacity: 0.7; }
-    .btn-recharger { background: white; color: #FF6B00; padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 800; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
-    .btn-recharger:hover { transform: scale(1.05); }
+    .btn-recharger { background: white; color: #FF6B00; padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 800; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; }
 
     /* STATS */
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
@@ -52,60 +92,87 @@
     .stat-card p { font-size: 12px; color: #888; margin-top: 3px; }
 
     /* NOTATION */
-    .note-card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); margin-bottom: 25px; display: flex; align-items: center; gap: 20px; }
+    .note-card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); margin-bottom: 25px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
     .note-grande { font-size: 48px; font-weight: 800; color: #FF6B00; }
     .note-etoiles i { color: #FF6B00; font-size: 18px; }
     .note-etoiles p { font-size: 12px; color: #888; margin-top: 4px; }
-    .points-bar { flex: 1; }
+    .points-bar { flex: 1; min-width: 180px; }
     .points-bar h4 { font-size: 14px; font-weight: 800; margin-bottom: 8px; }
     .points-track { background: #f0f0f0; border-radius: 10px; height: 10px; overflow: hidden; }
     .points-fill { height: 100%; background: linear-gradient(to right, #FF6B00, #22c55e); border-radius: 10px; width: 78%; }
     .points-bar p { font-size: 12px; color: #888; margin-top: 6px; }
 
-    /* COURSES */
+    /* GRILLE */
     .grid-main { display: grid; grid-template-columns: 1fr 360px; gap: 25px; }
     .card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
     .card-header h2 { font-size: 16px; font-weight: 800; }
     .course-item { border: 1.5px solid #eee; border-radius: 14px; padding: 18px; margin-bottom: 12px; transition: all 0.3s; }
     .course-item:hover { border-color: #FF6B00; }
-    .course-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .course-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
     .course-id { font-size: 15px; font-weight: 800; }
     .course-prix { font-size: 16px; font-weight: 800; color: #FF6B00; }
     .course-details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
     .course-detail p { font-size: 11px; color: #888; font-weight: 600; text-transform: uppercase; margin-bottom: 2px; }
     .course-detail span { font-size: 13px; font-weight: 600; }
-    .course-actions { display: flex; gap: 10px; }
-    .btn-accepter { flex: 1; padding: 10px; background: #FF6B00; border: none; border-radius: 10px; color: white; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
-    .btn-accepter:hover { background: #cc5500; }
-    .btn-refuser { padding: 10px 18px; background: #f4f6f9; border: none; border-radius: 10px; color: #888; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; }
+    .course-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-accepter { flex: 1; padding: 10px; background: #FF6B00; border: none; border-radius: 10px; color: white; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .btn-refuser { padding: 10px 18px; background: #f4f6f9; border: none; border-radius: 10px; color: #888; font-size: 13px; font-weight: 700; cursor: pointer; }
     .badge-urgence { background: rgba(239,68,68,0.15); color: #ef4444; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
     .badge-normal { background: rgba(34,197,94,0.15); color: #22c55e; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
 
     /* COURSE EN COURS */
     .en-cours-card { background: linear-gradient(135deg, #0f0f0f, #1a1a1a); border-radius: 16px; padding: 25px; color: white; }
     .en-cours-card h2 { font-size: 16px; font-weight: 800; margin-bottom: 20px; color: #FF6B00; }
-    .en-cours-step { display: flex; align-items: center; gap: 12px; padding: 14px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.1); }
+    .en-cours-step { display: flex; align-items: center; gap: 12px; padding: 14px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap; }
     .en-cours-step i { color: #FF6B00; font-size: 18px; width: 24px; text-align: center; }
     .en-cours-step h4 { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
     .en-cours-step p { font-size: 11px; color: #888; }
-    .btn-photo { width: 100%; padding: 14px; background: #FF6B00; border: none; border-radius: 12px; color: white; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .btn-livree { width: 100%; padding: 14px; background: #22c55e; border: none; border-radius: 12px; color: white; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .btn-photo { width: 100%; padding: 14px; background: #FF6B00; border: none; border-radius: 12px; color: white; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .btn-livree { width: 100%; padding: 14px; background: #22c55e; border: none; border-radius: 12px; color: white; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+      .grid-main { grid-template-columns: 1fr; }
+      .solde-banner { flex-direction: column; text-align: center; }
+      .note-card { flex-direction: column; text-align: center; }
+      .card { padding: 20px; overflow-x: auto; }
+      .course-details { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .header-left h1 { font-size: 20px; }
+      .solde-info h2 { font-size: 28px; }
+    }
   </style>
 </head>
 <body>
-<div class="sidebar">
-    <div class="sidebar-logo" style="line-height: 0;"><img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;"></div>
-    <a class="sidebar-item active" href="#"><i class="fas fa-home"></i> Tableau de bord</a>
+
+  <!-- MENU BURGER -->
+  <div class="menu-toggle" onclick="toggleSidebar()">☰</div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo" style="line-height: 0;">
+      <a href="/index.html">
+        <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
+      </a>
+    </div>
+    <a class="sidebar-item active" href="/dashboard-livreur.html"><i class="fas fa-home"></i> Tableau de bord</a>
     <a class="sidebar-item" href="#"><i class="fas fa-motorcycle"></i> Mes courses</a>
     <a class="sidebar-item" href="#"><i class="fas fa-wallet"></i> Mon portefeuille</a>
-    <a class="sidebar-item" href="#"><i class="fas fa-star"></i> Ma notation</a>
-    <a class="sidebar-item" href="#"><i class="fas fa-comments"></i> Messages</a>
+    <a class="sidebar-item" href="/notation.html"><i class="fas fa-star"></i> Ma notation</a>
+    <a class="sidebar-item" href="/messages.html"><i class="fas fa-comments"></i> Messages</a>
     <div class="sidebar-bottom">
-      <a class="sidebar-item" href="#"><i class="fas fa-cog"></i> Paramètres</a>
-      <a class="sidebar-item" href="#" onclick="if(confirm('Déconnexion ?')) window.location.href='/'"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+      <a class="sidebar-item" href="/parametres.html"><i class="fas fa-cog"></i> Paramètres</a>
+      <a class="sidebar-item" href="/index.html" onclick="return confirm('Déconnexion ?')"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
     </div>
   </div>
+
+  <script>
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+  </script>
 
   <div class="main">
     <!-- HEADER -->
@@ -116,175 +183,64 @@
       </div>
       <div class="disponibilite">
         <span id="dispo-label">Disponible</span>
-        <label class="toggle">
-          <input type="checkbox" checked onchange="toggleDispo(this)">
-          <span class="toggle-slider"></span>
-        </label>
+        <label class="toggle"><input type="checkbox" checked onchange="toggleDispo(this)"><span class="toggle-slider"></span></label>
       </div>
     </div>
 
     <!-- SOLDE -->
     <div class="solde-banner">
-      <div class="solde-info">
-        <p>Solde de votre compte Livoo</p>
-        <h2>12 500 FCFA</h2>
-        <small>Commission déduite automatiquement après chaque livraison</small>
-      </div>
-      <button class="btn-recharger" onclick="alert('Rechargement via MTN MoMo ou Orange Money')">
-        <i class="fas fa-plus"></i> Recharger
-      </button>
+      <div class="solde-info"><p>Solde de votre compte Livoo</p><h2>12 500 FCFA</h2><small>Commission déduite automatiquement après chaque livraison</small></div>
+      <button class="btn-recharger" onclick="alert('Rechargement via MTN MoMo ou Orange Money')"><i class="fas fa-plus"></i> Recharger</button>
     </div>
 
     <!-- STATS -->
     <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon orange"><i class="fas fa-motorcycle"></i></div>
-        <h3>47</h3>
-        <p>Livraisons totales</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
-        <h3>44</h3>
-        <p>Réussies</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon yellow"><i class="fas fa-star"></i></div>
-        <h3>4.8★</h3>
-        <p>Note moyenne</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon blue"><i class="fas fa-coins"></i></div>
-        <h3>78 pts</h3>
-        <p>Points fidélité</p>
-      </div>
+      <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-motorcycle"></i></div><h3>47</h3><p>Livraisons totales</p></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fas fa-check-circle"></i></div><h3>44</h3><p>Réussies</p></div>
+      <div class="stat-card"><div class="stat-icon yellow"><i class="fas fa-star"></i></div><h3>4.8★</h3><p>Note moyenne</p></div>
+      <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-coins"></i></div><h3>78 pts</h3><p>Points fidélité</p></div>
     </div>
 
     <!-- NOTATION -->
     <div class="note-card">
-      <div>
-        <div class="note-grande">4.8</div>
-        <div class="note-etoiles">
-          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-          <p>124 évaluations</p>
-        </div>
-      </div>
-      <div class="points-bar">
-        <h4>Points de fidélité : 78/100</h4>
-        <div class="points-track"><div class="points-fill"></div></div>
-        <p>Maintenez votre score au-dessus de 40 pour continuer à recevoir des commandes</p>
-      </div>
+      <div><div class="note-grande">4.8</div><div class="note-etoiles"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><p>124 évaluations</p></div></div>
+      <div class="points-bar"><h4>Points de fidélité : 78/100</h4><div class="points-track"><div class="points-fill"></div></div><p>Maintenez votre score au-dessus de 40 pour continuer à recevoir des commandes</p></div>
     </div>
 
     <!-- GRILLE -->
     <div class="grid-main">
-
       <!-- COURSES DISPONIBLES -->
       <div class="card">
-        <div class="card-header">
-          <h2>Courses disponibles près de vous</h2>
-          <span style="color:#22c55e;font-size:13px;font-weight:700"><i class="fas fa-circle" style="font-size:8px"></i> 3 disponibles</span>
-        </div>
-
-        <div class="course-item">
-          <div class="course-top">
-            <div class="course-id">#LV-008</div>
-            <div style="display:flex;align-items:center;gap:10px">
-              <span class="badge-urgence">Urgent</span>
-              <div class="course-prix">2 200 FCFA</div>
-            </div>
-          </div>
-          <div class="course-details">
-            <div class="course-detail"><p>Retrait</p><span>Akwa, Douala</span></div>
-            <div class="course-detail"><p>Livraison</p><span>Bonapriso</span></div>
-            <div class="course-detail"><p>Distance</p><span>3.2 km</span></div>
-            <div class="course-detail"><p>Colis</p><span>Moyen — Léger</span></div>
-          </div>
-          <div class="course-actions">
-            <button class="btn-accepter" onclick="accepterCourse('LV-008')"><i class="fas fa-check"></i> Accepter</button>
-            <button class="btn-refuser">Refuser</button>
-          </div>
-        </div>
-
-        <div class="course-item">
-          <div class="course-top">
-            <div class="course-id">#LV-009</div>
-            <div style="display:flex;align-items:center;gap:10px">
-              <span class="badge-normal">Normal</span>
-              <div class="course-prix">1 500 FCFA</div>
-            </div>
-          </div>
-          <div class="course-details">
-            <div class="course-detail"><p>Retrait</p><span>Deido, Douala</span></div>
-            <div class="course-detail"><p>Livraison</p><span>Bassa</span></div>
-            <div class="course-detail"><p>Distance</p><span>2.1 km</span></div>
-            <div class="course-detail"><p>Colis</p><span>Petit — Léger</span></div>
-          </div>
-          <div class="course-actions">
-            <button class="btn-accepter" onclick="accepterCourse('LV-009')"><i class="fas fa-check"></i> Accepter</button>
-            <button class="btn-refuser">Refuser</button>
-          </div>
-        </div>
-
+        <div class="card-header"><h2>Courses disponibles près de vous</h2><span style="color:#22c55e;font-size:13px;font-weight:700"><i class="fas fa-circle" style="font-size:8px"></i> 3 disponibles</span></div>
+        <div class="course-item"><div class="course-top"><div class="course-id">#LV-008</div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;"><span class="badge-urgence">Urgent</span><div class="course-prix">2 200 FCFA</div></div></div>
+        <div class="course-details"><div class="course-detail"><p>Retrait</p><span>Akwa, Douala</span></div><div class="course-detail"><p>Livraison</p><span>Bonapriso</span></div><div class="course-detail"><p>Distance</p><span>3.2 km</span></div><div class="course-detail"><p>Colis</p><span>Moyen — Léger</span></div></div>
+        <div class="course-actions"><button class="btn-accepter" onclick="accepterCourse('LV-008')"><i class="fas fa-check"></i> Accepter</button><button class="btn-refuser">Refuser</button></div></div>
+        <div class="course-item"><div class="course-top"><div class="course-id">#LV-009</div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;"><span class="badge-normal">Normal</span><div class="course-prix">1 500 FCFA</div></div></div>
+        <div class="course-details"><div class="course-detail"><p>Retrait</p><span>Deido, Douala</span></div><div class="course-detail"><p>Livraison</p><span>Bassa</span></div><div class="course-detail"><p>Distance</p><span>2.1 km</span></div><div class="course-detail"><p>Colis</p><span>Petit — Léger</span></div></div>
+        <div class="course-actions"><button class="btn-accepter" onclick="accepterCourse('LV-009')"><i class="fas fa-check"></i> Accepter</button><button class="btn-refuser">Refuser</button></div></div>
       </div>
 
       <!-- COURSE EN COURS -->
       <div class="en-cours-card">
         <h2><i class="fas fa-motorcycle"></i> Course en cours</h2>
-        <div class="en-cours-step">
-          <i class="fas fa-map-marker-alt"></i>
-          <div><h4>Adresse de retrait</h4><p>Rue Flatters, Akwa — Jean Baptiste</p></div>
-        </div>
-        <div class="en-cours-step">
-          <i class="fas fa-home"></i>
-          <div><h4>Adresse de livraison</h4><p>Carrefour Chapelle, Bonapriso</p></div>
-        </div>
-        <div class="en-cours-step">
-          <i class="fas fa-phone"></i>
-          <div><h4>Contact client</h4><p>+237 6XX XXX XXX</p></div>
-        </div>
-        <div class="en-cours-step">
-          <i class="fas fa-box"></i>
-          <div><h4>Colis</h4><p>Robe rouge taille M — Volume moyen</p></div>
-        </div>
-        <div class="en-cours-step">
-          <i class="fas fa-coins"></i>
-          <div><h4>À encaisser</h4><p style="color:#FF6B00;font-weight:800;font-size:16px">1 500 FCFA</p></div>
-        </div>
-        <button class="btn-photo" onclick="prendrePhoto('retrait')">
-          <i class="fas fa-camera"></i> Photo prise en charge
-        </button>
-        <button class="btn-livree" onclick="confirmerLivraison()">
-          <i class="fas fa-check"></i> Confirmer la livraison
-        </button>
+        <div class="en-cours-step"><i class="fas fa-map-marker-alt"></i><div><h4>Adresse de retrait</h4><p>Rue Flatters, Akwa — Jean Baptiste</p></div></div>
+        <div class="en-cours-step"><i class="fas fa-home"></i><div><h4>Adresse de livraison</h4><p>Carrefour Chapelle, Bonapriso</p></div></div>
+        <div class="en-cours-step"><i class="fas fa-phone"></i><div><h4>Contact client</h4><p>+237 6XX XXX XXX</p></div></div>
+        <div class="en-cours-step"><i class="fas fa-box"></i><div><h4>Colis</h4><p>Robe rouge taille M — Volume moyen</p></div></div>
+        <div class="en-cours-step"><i class="fas fa-coins"></i><div><h4>À encaisser</h4><p style="color:#FF6B00;font-weight:800;font-size:16px">1 500 FCFA</p></div></div>
+        <button class="btn-photo" onclick="prendrePhoto('retrait')"><i class="fas fa-camera"></i> Photo prise en charge</button>
+        <button class="btn-livree" onclick="confirmerLivraison()"><i class="fas fa-check"></i> Confirmer la livraison</button>
       </div>
-
     </div>
   </div>
 
   <script>
-    function toggleDispo(el) {
-      document.getElementById('dispo-label').textContent = el.checked ? 'Disponible' : 'Indisponible';
-    }
-    function accepterCourse(id) {
-      if(confirm('Accepter la course #' + id + ' ?')) {
-        alert('Course acceptée ! Rendez-vous chez le vendeur.');
-      }
-    }
-    function prendrePhoto(type) {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-      input.capture = 'camera';
-      input.onchange = () => alert('Photo enregistrée ✅');
-      input.click();
-    }
-    function confirmerLivraison() {
-      if(confirm('Confirmer que le colis a bien été livré ?')) {
-        alert('Livraison confirmée ! La commission sera déduite de votre solde.');
-        window.location.href = '/notation.html';
-      }
-    }
+    function toggleDispo(el) { document.getElementById('dispo-label').textContent = el.checked ? 'Disponible' : 'Indisponible'; }
+    function accepterCourse(id) { if(confirm('Accepter la course #' + id + ' ?')) { alert('Course acceptée ! Rendez-vous chez le vendeur.'); } }
+    function prendrePhoto(type) { const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*'; input.capture = 'camera'; input.onchange = () => alert('Photo enregistrée ✅'); input.click(); }
+    function confirmerLivraison() { if(confirm('Confirmer que le colis a bien été livré ?')) { alert('Livraison confirmée ! La commission sera déduite de votre solde.'); window.location.href = '/notation.html'; } }
     if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
   </script>
+
 </body>
 </html>

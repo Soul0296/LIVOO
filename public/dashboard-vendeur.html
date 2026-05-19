@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Livoo — Dashboard Vendeur</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,14 +16,16 @@
       background: #0f0f0f; padding: 30px 20px;
       display: flex; flex-direction: column; gap: 8px;
       border-right: 1px solid #222;
+      transition: transform 0.3s ease;
+      z-index: 100;
     }
     .sidebar-logo { padding: 10px 15px 30px; }
-    .sidebar-logo img { height: 40px; mix-blend-mode: lighten; }
+    .sidebar-logo img { height: 50px; width: auto; mix-blend-mode: lighten; }
     .sidebar-item {
       display: flex; align-items: center; gap: 12px;
       padding: 12px 15px; border-radius: 12px;
       color: #888; text-decoration: none; font-size: 14px;
-      font-weight: 600; transition: all 0.3s; cursor: pointer;
+      font-weight: 600; transition: all 0.3s;
     }
     .sidebar-item:hover { background: #1a1a1a; color: white; }
     .sidebar-item.active { background: #FF6B00; color: white; }
@@ -32,13 +34,56 @@
       margin-top: auto; border-top: 1px solid #222; padding-top: 20px;
     }
 
+    /* MENU TOGGLE */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 101;
+      background: #FF6B00;
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    /* SIDEBAR MOBILE */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .menu-toggle {
+        display: flex;
+      }
+      .main {
+        margin-left: 0;
+        padding: 20px;
+        padding-top: 70px;
+      }
+    }
+
     /* MAIN */
-    .main { margin-left: 260px; padding: 40px; }
+    .main {
+      margin-left: 260px;
+      padding: 40px;
+      transition: margin-left 0.3s ease;
+    }
 
     /* HEADER */
     .header {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 35px;
+      flex-wrap: wrap;
+      gap: 15px;
     }
     .header-left h1 { font-size: 26px; font-weight: 800; color: #1a1a1a; }
     .header-left p { color: #888; font-size: 14px; margin-top: 4px; }
@@ -82,6 +127,8 @@
     .card-header {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
     .card-header h2 { font-size: 16px; font-weight: 800; }
     .card-header a { color: #FF6B00; font-size: 13px; text-decoration: none; font-weight: 600; }
@@ -95,6 +142,7 @@
     tr:last-child td { border-bottom: none; }
     .badge {
       padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;
+      display: inline-block;
     }
     .badge.en-cours { background: rgba(59,130,246,0.15); color: #3b82f6; }
     .badge.livre { background: rgba(34,197,94,0.15); color: #22c55e; }
@@ -123,7 +171,6 @@
       border: 1px solid #eee; border-radius: 10px;
       font-size: 13px; font-family: 'Poppins', sans-serif;
       color: #1a1a1a; margin-bottom: 15px; outline: none;
-      transition: border 0.3s;
     }
     .create-form input:focus,
     .create-form select:focus,
@@ -148,6 +195,7 @@
     .lien-box {
       display: flex; align-items: center; gap: 10px;
       background: white; border-radius: 8px; padding: 10px 15px;
+      flex-wrap: wrap;
     }
     .lien-box span { flex: 1; font-size: 12px; color: #FF6B00; font-weight: 600; word-break: break-all; }
     .btn-copier {
@@ -161,6 +209,7 @@
     .profil-card {
       display: flex; align-items: center; gap: 15px;
       padding-bottom: 20px; border-bottom: 1px solid #f0f0f0; margin-bottom: 20px;
+      flex-wrap: wrap;
     }
     .profil-avatar {
       width: 50px; height: 50px; background: #FF6B00;
@@ -194,9 +243,10 @@
     .modal-lien {
       background: #f4f6f9; border-radius: 10px; padding: 15px;
       display: flex; gap: 10px; align-items: center; margin-bottom: 20px;
+      flex-wrap: wrap;
     }
     .modal-lien span { flex: 1; font-size: 13px; color: #FF6B00; font-weight: 600; text-align: left; word-break: break-all; }
-    .modal-btns { display: flex; gap: 10px; }
+    .modal-btns { display: flex; gap: 10px; flex-wrap: wrap; }
     .modal-btns button {
       flex: 1; padding: 12px; border-radius: 10px; font-size: 14px;
       font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif;
@@ -204,34 +254,47 @@
     }
     .btn-partager { background: #FF6B00; color: white; }
     .btn-fermer { background: #f4f6f9; color: #1a1a1a; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+      .grid-main { grid-template-columns: 1fr; }
+      .stat-card { padding: 20px; }
+      .card { padding: 20px; overflow-x: auto; }
+      table { font-size: 12px; }
+      th, td { padding: 10px; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .header-left h1 { font-size: 22px; }
+      .btn-nouvelle { padding: 12px 20px; font-size: 13px; }
+      .profil-stats { grid-template-columns: 1fr; }
+    }
+
+    /* MODE SOMBRE */
     body.dark { background: #0f0f0f !important; color: white !important; }
-body.dark .card { background: #1a1a1a !important; border-color: #2a2a2a !important; }
-body.dark .card h2 { color: white !important; }
-body.dark table { color: white !important; }
-body.dark td, body.dark th { color: #ccc !important; border-color: #2a2a2a !important; }
-body.dark input, body.dark select, body.dark textarea { background: #0f0f0f !important; border-color: #333 !important; color: white !important; }
-body.dark .stat-card { background: #1a1a1a !important; }
-body.dark .stat-card p { color: #888 !important; }
-  @media (max-width: 768px) {
-  .sidebar { display: none; }
-  .main { margin-left: 0; padding: 20px; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .grid-main { grid-template-columns: 1fr; }
-  .header { flex-direction: column; gap: 15px; align-items: flex-start; }
-}
+    body.dark .card { background: #1a1a1a !important; border-color: #2a2a2a !important; }
+    body.dark .card h2 { color: white !important; }
+    body.dark table { color: white !important; }
+    body.dark td, body.dark th { color: #ccc !important; border-color: #2a2a2a !important; }
+    body.dark input, body.dark select, body.dark textarea { background: #0f0f0f !important; border-color: #333 !important; color: white !important; }
+    body.dark .stat-card { background: #1a1a1a !important; }
+    body.dark .stat-card p { color: #888 !important; }
   </style>
 </head>
-<script>
-if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
-</script>
 <body>
 
+  <!-- MENU BURGER -->
+  <div class="menu-toggle" onclick="toggleSidebar()">☰</div>
+
   <!-- SIDEBAR -->
-<div class="sidebar">
+  <div class="sidebar" id="sidebar">
     <div class="sidebar-logo" style="line-height: 0;">
-      <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
+      <a href="/index.html">
+        <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
+      </a>
     </div>
-    <a class="sidebar-item active" href="#">
+    <a class="sidebar-item active" href="/dashboard-vendeur.html">
       <i class="fas fa-home"></i> Tableau de bord
     </a>
     <a class="sidebar-item" href="/nouvelle-livraison.html"><i class="fas fa-plus-circle"></i> Nouvelle livraison</a>
@@ -240,9 +303,15 @@ if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark'
     <a class="sidebar-item" href="/statistiques.html"><i class="fas fa-chart-bar"></i> Statistiques</a>
     <div class="sidebar-bottom">
       <a class="sidebar-item" href="/parametres.html"><i class="fas fa-cog"></i> Paramètres</a>
-      <a class="sidebar-item" href="/"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+      <a class="sidebar-item" href="/index.html"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
     </div>
   </div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+  </script>
 
   <!-- MAIN -->
   <div class="main">
@@ -260,26 +329,10 @@ if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark'
 
     <!-- STATS -->
     <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon orange"><i class="fas fa-box"></i></div>
-        <h3>12</h3>
-        <p>Commandes totales</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
-        <h3>9</h3>
-        <p>Livraisons réussies</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon blue"><i class="fas fa-motorcycle"></i></div>
-        <h3>2</h3>
-        <p>En cours</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon purple"><i class="fas fa-star"></i></div>
-        <h3>4.8</h3>
-        <p>Note moyenne</p>
-      </div>
+      <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-box"></i></div><h3>12</h3><p>Commandes totales</p></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fas fa-check-circle"></i></div><h3>9</h3><p>Livraisons réussies</p></div>
+      <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-motorcycle"></i></div><h3>2</h3><p>En cours</p></div>
+      <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-star"></i></div><h3>4.8</h3><p>Note moyenne</p></div>
     </div>
 
     <!-- GRILLE PRINCIPALE -->
@@ -289,149 +342,69 @@ if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark'
       <div class="card">
         <div class="card-header">
           <h2>Commandes récentes</h2>
-          <a href="#">Voir tout →</a>
+          <a href="/mes-commandes.html">Voir tout →</a>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Commande</th>
-              <th>Client</th>
-              <th>Zone</th>
-              <th>Statut</th>
-              <th>Lien</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>#LV-001</strong></td>
-              <td>Marie K.</td>
-              <td>Akwa, Douala</td>
-              <td><span class="badge livre">Livré</span></td>
-              <td><button class="btn-lien" onclick="copierLien('LV-001')"><i class="fas fa-copy"></i> Copier</button></td>
-            </tr>
-            <tr>
-              <td><strong>#LV-002</strong></td>
-              <td>Paul N.</td>
-              <td>Bonapriso</td>
-              <td><span class="badge en-cours">En cours</span></td>
-              <td><button class="btn-lien" onclick="copierLien('LV-002')"><i class="fas fa-copy"></i> Copier</button></td>
-            </tr>
-            <tr>
-              <td><strong>#LV-003</strong></td>
-              <td>Sylvie M.</td>
-              <td>Bastos, Yaoundé</td>
-              <td><span class="badge attente">En attente</span></td>
-              <td><button class="btn-lien" onclick="copierLien('LV-003')"><i class="fas fa-copy"></i> Copier</button></td>
-            </tr>
-            <tr>
-              <td><strong>#LV-004</strong></td>
-              <td>Eric T.</td>
-              <td>Deido, Douala</td>
-              <td><span class="badge livre">Livré</span></td>
-              <td><button class="btn-lien" onclick="copierLien('LV-004')"><i class="fas fa-copy"></i> Copier</button></td>
-            </tr>
-            <tr>
-              <td><strong>#LV-005</strong></td>
-              <td>Aïcha B.</td>
-              <td>Omnisport</td>
-              <td><span class="badge litige">Litige</span></td>
-              <td><button class="btn-lien" onclick="copierLien('LV-005')"><i class="fas fa-copy"></i> Copier</button></td>
-            </tr>
-          </tbody>
-        </table>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr><th>Commande</th><th>Client</th><th>Zone</th><th>Statut</th><th>Lien</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>#LV-001</strong></td><td>Marie K.</td><td>Akwa, Douala</td><td><span class="badge livre">Livré</span></td><td><button class="btn-lien" onclick="copierLien('LV-001')"><i class="fas fa-copy"></i> Copier</button></td></tr>
+              <tr><td><strong>#LV-002</strong></td><td>Paul N.</td><td>Bonapriso</td><td><span class="badge en-cours">En cours</span></td><td><button class="btn-lien" onclick="copierLien('LV-002')"><i class="fas fa-copy"></i> Copier</button></td></tr>
+              <tr><td><strong>#LV-003</strong></td><td>Sylvie M.</td><td>Bastos, Yaoundé</td><td><span class="badge attente">En attente</span></td><td><button class="btn-lien" onclick="copierLien('LV-003')"><i class="fas fa-copy"></i> Copier</button></td></tr>
+              <tr><td><strong>#LV-004</strong></td><td>Eric T.</td><td>Deido, Douala</td><td><span class="badge livre">Livré</span></td><td><button class="btn-lien" onclick="copierLien('LV-004')"><i class="fas fa-copy"></i> Copier</button></td></tr>
+              <tr><td><strong>#LV-005</strong></td><td>Aïcha B.</td><td>Omnisport</td><td><span class="badge litige">Litige</span></td><td><button class="btn-lien" onclick="copierLien('LV-005')"><i class="fas fa-copy"></i> Copier</button></td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- PANEL DROITE -->
       <div class="panel-right">
-
-        <!-- PROFIL -->
         <div class="card">
           <div class="profil-card">
             <div class="profil-avatar">J</div>
-            <div class="profil-info">
-              <h3>Jean Baptiste</h3>
-              <p>Vendeur — Douala</p>
-            </div>
+            <div class="profil-info"><h3>Jean Baptiste</h3><p>Vendeur — Douala</p></div>
           </div>
           <div class="profil-stats">
-            <div class="profil-stat">
-              <h4>12</h4>
-              <p>Commandes</p>
-            </div>
-            <div class="profil-stat">
-              <h4>9</h4>
-              <p>Livrées</p>
-            </div>
-            <div class="profil-stat">
-              <h4>4.8★</h4>
-              <p>Note</p>
-            </div>
-            <div class="profil-stat">
-              <h4>0</h4>
-              <p>Litiges</p>
-            </div>
+            <div class="profil-stat"><h4>12</h4><p>Commandes</p></div>
+            <div class="profil-stat"><h4>9</h4><p>Livrées</p></div>
+            <div class="profil-stat"><h4>4.8★</h4><p>Note</p></div>
+            <div class="profil-stat"><h4>0</h4><p>Litiges</p></div>
           </div>
         </div>
 
-        <!-- CRÉER LIVRAISON RAPIDE -->
         <div class="card">
-          <div class="card-header">
-            <h2>Livraison rapide</h2>
-          </div>
+          <div class="card-header"><h2>Livraison rapide</h2></div>
           <div class="create-form">
             <label>Description du colis</label>
             <textarea id="description" placeholder="Ex: Robe rouge taille M, emballée..."></textarea>
             <div class="row-2">
-              <div>
-                <label>Volume</label>
-                <select id="volume">
-                  <option value="petit">Petit</option>
-                  <option value="moyen">Moyen</option>
-                  <option value="grand">Grand</option>
-                </select>
-              </div>
-              <div>
-                <label>Poids</label>
-                <select id="poids">
-                  <option value="leger">Léger</option>
-                  <option value="moyen">Moyen</option>
-                  <option value="lourd">Lourd</option>
-                </select>
-              </div>
+              <div><label>Volume</label><select id="volume"><option value="petit">Petit</option><option value="moyen">Moyen</option><option value="grand">Grand</option></select></div>
+              <div><label>Poids</label><select id="poids"><option value="leger">Léger</option><option value="moyen">Moyen</option><option value="lourd">Lourd</option></select></div>
             </div>
             <label>Adresse de retrait</label>
             <input type="text" id="adresse" placeholder="Ex: Rue Flatters, Akwa">
-            <button class="btn-generer" onclick="genererLien()">
-              <i class="fas fa-link"></i> Générer le lien client
-            </button>
+            <button class="btn-generer" onclick="genererLien()"><i class="fas fa-link"></i> Générer le lien client</button>
             <div class="lien-genere" id="lien-genere">
               <p>Lien à envoyer au client</p>
-              <div class="lien-box">
-                <span id="lien-texte"></span>
-                <button class="btn-copier" onclick="copierLienRapide()">Copier</button>
-              </div>
+              <div class="lien-box"><span id="lien-texte"></span><button class="btn-copier" onclick="copierLienRapide()">Copier</button></div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 
-  <!-- MODAL NOUVELLE LIVRAISON -->
+  <!-- MODAL -->
   <div class="modal-overlay" id="modal-overlay" onclick="fermerModal(event)">
     <div class="modal">
       <div class="modal-icon"><i class="fas fa-box"></i></div>
       <h3>Nouvelle livraison créée !</h3>
       <p>Copiez ce lien et envoyez-le à votre client sur WhatsApp, Instagram ou Facebook.</p>
-      <div class="modal-lien">
-        <span id="modal-lien-texte">livoo.cm/commande/LV-006</span>
-        <button class="btn-copier" onclick="copierModalLien()">Copier</button>
-      </div>
-      <div class="modal-btns">
-        <button class="btn-partager" onclick="partager()"><i class="fas fa-share"></i> Partager</button>
-        <button class="btn-fermer" onclick="fermerModalBtn()">Fermer</button>
-      </div>
+      <div class="modal-lien"><span id="modal-lien-texte">livoo.cm/commande/LV-006</span><button class="btn-copier" onclick="copierModalLien()">Copier</button></div>
+      <div class="modal-btns"><button class="btn-partager" onclick="partager()"><i class="fas fa-share"></i> Partager</button><button class="btn-fermer" onclick="fermerModalBtn()">Fermer</button></div>
     </div>
   </div>
 
@@ -439,57 +412,20 @@ if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark'
     function genererLien() {
       const description = document.getElementById('description').value;
       const adresse = document.getElementById('adresse').value;
-      if (!description || !adresse) {
-        alert('Veuillez remplir la description et l\'adresse !');
-        return;
-      }
+      if (!description || !adresse) { alert('Veuillez remplir la description et l\'adresse !'); return; }
       const code = 'LV-' + Math.random().toString(36).substring(2, 7).toUpperCase();
       const lien = 'livoo.cm/commande/' + code;
       document.getElementById('lien-texte').textContent = lien;
       document.getElementById('lien-genere').style.display = 'block';
     }
-
-    function copierLienRapide() {
-      const lien = document.getElementById('lien-texte').textContent;
-      navigator.clipboard.writeText(lien);
-      alert('Lien copié ! Envoyez-le à votre client 🎉');
-    }
-
-    function copierLien(code) {
-      navigator.clipboard.writeText('livoo.cm/commande/' + code);
-      alert('Lien copié !');
-    }
-
-    function copierModalLien() {
-      const lien = document.getElementById('modal-lien-texte').textContent;
-      navigator.clipboard.writeText(lien);
-      alert('Lien copié !');
-    }
-
-    function partager() {
-      const lien = document.getElementById('modal-lien-texte').textContent;
-      if (navigator.share) {
-        navigator.share({ title: 'Ma livraison Livoo', url: lien });
-      } else {
-        navigator.clipboard.writeText(lien);
-        alert('Lien copié pour partage !');
-      }
-    }
-
-    function fermerModal(event) {
-      if (event.target === document.getElementById('modal-overlay')) {
-        document.getElementById('modal-overlay').classList.remove('show');
-      }
-    }
-
-    function fermerModalBtn() {
-      document.getElementById('modal-overlay').classList.remove('show');
-    }
+    function copierLienRapide() { const lien = document.getElementById('lien-texte').textContent; navigator.clipboard.writeText(lien); alert('Lien copié ! Envoyez-le à votre client 🎉'); }
+    function copierLien(code) { navigator.clipboard.writeText('livoo.cm/commande/' + code); alert('Lien copié !'); }
+    function copierModalLien() { const lien = document.getElementById('modal-lien-texte').textContent; navigator.clipboard.writeText(lien); alert('Lien copié !'); }
+    function partager() { const lien = document.getElementById('modal-lien-texte').textContent; if (navigator.share) { navigator.share({ title: 'Ma livraison Livoo', url: lien }); } else { navigator.clipboard.writeText(lien); alert('Lien copié pour partage !'); } }
+    function fermerModal(event) { if (event.target === document.getElementById('modal-overlay')) { document.getElementById('modal-overlay').classList.remove('show'); } }
+    function fermerModalBtn() { document.getElementById('modal-overlay').classList.remove('show'); }
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
   </script>
-
-<script>
-if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
-</script>
 
 </body>
 </html>

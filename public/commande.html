@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Livoo — Votre livraison</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -10,13 +10,40 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background: #f4f6f9; color: #1a1a1a; min-height: 100vh; }
 
-    /* HEADER */
-    header {
+    /* NAVBAR */
+    nav {
       background: #0f0f0f; padding: 15px 30px;
       display: flex; align-items: center; justify-content: space-between;
       border-bottom: 1px solid #222;
+      flex-wrap: wrap;
+      gap: 10px;
     }
-    header img { height: 40px; mix-blend-mode: lighten; filter: brightness(2); }
+    .logo img { height: 50px; width: auto; mix-blend-mode: lighten; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-links a {
+      color: white; text-decoration: none;
+      font-weight: 600; transition: color 0.3s; font-size: 14px;
+    }
+    .nav-links a:hover { color: #FF6B00; }
+    .btn-nav {
+      background: #FF6B00; color: white; padding: 8px 20px;
+      border-radius: 25px; font-weight: 700; text-decoration: none;
+      transition: all 0.3s;
+    }
+    .btn-nav:hover { background: white; color: #FF6B00; }
+
+    /* MENU BURGER */
+    .menu-toggle {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: white;
+    }
+
     .secure-badge {
       display: flex; align-items: center; gap: 8px;
       color: #22c55e; font-size: 13px; font-weight: 600;
@@ -30,6 +57,7 @@
     /* ÉTAPES */
     .etapes-bar {
       display: flex; align-items: center; margin-bottom: 35px;
+      flex-wrap: nowrap;
     }
     .etape-dot {
       width: 32px; height: 32px; border-radius: 50%;
@@ -39,7 +67,7 @@
     .etape-dot.done { background: #FF6B00; color: white; }
     .etape-dot.active { background: #FF6B00; color: white; box-shadow: 0 0 0 4px rgba(255,107,0,0.2); }
     .etape-dot.pending { background: #eee; color: #888; }
-    .etape-line { flex: 1; height: 2px; background: #eee; }
+    .etape-line { flex: 1; height: 2px; background: #eee; min-width: 20px; }
     .etape-line.done { background: #FF6B00; }
     .etapes-labels {
       display: flex; justify-content: space-between;
@@ -63,39 +91,38 @@
     /* ARTICLE */
     .article-info {
       display: flex; gap: 15px; align-items: flex-start;
+      flex-wrap: wrap;
     }
     .article-photo {
       width: 90px; height: 90px; border-radius: 12px;
-      object-fit: cover; background: #f4f6f9;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 30px; flex-shrink: 0; border: 1px solid #eee;
+      background: #f4f6f9; display: flex; align-items: center;
+      justify-content: center; font-size: 30px; flex-shrink: 0; border: 1px solid #eee;
     }
-    .article-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
+    .article-details { flex: 1; }
     .article-details h3 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
     .article-details p { font-size: 13px; color: #888; line-height: 1.6; }
     .vendeur-info {
       display: flex; align-items: center; gap: 10px;
       margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f0f0;
+      flex-wrap: wrap;
     }
     .vendeur-avatar {
       width: 32px; height: 32px; background: #FF6B00;
       border-radius: 8px; display: flex; align-items: center;
       justify-content: center; font-weight: 800; color: white; font-size: 13px;
     }
-    .vendeur-info span { font-size: 13px; font-weight: 600; }
-    .vendeur-info small { font-size: 11px; color: #888; display: block; }
 
     /* ADRESSE */
-    .adresse-options { display: flex; gap: 10px; margin-bottom: 15px; }
+    .adresse-options { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
     .adresse-btn {
       flex: 1; padding: 12px; border-radius: 12px; border: 2px solid #eee;
       background: white; font-size: 13px; font-weight: 700;
       cursor: pointer; font-family: 'Poppins', sans-serif;
       display: flex; align-items: center; justify-content: center;
       gap: 8px; transition: all 0.3s; color: #888;
+      min-width: 120px;
     }
     .adresse-btn.active { border-color: #FF6B00; color: #FF6B00; background: rgba(255,107,0,0.05); }
-    .adresse-btn i { font-size: 16px; }
     .input-adresse {
       width: 100%; padding: 14px 15px; background: #f4f6f9;
       border: 1.5px solid #eee; border-radius: 12px;
@@ -108,6 +135,7 @@
       display: none; align-items: center; gap: 8px;
       background: rgba(34,197,94,0.1); border-radius: 10px;
       padding: 12px 15px; font-size: 13px; color: #22c55e; font-weight: 600;
+      flex-wrap: wrap;
     }
     .geo-status.show { display: flex; }
     .geo-loading {
@@ -131,6 +159,7 @@
     .prix-ligne {
       display: flex; justify-content: space-between;
       font-size: 13px; color: #888;
+      flex-wrap: wrap;
     }
     .prix-ligne span:last-child { font-weight: 700; color: #1a1a1a; }
 
@@ -138,6 +167,7 @@
     .paiement-info {
       background: #f4f6f9; border-radius: 12px; padding: 15px;
       display: flex; align-items: center; gap: 12px;
+      flex-wrap: wrap;
     }
     .paiement-info i { font-size: 24px; color: #FF6B00; }
     .paiement-info p { font-size: 13px; color: #888; line-height: 1.5; }
@@ -152,7 +182,6 @@
       display: flex; align-items: center; justify-content: center; gap: 10px;
     }
     .btn-confirmer:hover { background: #cc5500; transform: translateY(-2px); }
-    .btn-confirmer:disabled { background: #ccc; cursor: not-allowed; transform: none; }
 
     /* CONFIRMATION */
     .confirmation {
@@ -169,204 +198,227 @@
     .suivi-step {
       display: flex; align-items: center; gap: 12px;
       background: #f4f6f9; border-radius: 12px; padding: 14px;
+      flex-wrap: wrap;
     }
     .suivi-step i { color: #FF6B00; font-size: 18px; width: 24px; text-align: center; }
     .suivi-step span { font-size: 13px; font-weight: 600; }
     .suivi-step small { font-size: 11px; color: #888; display: block; }
 
-    /* SPINNER */
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner { animation: spin 1s linear infinite; display: inline-block; }
+
+    /* RESPONSIVE MOBILE */
+    @media (max-width: 768px) {
+      nav { padding: 15px 20px; }
+      .menu-toggle { display: block; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: #0f0f0f;
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        border-bottom: 1px solid #222;
+        z-index: 99;
+      }
+      .nav-links.show { display: flex; }
+      .nav-links a { margin: 0; }
+      .btn-nav { text-align: center; }
+      .main { margin: 20px auto; padding: 0 15px 40px; }
+      .card { padding: 20px; }
+      .prix-box h2 { font-size: 32px; }
+      .btn-confirmer { padding: 15px; font-size: 15px; }
+    }
   </style>
 </head>
 <body>
 
- <header>
-<div class="logo" style="line-height: 0;">
-        <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
-    </div>
-    <div class="secure-badge">
-      <i class="fas fa-shield-alt"></i> Livraison sécurisée
-    </div>
-</header>
+<nav>
+  <div class="logo" style="line-height: 0;">
+    <a href="/index.html">
+      <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
+    </a>
+  </div>
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  <div class="nav-links" id="navLinks">
+    <a href="/index.html">Accueil</a>
+    <a href="/comment-ca-marche.html">Comment ça marche</a>
+    <a href="/inscription-livreur.html">Devenir livreur</a>
+    <a href="/inscription-vendeur.html" class="btn-nav">Je suis vendeur</a>
+  </div>
+</nav>
 
-  <div class="main">
+<script>
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('show');
+  }
+</script>
 
-    <!-- ÉTAPES -->
-    <div class="etapes-bar">
-      <div class="etape-dot done" id="dot1">1</div>
-      <div class="etape-line done" id="line1"></div>
-      <div class="etape-dot active" id="dot2">2</div>
-      <div class="etape-line" id="line2"></div>
-      <div class="etape-dot pending" id="dot3">3</div>
-    </div>
-    <div class="etapes-labels">
-      <span class="active">Commande</span>
-      <span class="active">Adresse</span>
-      <span>Confirmation</span>
-    </div>
+<div class="main">
 
-    <!-- CONTENU PRINCIPAL -->
-    <div id="contenu-principal">
+  <!-- ÉTAPES -->
+  <div class="etapes-bar">
+    <div class="etape-dot done" id="dot1">1</div>
+    <div class="etape-line done" id="line1"></div>
+    <div class="etape-dot active" id="dot2">2</div>
+    <div class="etape-line" id="line2"></div>
+    <div class="etape-dot pending" id="dot3">3</div>
+  </div>
+  <div class="etapes-labels">
+    <span class="active">Commande</span>
+    <span class="active">Adresse</span>
+    <span>Confirmation</span>
+  </div>
 
-      <!-- ARTICLE -->
-      <div class="card">
-        <div class="card-title"><i class="fas fa-box"></i> Votre commande</div>
-        <div class="article-info">
-          <div class="article-photo">📦</div>
-          <div class="article-details">
-            <h3>Robe rouge taille M</h3>
-            <p>Colis bien emballé dans un carton. Volume moyen, poids léger.</p>
-          </div>
-        </div>
-        <div class="vendeur-info">
-          <div class="vendeur-avatar">J</div>
-          <div>
-            <span>Jean Baptiste</span>
-            <small>Vendeur — Akwa, Douala</small>
-          </div>
-        </div>
-      </div>
+  <!-- CONTENU PRINCIPAL -->
+  <div id="contenu-principal">
 
-      <!-- ADRESSE -->
-      <div class="card">
-        <div class="card-title"><i class="fas fa-map-marker-alt"></i> Votre adresse de livraison</div>
-        <div class="adresse-options">
-          <button class="adresse-btn active" id="btn-manuel" onclick="switchAdresse('manuel')">
-            <i class="fas fa-keyboard"></i> Saisir manuellement
-          </button>
-          <button class="adresse-btn" id="btn-geo" onclick="switchAdresse('geo')">
-            <i class="fas fa-crosshairs"></i> Ma position GPS
-          </button>
-        </div>
-
-        <!-- MANUEL -->
-        <div id="zone-manuel">
-          <input type="text" class="input-adresse" id="adresse-input" placeholder="Ex: Carrefour Chapelle, Bonapriso, Douala">
-          <input type="text" class="input-adresse" id="repere-input" placeholder="Repère : Ex: En face de la pharmacie...">
-          <input type="tel" class="input-adresse" id="telephone-input" placeholder="Votre numéro de téléphone">
-        </div>
-
-        <!-- GÉOLOCALISATION -->
-        <div id="zone-geo" style="display:none">
-          <button class="adresse-btn active" style="width:100%;margin-bottom:10px" onclick="localiser()">
-            <i class="fas fa-crosshairs"></i> Utiliser ma position actuelle
-          </button>
-          <div class="geo-loading" id="geo-loading">
-            <i class="fas fa-circle-notch spinner"></i> Localisation en cours...
-          </div>
-          <div class="geo-status" id="geo-status">
-            <i class="fas fa-check-circle"></i>
-            <span id="geo-adresse">Position détectée</span>
-          </div>
-          <input type="tel" class="input-adresse" id="telephone-geo" placeholder="Votre numéro de téléphone" style="margin-top:10px">
+    <!-- ARTICLE -->
+    <div class="card">
+      <div class="card-title"><i class="fas fa-box"></i> Votre commande</div>
+      <div class="article-info">
+        <div class="article-photo">📦</div>
+        <div class="article-details">
+          <h3>Robe rouge taille M</h3>
+          <p>Colis bien emballé dans un carton. Volume moyen, poids léger.</p>
         </div>
       </div>
-
-      <!-- PRIX -->
-      <div class="card">
-        <div class="card-title"><i class="fas fa-receipt"></i> Frais de livraison</div>
-        <div class="prix-box">
-          <p>Montant à payer au livreur</p>
-          <h2>1 500 FCFA</h2>
-          <small>Paiement à la réception</small>
-        </div>
-        <div class="prix-details">
-          <div class="prix-ligne"><span>Distance estimée</span><span>~3 km</span></div>
-          <div class="prix-ligne"><span>Tarif de base</span><span>500 FCFA</span></div>
-          <div class="prix-ligne"><span>Frais distance</span><span>700 FCFA</span></div>
-          <div class="prix-ligne"><span>Volume (moyen)</span><span>×1.5</span></div>
-        </div>
-      </div>
-
-      <!-- PAIEMENT -->
-      <div class="card">
-        <div class="card-title"><i class="fas fa-mobile-alt"></i> Mode de paiement</div>
-        <div class="paiement-info">
-          <i class="fas fa-hand-holding-usd"></i>
-          <p>Vous payez <strong>directement au livreur</strong> à la réception de votre colis. En <strong>liquide</strong> ou via <strong>Orange Money</strong>. Aucun paiement en ligne requis.</p>
-        </div>
-      </div>
-
-      <button class="btn-confirmer" onclick="confirmer()">
-        <i class="fas fa-check"></i> Confirmer ma livraison
-      </button>
-
-    </div>
-
-    <!-- CONFIRMATION -->
-    <div class="card confirmation" id="confirmation">
-      <div class="confirmation-icon">🎉</div>
-      <h2>Livraison confirmée !</h2>
-      <p>Votre commande est en cours de traitement. Un livreur va être trouvé dans votre zone.</p>
-      <div class="suivi-steps">
-        <div class="suivi-step">
-          <i class="fas fa-search"></i>
-          <div><span>Recherche d'un livreur</span><small>Dans votre zone — en cours...</small></div>
-        </div>
-        <div class="suivi-step">
-          <i class="fas fa-motorcycle"></i>
-          <div><span>Livreur en route vers le vendeur</span><small>À venir</small></div>
-        </div>
-        <div class="suivi-step">
-          <i class="fas fa-box"></i>
-          <div><span>Colis récupéré</span><small>À venir</small></div>
-        </div>
-        <div class="suivi-step">
-          <i class="fas fa-home"></i>
-          <div><span>Livraison chez vous</span><small>À venir</small></div>
+      <div class="vendeur-info">
+        <div class="vendeur-avatar">J</div>
+        <div>
+          <span>Jean Baptiste</span>
+          <small>Vendeur — Akwa, Douala</small>
         </div>
       </div>
     </div>
+
+    <!-- ADRESSE -->
+    <div class="card">
+      <div class="card-title"><i class="fas fa-map-marker-alt"></i> Votre adresse de livraison</div>
+      <div class="adresse-options">
+        <button class="adresse-btn active" id="btn-manuel" onclick="switchAdresse('manuel')">
+          <i class="fas fa-keyboard"></i> Saisir manuellement
+        </button>
+        <button class="adresse-btn" id="btn-geo" onclick="switchAdresse('geo')">
+          <i class="fas fa-crosshairs"></i> Ma position GPS
+        </button>
+      </div>
+
+      <div id="zone-manuel">
+        <input type="text" class="input-adresse" id="adresse-input" placeholder="Ex: Carrefour Chapelle, Bonapriso, Douala">
+        <input type="text" class="input-adresse" id="repere-input" placeholder="Repère : Ex: En face de la pharmacie...">
+        <input type="tel" class="input-adresse" id="telephone-input" placeholder="Votre numéro de téléphone">
+      </div>
+
+      <div id="zone-geo" style="display:none">
+        <button class="adresse-btn active" style="width:100%;margin-bottom:10px" onclick="localiser()">
+          <i class="fas fa-crosshairs"></i> Utiliser ma position actuelle
+        </button>
+        <div class="geo-loading" id="geo-loading">
+          <i class="fas fa-circle-notch spinner"></i> Localisation en cours...
+        </div>
+        <div class="geo-status" id="geo-status">
+          <i class="fas fa-check-circle"></i>
+          <span id="geo-adresse">Position détectée</span>
+        </div>
+        <input type="tel" class="input-adresse" id="telephone-geo" placeholder="Votre numéro de téléphone" style="margin-top:10px">
+      </div>
+    </div>
+
+    <!-- PRIX -->
+    <div class="card">
+      <div class="card-title"><i class="fas fa-receipt"></i> Frais de livraison</div>
+      <div class="prix-box">
+        <p>Montant à payer au livreur</p>
+        <h2>1 500 FCFA</h2>
+        <small>Paiement à la réception</small>
+      </div>
+      <div class="prix-details">
+        <div class="prix-ligne"><span>Distance estimée</span><span>~3 km</span></div>
+        <div class="prix-ligne"><span>Tarif de base</span><span>500 FCFA</span></div>
+        <div class="prix-ligne"><span>Frais distance</span><span>700 FCFA</span></div>
+        <div class="prix-ligne"><span>Volume (moyen)</span><span>×1.5</span></div>
+      </div>
+    </div>
+
+    <!-- PAIEMENT -->
+    <div class="card">
+      <div class="card-title"><i class="fas fa-mobile-alt"></i> Mode de paiement</div>
+      <div class="paiement-info">
+        <i class="fas fa-hand-holding-usd"></i>
+        <p>Vous payez <strong>directement au livreur</strong> à la réception de votre colis. En <strong>liquide</strong> ou via <strong>Orange Money</strong>. Aucun paiement en ligne requis.</p>
+      </div>
+    </div>
+
+    <button class="btn-confirmer" onclick="confirmer()">
+      <i class="fas fa-check"></i> Confirmer ma livraison
+    </button>
 
   </div>
 
-  <script>
-    function switchAdresse(mode) {
-      document.getElementById('btn-manuel').classList.toggle('active', mode === 'manuel');
-      document.getElementById('btn-geo').classList.toggle('active', mode === 'geo');
-      document.getElementById('zone-manuel').style.display = mode === 'manuel' ? 'block' : 'none';
-      document.getElementById('zone-geo').style.display = mode === 'geo' ? 'block' : 'none';
-    }
+  <!-- CONFIRMATION -->
+  <div class="card confirmation" id="confirmation">
+    <div class="confirmation-icon">🎉</div>
+    <h2>Livraison confirmée !</h2>
+    <p>Votre commande est en cours de traitement. Un livreur va être trouvé dans votre zone.</p>
+    <div class="suivi-steps">
+      <div class="suivi-step"><i class="fas fa-search"></i><div><span>Recherche d'un livreur</span><small>Dans votre zone — en cours...</small></div></div>
+      <div class="suivi-step"><i class="fas fa-motorcycle"></i><div><span>Livreur en route vers le vendeur</span><small>À venir</small></div></div>
+      <div class="suivi-step"><i class="fas fa-box"></i><div><span>Colis récupéré</span><small>À venir</small></div></div>
+      <div class="suivi-step"><i class="fas fa-home"></i><div><span>Livraison chez vous</span><small>À venir</small></div></div>
+    </div>
+  </div>
 
-    function localiser() {
-      document.getElementById('geo-loading').classList.add('show');
-      document.getElementById('geo-status').classList.remove('show');
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          function(pos) {
-            document.getElementById('geo-loading').classList.remove('show');
-            document.getElementById('geo-status').classList.add('show');
-            document.getElementById('geo-adresse').textContent =
-              'Position détectée : ' + pos.coords.latitude.toFixed(4) + ', ' + pos.coords.longitude.toFixed(4);
-          },
-          function() {
-            document.getElementById('geo-loading').classList.remove('show');
-            alert('Impossible de détecter votre position. Saisissez votre adresse manuellement.');
-            switchAdresse('manuel');
-          }
-        );
-      }
-    }
+</div>
 
-    function confirmer() {
-      const mode = document.getElementById('btn-manuel').classList.contains('active') ? 'manuel' : 'geo';
-      if (mode === 'manuel') {
-        const adresse = document.getElementById('adresse-input').value;
-        const tel = document.getElementById('telephone-input').value;
-        if (!adresse || !tel) { alert('Veuillez renseigner votre adresse et votre numéro de téléphone !'); return; }
-      } else {
-        const tel = document.getElementById('telephone-geo').value;
-        const geoOk = document.getElementById('geo-status').classList.contains('show');
-        if (!geoOk || !tel) { alert('Veuillez détecter votre position et renseigner votre numéro !'); return; }
-      }
-      document.getElementById('contenu-principal').style.display = 'none';
-      document.getElementById('confirmation').style.display = 'block';
-      document.getElementById('dot2').className = 'etape-dot done';
-      document.getElementById('line2').className = 'etape-line done';
-      document.getElementById('dot3').className = 'etape-dot active';
+<script>
+  function switchAdresse(mode) {
+    document.getElementById('btn-manuel').classList.toggle('active', mode === 'manuel');
+    document.getElementById('btn-geo').classList.toggle('active', mode === 'geo');
+    document.getElementById('zone-manuel').style.display = mode === 'manuel' ? 'block' : 'none';
+    document.getElementById('zone-geo').style.display = mode === 'geo' ? 'block' : 'none';
+  }
+
+  function localiser() {
+    document.getElementById('geo-loading').classList.add('show');
+    document.getElementById('geo-status').classList.remove('show');
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          document.getElementById('geo-loading').classList.remove('show');
+          document.getElementById('geo-status').classList.add('show');
+          document.getElementById('geo-adresse').textContent = 'Position détectée : ' + pos.coords.latitude.toFixed(4) + ', ' + pos.coords.longitude.toFixed(4);
+        },
+        function() {
+          document.getElementById('geo-loading').classList.remove('show');
+          alert('Impossible de détecter votre position. Saisissez votre adresse manuellement.');
+          switchAdresse('manuel');
+        }
+      );
     }
-  </script>
+  }
+
+  function confirmer() {
+    const mode = document.getElementById('btn-manuel').classList.contains('active') ? 'manuel' : 'geo';
+    if (mode === 'manuel') {
+      const adresse = document.getElementById('adresse-input').value;
+      const tel = document.getElementById('telephone-input').value;
+      if (!adresse || !tel) { alert('Veuillez renseigner votre adresse et votre numéro de téléphone !'); return; }
+    } else {
+      const tel = document.getElementById('telephone-geo').value;
+      const geoOk = document.getElementById('geo-status').classList.contains('show');
+      if (!geoOk || !tel) { alert('Veuillez détecter votre position et renseigner votre numéro !'); return; }
+    }
+    document.getElementById('contenu-principal').style.display = 'none';
+    document.getElementById('confirmation').style.display = 'block';
+    document.getElementById('dot2').className = 'etape-dot done';
+    document.getElementById('line2').className = 'etape-line done';
+    document.getElementById('dot3').className = 'etape-dot active';
+  }
+</script>
 
 </body>
 </html>

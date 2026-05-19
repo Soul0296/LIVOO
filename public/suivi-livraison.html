@@ -2,20 +2,48 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Livoo — Suivi de livraison</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background: #f4f6f9; color: #1a1a1a; min-height: 100vh; }
-    header { background: #0f0f0f; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
-    header img { height: 40px; mix-blend-mode: lighten; filter: brightness(2); }
+
+    /* NAVBAR */
+    nav {
+      background: #0f0f0f; padding: 15px 30px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid #222;
+    }
+    .logo img { height: 50px; width: auto; mix-blend-mode: lighten; filter: brightness(2); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-links a {
+      color: white; text-decoration: none;
+      font-weight: 600; font-size: 14px;
+    }
+    .nav-links a:hover { color: #FF6B00; }
+    .btn-nav {
+      background: #FF6B00; color: white; padding: 8px 20px;
+      border-radius: 25px; font-weight: 700;
+    }
+
+    /* MENU BURGER */
+    .menu-toggle {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: white;
+    }
+
     .header-right { color: #888; font-size: 13px; }
     .header-right span { color: #FF6B00; font-weight: 700; }
     .main { max-width: 550px; margin: 30px auto; padding: 0 20px 60px; }
 
-    /* STATUT PRINCIPAL */
     .statut-card {
       background: linear-gradient(135deg, #FF6B00, #cc5500);
       border-radius: 20px; padding: 25px; color: white;
@@ -27,26 +55,25 @@
     .statut-card p { font-size: 13px; opacity: 0.9; }
     .statut-temps { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 6px 16px; display: inline-block; margin-top: 10px; font-size: 13px; font-weight: 700; }
 
-    /* LIVREUR */
     .livreur-card {
       background: white; border-radius: 20px; padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px;
       display: flex; align-items: center; gap: 15px;
+      flex-wrap: wrap;
     }
     .livreur-avatar { width: 55px; height: 55px; background: #FF6B00; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; color: white; flex-shrink: 0; }
     .livreur-info { flex: 1; }
     .livreur-info h3 { font-size: 16px; font-weight: 800; margin-bottom: 3px; }
     .livreur-info p { font-size: 13px; color: #888; }
-    .livreur-note { display: flex; align-items: center; gap: 4px; margin-top: 4px; }
+    .livreur-note { display: flex; align-items: center; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
     .livreur-note i { color: #FF6B00; font-size: 12px; }
     .livreur-note span { font-size: 12px; font-weight: 700; }
     .btn-appeler { background: #FF6B00; color: white; border: none; padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; display: flex; align-items: center; gap: 8px; }
 
-    /* TIMELINE */
     .card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
     .card h3 { font-size: 15px; font-weight: 800; margin-bottom: 20px; }
     .timeline { display: flex; flex-direction: column; gap: 0; }
-    .tl-item { display: flex; gap: 15px; position: relative; }
+    .tl-item { display: flex; gap: 15px; position: relative; flex-wrap: wrap; }
     .tl-item:not(:last-child)::after { content: ''; position: absolute; left: 19px; top: 42px; bottom: -5px; width: 2px; background: #eee; z-index: 0; }
     .tl-item.done:not(:last-child)::after { background: #FF6B00; }
     .tl-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
@@ -60,142 +87,124 @@
     .tl-content .tl-time { font-size: 11px; color: #FF6B00; font-weight: 700; margin-top: 3px; }
     @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 4px rgba(255,107,0,0.2); } 50% { box-shadow: 0 0 0 8px rgba(255,107,0,0.1); } }
 
-    /* CARTE */
     .map-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
     .map-card iframe { width: 100%; height: 200px; border: none; display: block; }
-    .map-footer { padding: 12px 20px; display: flex; align-items: center; gap: 8px; }
+    .map-footer { padding: 12px 20px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .map-footer i { color: #FF6B00; }
     .map-footer span { font-size: 13px; color: #888; }
 
-    /* COMMANDE DETAILS */
-    .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+    .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; flex-wrap: wrap; gap: 8px; }
     .detail-row:last-child { border-bottom: none; }
     .detail-row span:first-child { color: #888; }
     .detail-row span:last-child { font-weight: 700; }
 
-    /* BOUTONS */
-    .btn-probleme { width: 100%; padding: 15px; background: rgba(239,68,68,0.1); border: 1.5px solid #ef4444; border-radius: 14px; color: #ef4444; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s; margin-bottom: 12px; }
+    .btn-probleme { width: 100%; padding: 15px; background: rgba(239,68,68,0.1); border: 1.5px solid #ef4444; border-radius: 14px; color: #ef4444; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px; }
     .btn-probleme:hover { background: #ef4444; color: white; }
     .btn-noter { width: 100%; padding: 15px; background: #FF6B00; border: none; border-radius: 14px; color: white; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s; }
     .btn-noter:hover { background: #cc5500; }
 
-    /* BADGE STATUT */
     .badge-live { display: inline-flex; align-items: center; gap: 6px; background: rgba(34,197,94,0.15); color: #22c55e; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; }
     .live-dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; animation: blink 1s infinite; }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    @media (max-width: 768px) {
+      nav { padding: 15px 20px; }
+      .menu-toggle { display: block; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: #0f0f0f;
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        border-bottom: 1px solid #222;
+        z-index: 99;
+      }
+      .nav-links.show { display: flex; }
+      .nav-links a { margin: 0; }
+      .main { margin: 20px auto; padding: 0 15px 40px; }
+      .statut-card h2 { font-size: 18px; }
+      .tl-item:not(:last-child)::after { left: 19px; }
+    }
   </style>
 </head>
 <body>
-<header>
-    <div class="logo" style="line-height: 0;">
-        <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
-    </div>
-    <div class="header-right">Commande <span>#LV-002</span></div>
-</header>
-  <div class="main">
 
-    <!-- STATUT PRINCIPAL -->
-    <div class="statut-card">
-      <div class="statut-icon">🏍️</div>
-      <div class="badge-live" style="margin-bottom:10px"><div class="live-dot"></div> En direct</div>
-      <h2>Votre livreur est en route</h2>
-      <p>Martin récupère votre colis chez le vendeur</p>
-      <div class="statut-temps"><i class="fas fa-clock"></i> Arrivée estimée : 15-20 min</div>
-    </div>
-
-    <!-- LIVREUR -->
-    <div class="livreur-card">
-      <div class="livreur-avatar">M</div>
-      <div class="livreur-info">
-        <h3>Martin Kamga</h3>
-        <p>Livreur Livoo — Moto</p>
-        <div class="livreur-note">
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star"></i>
-          <i class="fas fa-star-half-alt"></i>
-          <span>4.8 (124 livraisons)</span>
-        </div>
-      </div>
-      <button class="btn-appeler" onclick="alert('Appel en cours...')">
-        <i class="fas fa-phone"></i> Appeler
-      </button>
-    </div>
-
-    <!-- CARTE -->
-    <div class="map-card">
-      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7963.5!2d9.7679!3d4.0511!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2scm!4v1234567890" allowfullscreen="" loading="lazy"></iframe>
-      <div class="map-footer">
-        <i class="fas fa-map-marker-alt"></i>
-        <span>Martin est à environ 2.3 km de votre position</span>
-      </div>
-    </div>
-
-    <!-- TIMELINE -->
-    <div class="card">
-      <h3><i class="fas fa-route" style="color:#FF6B00;margin-right:8px"></i> Suivi de votre livraison</h3>
-      <div class="timeline">
-        <div class="tl-item done">
-          <div class="tl-left"><div class="tl-circle done"><i class="fas fa-check"></i></div></div>
-          <div class="tl-content">
-            <h4>Commande confirmée</h4>
-            <p>Votre adresse a été enregistrée</p>
-            <div class="tl-time">14:05</div>
-          </div>
-        </div>
-        <div class="tl-item done">
-          <div class="tl-left"><div class="tl-circle done"><i class="fas fa-check"></i></div></div>
-          <div class="tl-content">
-            <h4>Livreur trouvé</h4>
-            <p>Martin Kamga a accepté votre course</p>
-            <div class="tl-time">14:07</div>
-          </div>
-        </div>
-        <div class="tl-item active">
-          <div class="tl-left"><div class="tl-circle active"><i class="fas fa-motorcycle"></i></div></div>
-          <div class="tl-content">
-            <h4>En route vers le vendeur</h4>
-            <p>Martin récupère votre colis</p>
-            <div class="tl-time">En cours...</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-left"><div class="tl-circle pending"><i class="fas fa-box"></i></div></div>
-          <div class="tl-content">
-            <h4>Colis récupéré</h4>
-            <p>Le livreur est en route vers vous</p>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-left"><div class="tl-circle pending"><i class="fas fa-home"></i></div></div>
-          <div class="tl-content">
-            <h4>Livraison chez vous</h4>
-            <p>Paiement au livreur à la réception</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DÉTAILS COMMANDE -->
-    <div class="card">
-      <h3><i class="fas fa-receipt" style="color:#FF6B00;margin-right:8px"></i> Détails de la commande</h3>
-      <div class="detail-row"><span>Référence</span><span>#LV-002</span></div>
-      <div class="detail-row"><span>Article</span><span>Robe rouge taille M</span></div>
-      <div class="detail-row"><span>Vendeur</span><span>Jean Baptiste</span></div>
-      <div class="detail-row"><span>Adresse de livraison</span><span>Carrefour Chapelle, Bonapriso</span></div>
-      <div class="detail-row"><span>Frais de livraison</span><span style="color:#FF6B00">1 500 FCFA</span></div>
-      <div class="detail-row"><span>Mode de paiement</span><span>Liquide / Orange Money</span></div>
-    </div>
-
-    <!-- ACTIONS -->
-    <button class="btn-probleme" onclick="window.location.href='/litige.html'">
-      <i class="fas fa-exclamation-triangle"></i> Signaler un problème
-    </button>
-    <button class="btn-noter" onclick="window.location.href='/notation.html'">
-      <i class="fas fa-star"></i> Noter la livraison
-    </button>
-
+<nav>
+  <div class="logo" style="line-height: 0;">
+    <a href="/index.html">
+      <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
+    </a>
   </div>
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  <div class="nav-links" id="navLinks">
+    <a href="/index.html">Accueil</a>
+    <a href="/comment-ca-marche.html">Comment ça marche</a>
+    <a href="/inscription-livreur.html">Devenir livreur</a>
+    <a href="/inscription-vendeur.html" class="btn-nav">Je suis vendeur</a>
+  </div>
+</nav>
+
+<script>
+  function toggleMenu() { document.getElementById('navLinks').classList.toggle('show'); }
+</script>
+
+<div class="main">
+
+  <div class="statut-card">
+    <div class="statut-icon">🏍️</div>
+    <div class="badge-live" style="margin-bottom:10px"><div class="live-dot"></div> En direct</div>
+    <h2>Votre livreur est en route</h2>
+    <p>Martin récupère votre colis chez le vendeur</p>
+    <div class="statut-temps"><i class="fas fa-clock"></i> Arrivée estimée : 15-20 min</div>
+  </div>
+
+  <div class="livreur-card">
+    <div class="livreur-avatar">M</div>
+    <div class="livreur-info">
+      <h3>Martin Kamga</h3>
+      <p>Livreur Livoo — Moto</p>
+      <div class="livreur-note">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+        <span>4.8 (124 livraisons)</span>
+      </div>
+    </div>
+    <button class="btn-appeler" onclick="alert('Appel en cours...')"><i class="fas fa-phone"></i> Appeler</button>
+  </div>
+
+  <div class="map-card">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7963.5!2d9.7679!3d4.0511!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2scm!4v1234567890" allowfullscreen="" loading="lazy"></iframe>
+    <div class="map-footer"><i class="fas fa-map-marker-alt"></i><span>Martin est à environ 2.3 km de votre position</span></div>
+  </div>
+
+  <div class="card">
+    <h3><i class="fas fa-route" style="color:#FF6B00;margin-right:8px"></i> Suivi de votre livraison</h3>
+    <div class="timeline">
+      <div class="tl-item done"><div class="tl-left"><div class="tl-circle done"><i class="fas fa-check"></i></div></div><div class="tl-content"><h4>Commande confirmée</h4><p>Votre adresse a été enregistrée</p><div class="tl-time">14:05</div></div></div>
+      <div class="tl-item done"><div class="tl-left"><div class="tl-circle done"><i class="fas fa-check"></i></div></div><div class="tl-content"><h4>Livreur trouvé</h4><p>Martin Kamga a accepté votre course</p><div class="tl-time">14:07</div></div></div>
+      <div class="tl-item active"><div class="tl-left"><div class="tl-circle active"><i class="fas fa-motorcycle"></i></div></div><div class="tl-content"><h4>En route vers le vendeur</h4><p>Martin récupère votre colis</p><div class="tl-time">En cours...</div></div></div>
+      <div class="tl-item"><div class="tl-left"><div class="tl-circle pending"><i class="fas fa-box"></i></div></div><div class="tl-content"><h4>Colis récupéré</h4><p>Le livreur est en route vers vous</p></div></div>
+      <div class="tl-item"><div class="tl-left"><div class="tl-circle pending"><i class="fas fa-home"></i></div></div><div class="tl-content"><h4>Livraison chez vous</h4><p>Paiement au livreur à la réception</p></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><i class="fas fa-receipt" style="color:#FF6B00;margin-right:8px"></i> Détails de la commande</h3>
+    <div class="detail-row"><span>Référence</span><span>#LV-002</span></div>
+    <div class="detail-row"><span>Article</span><span>Robe rouge taille M</span></div>
+    <div class="detail-row"><span>Vendeur</span><span>Jean Baptiste</span></div>
+    <div class="detail-row"><span>Adresse de livraison</span><span>Carrefour Chapelle, Bonapriso</span></div>
+    <div class="detail-row"><span>Frais de livraison</span><span style="color:#FF6B00">1 500 FCFA</span></div>
+    <div class="detail-row"><span>Mode de paiement</span><span>Liquide / Orange Money</span></div>
+  </div>
+
+  <button class="btn-probleme" onclick="window.location.href='/litige.html'"><i class="fas fa-exclamation-triangle"></i> Signaler un problème</button>
+  <button class="btn-noter" onclick="window.location.href='/notation.html'"><i class="fas fa-star"></i> Noter la livraison</button>
+
+</div>
+
 </body>
 </html>

@@ -2,180 +2,232 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Livoo — Noter la livraison</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background: #f4f6f9; color: #1a1a1a; min-height: 100vh; }
-    header { background: #0f0f0f; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
-    header img { height: 40px; mix-blend-mode: lighten; filter: brightness(2); }
+
+    /* NAVBAR */
+    nav {
+      background: #0f0f0f; padding: 15px 30px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid #222;
+    }
+    .logo img { height: 50px; width: auto; mix-blend-mode: lighten; filter: brightness(2); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-links a {
+      color: white; text-decoration: none;
+      font-weight: 600; font-size: 14px;
+    }
+    .nav-links a:hover { color: #FF6B00; }
+    .btn-nav {
+      background: #FF6B00; color: white; padding: 8px 20px;
+      border-radius: 25px; font-weight: 700;
+    }
+
+    /* MENU BURGER */
+    .menu-toggle {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: white;
+    }
+
     .main { max-width: 480px; margin: 40px auto; padding: 0 20px 60px; }
     .card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
 
-    /* SUCCÈS */
     .succes-banner { background: linear-gradient(135deg, #22c55e, #16a34a); border-radius: 20px; padding: 25px; color: white; text-align: center; margin-bottom: 20px; }
     .succes-icon { font-size: 50px; margin-bottom: 12px; }
     .succes-banner h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
     .succes-banner p { font-size: 13px; opacity: 0.9; }
 
-    /* LIVREUR */
-    .livreur-row { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+    .livreur-row { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
     .livreur-avatar { width: 55px; height: 55px; background: #FF6B00; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; color: white; }
     .livreur-info h3 { font-size: 16px; font-weight: 800; }
     .livreur-info p { font-size: 13px; color: #888; }
 
-    /* ÉTOILES */
     .etoiles-section { text-align: center; margin-bottom: 25px; }
     .etoiles-section h3 { font-size: 16px; font-weight: 800; margin-bottom: 15px; }
-    .etoiles { display: flex; justify-content: center; gap: 10px; }
+    .etoiles { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
     .etoile { font-size: 40px; cursor: pointer; transition: transform 0.2s; color: #ddd; }
     .etoile:hover, .etoile.active { color: #FF6B00; transform: scale(1.2); }
     .note-label { font-size: 14px; font-weight: 700; color: #FF6B00; margin-top: 10px; height: 20px; }
 
-    /* CRITÈRES */
     .criteres { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
-    .critere { display: flex; justify-content: space-between; align-items: center; }
+    .critere { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
     .critere span { font-size: 14px; font-weight: 600; }
     .mini-etoiles { display: flex; gap: 5px; }
     .mini-etoile { font-size: 20px; cursor: pointer; color: #ddd; transition: color 0.2s; }
     .mini-etoile:hover, .mini-etoile.active { color: #FF6B00; }
 
-    /* COMMENTAIRE */
-    textarea { width: 100%; padding: 14px; background: #f4f6f9; border: 1.5px solid #eee; border-radius: 12px; font-size: 14px; font-family: 'Poppins', sans-serif; resize: none; height: 100px; outline: none; transition: border 0.3s; }
+    textarea { width: 100%; padding: 14px; background: #f4f6f9; border: 1.5px solid #eee; border-radius: 12px; font-size: 14px; font-family: 'Poppins', sans-serif; resize: none; height: 100px; outline: none; }
     textarea:focus { border-color: #FF6B00; background: white; }
 
-    /* BOUTONS */
     .btn-envoyer { width: 100%; padding: 16px; background: #FF6B00; border: none; border-radius: 14px; color: white; font-size: 15px; font-weight: 800; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .btn-envoyer:hover { background: #cc5500; transform: translateY(-2px); }
     .btn-passer { width: 100%; padding: 14px; background: transparent; border: none; color: #888; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; margin-top: 10px; }
 
-    /* MERCI */
     .merci { display: none; text-align: center; padding: 20px; }
     .merci-icon { font-size: 60px; margin-bottom: 15px; }
     .merci h2 { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
     .merci p { color: #888; font-size: 14px; margin-bottom: 25px; }
     .btn-accueil { background: #FF6B00; color: white; padding: 14px 30px; border-radius: 14px; font-size: 14px; font-weight: 700; text-decoration: none; display: inline-block; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 15px 20px; }
+      .menu-toggle { display: block; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: #0f0f0f;
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        border-bottom: 1px solid #222;
+        z-index: 99;
+      }
+      .nav-links.show { display: flex; }
+      .nav-links a { margin: 0; }
+      .main { margin: 20px auto; padding: 0 15px 40px; }
+      .card { padding: 20px; }
+      .etoile { font-size: 30px; }
+      .mini-etoile { font-size: 16px; }
+    }
   </style>
 </head>
 <body>
-<header>
-    <div class="logo" style="line-height: 0;">
-        <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
-    </div>
-    <span style="color:#22c55e;font-weight:700;font-size:13px"><i class="fas fa-check-circle"></i> Livraison confirmée</span>
-</header>
 
-  <div class="main">
+<nav>
+  <div class="logo" style="line-height: 0;">
+    <a href="/index.html">
+      <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
+    </a>
+  </div>
+  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  <div class="nav-links" id="navLinks">
+    <a href="/index.html">Accueil</a>
+    <a href="/comment-ca-marche.html">Comment ça marche</a>
+    <a href="/inscription-livreur.html">Devenir livreur</a>
+    <a href="/inscription-vendeur.html" class="btn-nav">Je suis vendeur</a>
+  </div>
+</nav>
 
-    <!-- SUCCÈS -->
-    <div class="succes-banner">
-      <div class="succes-icon">📦</div>
-      <h2>Colis bien reçu !</h2>
-      <p>Votre commande #LV-002 a été livrée avec succès</p>
-    </div>
+<script>
+  function toggleMenu() { document.getElementById('navLinks').classList.toggle('show'); }
+</script>
 
-    <!-- NOTATION -->
-    <div class="card" id="form-notation">
-      <div class="livreur-row">
-        <div class="livreur-avatar">M</div>
-        <div class="livreur-info">
-          <h3>Martin Kamga</h3>
-          <p>Votre livreur aujourd'hui</p>
-        </div>
-      </div>
+<div class="main">
 
-      <div class="etoiles-section">
-        <h3>Comment s'est passée votre livraison ?</h3>
-        <div class="etoiles">
-          <span class="etoile" onclick="noterGlobal(1)">★</span>
-          <span class="etoile" onclick="noterGlobal(2)">★</span>
-          <span class="etoile" onclick="noterGlobal(3)">★</span>
-          <span class="etoile" onclick="noterGlobal(4)">★</span>
-          <span class="etoile" onclick="noterGlobal(5)">★</span>
-        </div>
-        <div class="note-label" id="note-label"></div>
-      </div>
-
-      <div class="criteres">
-        <div class="critere">
-          <span>Ponctualité</span>
-          <div class="mini-etoiles" id="crit-ponctualite">
-            <span class="mini-etoile" onclick="noterCritere('ponctualite', 1)">★</span>
-            <span class="mini-etoile" onclick="noterCritere('ponctualite', 2)">★</span>
-            <span class="mini-etoile" onclick="noterCritere('ponctualite', 3)">★</span>
-            <span class="mini-etoile" onclick="noterCritere('ponctualite', 4)">★</span>
-            <span class="mini-etoile" onclick="noterCritere('ponctualite', 5)">★</span>
-          </div>
-        </div>
-        <div class="critere">
-          <span>Colis en bon état</span>
-          <div class="mini-etoiles" id="crit-etat">
-            <span class="mini-etoile" onclick="noterCritere('etat', 1)">★</span>
-            <span class="mini-etoile" onclick="noterCritere('etat', 2)">★</span>
-            <span class="mini-etoile" onclick="noterCritere('etat', 3)">★</span>
-            <span class="mini-etoile" onclick="noterCritere('etat', 4)">★</span>
-            <span class="mini-etoile" onclick="noterCritere('etat', 5)">★</span>
-          </div>
-        </div>
-        <div class="critere">
-          <span>Communication</span>
-          <div class="mini-etoiles" id="crit-communication">
-            <span class="mini-etoile" onclick="noterCritere('communication', 1)">★</span>
-            <span class="mini-etoile" onclick="noterCritere('communication', 2)">★</span>
-            <span class="mini-etoile" onclick="noterCritere('communication', 3)">★</span>
-            <span class="mini-etoile" onclick="noterCritere('communication', 4)">★</span>
-            <span class="mini-etoile" onclick="noterCritere('communication', 5)">★</span>
-          </div>
-        </div>
-      </div>
-
-      <textarea placeholder="Laissez un commentaire (optionnel)..."></textarea>
-      <br><br>
-      <button class="btn-envoyer" onclick="envoyerNote()">
-        <i class="fas fa-paper-plane"></i> Envoyer mon avis
-      </button>
-      <button class="btn-passer" onclick="passer()">Passer cette étape</button>
-    </div>
-
-    <!-- MERCI -->
-    <div class="card merci" id="merci">
-      <div class="merci-icon">🙏</div>
-      <h2>Merci pour votre avis !</h2>
-      <p>Votre note aide à améliorer la qualité des livraisons pour tous les utilisateurs de Livoo.</p>
-      <a href="/" class="btn-accueil">Retour à l'accueil</a>
-    </div>
-
+  <div class="succes-banner">
+    <div class="succes-icon">📦</div>
+    <h2>Colis bien reçu !</h2>
+    <p>Votre commande #LV-002 a été livrée avec succès</p>
   </div>
 
-  <script>
-    const labels = ['', 'Très mauvais 😞', 'Mauvais 😕', 'Correct 😐', 'Bien 😊', 'Excellent ! 🎉'];
-    let noteGlobale = 0;
+  <div class="card" id="form-notation">
+    <div class="livreur-row">
+      <div class="livreur-avatar">M</div>
+      <div class="livreur-info">
+        <h3>Martin Kamga</h3>
+        <p>Votre livreur aujourd'hui</p>
+      </div>
+    </div>
 
-    function noterGlobal(n) {
-      noteGlobale = n;
-      document.querySelectorAll('.etoile').forEach((e, i) => {
-        e.classList.toggle('active', i < n);
-      });
-      document.getElementById('note-label').textContent = labels[n];
-    }
+    <div class="etoiles-section">
+      <h3>Comment s'est passée votre livraison ?</h3>
+      <div class="etoiles">
+        <span class="etoile" onclick="noterGlobal(1)">★</span>
+        <span class="etoile" onclick="noterGlobal(2)">★</span>
+        <span class="etoile" onclick="noterGlobal(3)">★</span>
+        <span class="etoile" onclick="noterGlobal(4)">★</span>
+        <span class="etoile" onclick="noterGlobal(5)">★</span>
+      </div>
+      <div class="note-label" id="note-label"></div>
+    </div>
 
-    function noterCritere(critere, n) {
-      document.querySelectorAll(`#crit-${critere} .mini-etoile`).forEach((e, i) => {
-        e.classList.toggle('active', i < n);
-      });
-    }
+    <div class="criteres">
+      <div class="critere">
+        <span>Ponctualité</span>
+        <div class="mini-etoiles" id="crit-ponctualite">
+          <span class="mini-etoile" onclick="noterCritere('ponctualite', 1)">★</span>
+          <span class="mini-etoile" onclick="noterCritere('ponctualite', 2)">★</span>
+          <span class="mini-etoile" onclick="noterCritere('ponctualite', 3)">★</span>
+          <span class="mini-etoile" onclick="noterCritere('ponctualite', 4)">★</span>
+          <span class="mini-etoile" onclick="noterCritere('ponctualite', 5)">★</span>
+        </div>
+      </div>
+      <div class="critere">
+        <span>Colis en bon état</span>
+        <div class="mini-etoiles" id="crit-etat">
+          <span class="mini-etoile" onclick="noterCritere('etat', 1)">★</span>
+          <span class="mini-etoile" onclick="noterCritere('etat', 2)">★</span>
+          <span class="mini-etoile" onclick="noterCritere('etat', 3)">★</span>
+          <span class="mini-etoile" onclick="noterCritere('etat', 4)">★</span>
+          <span class="mini-etoile" onclick="noterCritere('etat', 5)">★</span>
+        </div>
+      </div>
+      <div class="critere">
+        <span>Communication</span>
+        <div class="mini-etoiles" id="crit-communication">
+          <span class="mini-etoile" onclick="noterCritere('communication', 1)">★</span>
+          <span class="mini-etoile" onclick="noterCritere('communication', 2)">★</span>
+          <span class="mini-etoile" onclick="noterCritere('communication', 3)">★</span>
+          <span class="mini-etoile" onclick="noterCritere('communication', 4)">★</span>
+          <span class="mini-etoile" onclick="noterCritere('communication', 5)">★</span>
+        </div>
+      </div>
+    </div>
 
-    function envoyerNote() {
-      if (noteGlobale === 0) { alert('Veuillez donner une note globale !'); return; }
-      document.getElementById('form-notation').style.display = 'none';
-      document.getElementById('merci').style.display = 'block';
-    }
+    <textarea id="commentaire" placeholder="Laissez un commentaire (optionnel)..."></textarea>
+    <br><br>
+    <button class="btn-envoyer" onclick="envoyerNote()">
+      <i class="fas fa-paper-plane"></i> Envoyer mon avis
+    </button>
+    <button class="btn-passer" onclick="passer()">Passer cette étape</button>
+  </div>
 
-    function passer() {
-      window.location.href = '/';
-    }
-  </script>
+  <div class="card merci" id="merci">
+    <div class="merci-icon">🙏</div>
+    <h2>Merci pour votre avis !</h2>
+    <p>Votre note aide à améliorer la qualité des livraisons pour tous les utilisateurs de Livoo.</p>
+    <a href="/index.html" class="btn-accueil">Retour à l'accueil</a>
+  </div>
+
+</div>
+
+<script>
+  const labels = ['', 'Très mauvais 😞', 'Mauvais 😕', 'Correct 😐', 'Bien 😊', 'Excellent ! 🎉'];
+  let noteGlobale = 0;
+
+  function noterGlobal(n) {
+    noteGlobale = n;
+    document.querySelectorAll('.etoile').forEach((e, i) => { e.classList.toggle('active', i < n); });
+    document.getElementById('note-label').textContent = labels[n];
+  }
+
+  function noterCritere(critere, n) {
+    document.querySelectorAll(`#crit-${critere} .mini-etoile`).forEach((e, i) => { e.classList.toggle('active', i < n); });
+  }
+
+  function envoyerNote() {
+    if (noteGlobale === 0) { alert('Veuillez donner une note globale !'); return; }
+    document.getElementById('form-notation').style.display = 'none';
+    document.getElementById('merci').style.display = 'block';
+  }
+
+  function passer() { window.location.href = '/index.html'; }
+</script>
+
 </body>
 </html>
