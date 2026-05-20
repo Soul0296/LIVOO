@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Livoo — Connexion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/mobile.css">
+    <script src="/global.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Image de fond floutée */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/images/photo_connexion.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(4px);
+            transform: scale(1.05);
+            z-index: -2;
+        }
+
+        /* Overlay sombre pour lisibilité */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        /* Texte à gauche */
+        .hero-text {
+            position: absolute;
+            left: 8%;
+            top: 50%;
+            transform: translateY(-50%);
+            max-width: 450px;
+            color: white;
+            z-index: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.6;
+        }
+
+        .hero-text span {
+            color: #FF6B00;
+        }
+
+        /* Carte de connexion à droite */
+        .login-container {
+            max-width: 480px;
+            width: 90%;
+            background: white;
+            border-radius: 32px;
+            padding: 50px 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            margin: 40px 60px 40px auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .logo img {
+            height: 55px;
+            width: auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i:first-child {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 16px;
+            z-index: 1;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 45px 14px 45px;
+            background: #f4f6f9;
+            border: 1.5px solid #eee;
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #FF6B00;
+            background: white;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #aaa;
+            z-index: 1;
+        }
+
+        .btn-connexion {
+            width: 100%;
+            padding: 16px;
+            background: #FF6B00;
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-connexion:hover {
+            background: #cc5500;
+            transform: translateY(-2px);
+        }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+            color: #ccc;
+            font-size: 12px;
+        }
+
+        .separator::before,
+        .separator::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+
+        .create-account {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .create-account p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .create-account a {
+            color: #FF6B00;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #ef4444;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+        }
+
+        /* Mode sombre */
+        body.dark .login-container {
+            background: #1a1a1a;
+        }
+
+        body.dark h1 {
+            color: white;
+        }
+
+        body.dark .form-group label {
+            color: #aaa;
+        }
+
+        body.dark .form-group input {
+            background: #0f0f0f;
+            border-color: #333;
+            color: white;
+        }
+
+        body.dark .error-message {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .hero-text {
+                left: 5%;
+            }
+            .hero-text h1 {
+                font-size: 36px;
+            }
+            .login-container {
+                margin-right: 40px;
+                padding: 40px 35px;
+            }
+        }
+
+        @media (max-width: 850px) {
+            body {
+                justify-content: center;
+            }
+            .hero-text {
+                display: none;
+            }
+            .login-container {
+                margin: 40px auto;
+                width: 95%;
+                padding: 35px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Texte à gauche -->
+    <div class="hero-text">
+        <h1>Connecte-toi et <span>fais livrer</span><br>ton article en un clic</h1>
+        <p>Livoo connecte vos clients à vos livreurs en quelques secondes. Simple, rapide et sécurisé.</p>
+    </div>
+
+    <!-- Carte de connexion à droite -->
+    <div class="login-container">
+        <div class="logo">
+            <img src="/images/logo/logo_transparent.png" alt="Livoo">
+        </div>
+
+        <h1 data-i18n="loginTitle">🔐 Connexion</h1>
+        <p class="subtitle" data-i18n="loginSubtitle">Accédez à votre espace Livoo</p>
+
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-triangle"></i> <span data-i18n="errorInvalid">Numéro ou mot de passe incorrect</span>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label data-i18n="phoneLabel">📱 Numéro de téléphone</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" id="telephone" placeholder="6XXXXXXXX" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label data-i18n="passwordLabel">🔒 Mot de passe</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                    <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-connexion">
+                <i class="fas fa-arrow-right"></i> <span data-i18n="loginBtn">Se connecter</span>
+            </button>
+        </form>
+
+        <div class="separator">
+            <span data-i18n="or">ou</span>
+        </div>
+
+        <div class="create-account">
+            <p><span data-i18n="noAccount">Vous n'avez pas de compte ?</span> <a href="/inscription-vendeur.html" data-i18n="createLink">Créer un compte</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Afficher/masquer le mot de passe
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // Gestionnaire de connexion
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const telephone = document.getElementById('telephone').value;
+            const password = document.getElementById('password').value;
+
+            // Simulation de connexion
+            if (telephone === "690000000" && password === "admin123") {
+                localStorage.setItem('userConnected', 'true');
+                localStorage.setItem('userPhone', telephone);
+                localStorage.setItem('userRole', 'vendeur');
+                window.location.href = '/dashboard-vendeur.html';
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('errorMessage').style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        // Traductions
+        const translationsPage = {
+            fr: {
+                loginTitle: "🔐 Connexion",
+                loginSubtitle: "Accédez à votre espace Livoo",
+                phoneLabel: "📱 Numéro de téléphone",
+                passwordLabel: "🔒 Mot de passe",
+                loginBtn: "Se connecter",
+                or: "ou",
+                noAccount: "Vous n'avez pas de compte ?",
+                createLink: "Créer un compte",
+                errorInvalid: "Numéro ou mot de passe incorrect"
+            },
+            en: {
+                loginTitle: "🔐 Login",
+                loginSubtitle: "Access your Livoo space",
+                phoneLabel: "📱 Phone number",
+                passwordLabel: "🔒 Password",
+                loginBtn: "Login",
+                or: "or",
+                noAccount: "Don't have an account?",
+                createLink: "Create an account",
+                errorInvalid: "Incorrect phone number or password"
+            }
+        };
+
+        function applyLoginLanguage() {
+            const currentLang = localStorage.getItem('lang') || 'fr';
+            const t = translationsPage[currentLang];
+            document.querySelector('[data-i18n="loginTitle"]').textContent = t.loginTitle;
+            document.querySelector('[data-i18n="loginSubtitle"]').textContent = t.loginSubtitle;
+            document.querySelector('[data-i18n="phoneLabel"]').textContent = t.phoneLabel;
+            document.querySelector('[data-i18n="passwordLabel"]').textContent = t.passwordLabel;
+            document.querySelector('[data-i18n="loginBtn"]').textContent = t.loginBtn;
+            document.querySelector('[data-i18n="or"]').textContent = t.or;
+            document.querySelector('[data-i18n="noAccount"]').textContent = t.noAccount;
+            document.querySelector('[data-i18n="createLink"]').textContent = t.createLink;
+            document.querySelector('[data-i18n="errorInvalid"]').textContent = t.errorInvalid;
+        }
+
+        applyLoginLanguage();
+    </script>
+
+</body>
+</html>
