@@ -1,451 +1,217 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Livoo — Connexion</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/mobile.css">
-    <script src="/global.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Livoo — Connexion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root { --orange:#FF6B00; --orange-light:rgba(255,107,0,0.12); }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'Poppins',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:flex-end;position:relative;overflow-x:hidden}
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            position: relative;
-            overflow-x: hidden;
-        }
+    /* FOND */
+    body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background-image:url('images/photo_connexion.jpg');background-size:cover;background-position:center;filter:blur(2px);transform:scale(1.05);z-index:-2}
+    body::after{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.55);z-index:-1}
 
-        /* Image de fond floutée */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('/images/photo_connexion.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            filter: blur(1px);
-            transform: scale(1.05);
-            z-index: -2;
-        }
-        /* Overlay sombre pour lisibilité */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: -1;
-        }
+    /* TEXTE GAUCHE */
+    .hero-text{position:absolute;left:8%;top:50%;transform:translateY(-50%);max-width:440px;color:white;z-index:1}
+    .hero-text h1{font-size:46px;font-weight:800;line-height:1.2;margin-bottom:18px;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+    .hero-text p{font-size:17px;color:rgba(255,255,255,.88);line-height:1.65}
+    .hero-text span{color:var(--orange)}
 
-        /* Texte à gauche */
-        .hero-text {
-            position: absolute;
-            left: 8%;
-            top: 50%;
-            transform: translateY(-50%);
-            max-width: 450px;
-            color: white;
-            z-index: 1;
-        }
+    /* CARTE */
+    .login-container{max-width:460px;width:90%;background:white;border-radius:32px;padding:48px 40px;box-shadow:0 25px 60px rgba(0,0,0,.35);margin:40px 60px 40px auto;position:relative;z-index:2;transition:background .35s}
+    [data-theme="dark"] .login-container{background:#1a1a1a}
 
-        .hero-text h1 {
-            font-size: 48px;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
+    .logo{margin-bottom:28px;text-align:center}
+    .logo img{height:52px;width:auto}
 
-        .hero-text p {
-            font-size: 18px;
-            color: rgba(255,255,255,0.9);
-            line-height: 1.6;
-        }
+    .login-container h1{font-size:26px;font-weight:800;color:#1a1a1a;margin-bottom:7px;text-align:center}
+    [data-theme="dark"] .login-container h1{color:white}
 
-        .hero-text span {
-            color: #FF6B00;
-        }
+    .subtitle{color:#888;font-size:14px;margin-bottom:32px;text-align:center}
 
-        /* Carte de connexion à droite */
-        .login-container {
-            max-width: 480px;
-            width: 90%;
-            background: white;
-            border-radius: 32px;
-            padding: 50px 40px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-            margin: 40px 60px 40px auto;
-            position: relative;
-            z-index: 2;
-        }
+    .form-group{margin-bottom:18px;text-align:left}
+    .form-group label{display:block;font-size:13px;font-weight:600;color:#444;margin-bottom:7px}
+    [data-theme="dark"] .form-group label{color:#aaa}
 
-        .logo {
-            margin-bottom: 30px;
-            text-align: center;
-        }
+    .input-wrapper{position:relative}
+    .input-wrapper>.fa-icon-left{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#aaa;font-size:15px;z-index:1;pointer-events:none}
+    .form-group input{width:100%;padding:14px 44px;background:#f4f6f9;border:1.5px solid #eee;border-radius:14px;font-size:14px;font-family:'Poppins',sans-serif;outline:none;transition:all .3s;color:#1a1a1a}
+    .form-group input::placeholder{color:#bbb}
+    .form-group input:focus{border-color:var(--orange);background:white;box-shadow:0 0 0 4px var(--orange-light)}
+    [data-theme="dark"] .form-group input{background:#111;border-color:#2a2a2a;color:white}
+    [data-theme="dark"] .form-group input:focus{background:#1a1a1a}
 
-        .logo img {
-            height: 55px;
-            width: auto;
-        }
+    .toggle-pw{position:absolute;right:15px;top:50%;transform:translateY(-50%);cursor:pointer;color:#aaa;background:none;border:none;font-size:15px;z-index:1}
 
-        h1 {
-            font-size: 28px;
-            font-weight: 800;
-            color: #1a1a1a;
-            margin-bottom: 8px;
-            text-align: center;
-        }
+    /* RÔLE SELECTOR */
+    .role-selector{display:flex;gap:10px;margin-bottom:22px}
+    .role-btn{flex:1;padding:10px 8px;border:1.5px solid #eee;border-radius:12px;background:white;cursor:pointer;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:#888;transition:all .25s;text-align:center}
+    .role-btn:hover{border-color:var(--orange);color:var(--orange)}
+    .role-btn.active{border-color:var(--orange);background:var(--orange-light);color:var(--orange)}
+    [data-theme="dark"] .role-btn{background:#111;border-color:#2a2a2a;color:#888}
+    [data-theme="dark"] .role-btn.active{background:var(--orange-light);border-color:var(--orange);color:var(--orange)}
 
-        .subtitle {
-            color: #888;
-            font-size: 14px;
-            margin-bottom: 35px;
-            text-align: center;
-        }
+    .btn-connexion{width:100%;padding:15px;background:var(--orange);border:none;border-radius:14px;color:white;font-size:15px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .3s;margin-top:8px}
+    .btn-connexion:hover{background:#cc5500;transform:translateY(-2px)}
 
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
+    /* LANG + THEME BUTTONS */
+    .top-controls{position:fixed;top:18px;right:18px;display:flex;gap:8px;z-index:100}
+    .ctrl-btn{background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);color:white;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'Poppins',sans-serif}
+    .ctrl-btn:hover{background:rgba(255,107,0,.5);border-color:var(--orange)}
 
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #444;
-            margin-bottom: 8px;
-        }
+    .separator{display:flex;align-items:center;gap:14px;margin:22px 0;color:#ccc;font-size:12px}
+    .separator::before,.separator::after{content:'';flex:1;height:1px;background:#eee}
+    [data-theme="dark"] .separator::before,[data-theme="dark"] .separator::after{background:#2a2a2a}
 
-        .input-wrapper {
-            position: relative;
-        }
+    .create-account{text-align:center}
+    .create-account p{color:#888;font-size:14px}
+    .create-account a{color:var(--orange);text-decoration:none;font-weight:700}
+    .create-account a:hover{text-decoration:underline}
 
-        .input-wrapper i:first-child {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #aaa;
-            font-size: 16px;
-            z-index: 1;
-        }
+    .error-message{background:rgba(239,68,68,.12);color:#ef4444;padding:12px;border-radius:12px;font-size:13px;margin-bottom:18px;display:none;text-align:center;border:1px solid rgba(239,68,68,.3)}
 
-        .form-group input {
-            width: 100%;
-            padding: 14px 45px 14px 45px;
-            background: #f4f6f9;
-            border: 1.5px solid #eee;
-            border-radius: 14px;
-            font-size: 15px;
-            font-family: 'Poppins', sans-serif;
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus {
-            border-color: #FF6B00;
-            background: white;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #aaa;
-            z-index: 1;
-        }
-
-        .btn-connexion {
-            width: 100%;
-            padding: 16px;
-            background: #FF6B00;
-            border: none;
-            border-radius: 14px;
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-connexion:hover {
-            background: #cc5500;
-            transform: translateY(-2px);
-        }
-
-        .separator {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin: 25px 0;
-            color: #ccc;
-            font-size: 12px;
-        }
-
-        .separator::before,
-        .separator::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #eee;
-        }
-
-        .create-account {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .create-account p {
-            color: #888;
-            font-size: 14px;
-        }
-
-        .create-account a {
-            color: #FF6B00;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .error-message {
-            background: #fee2e2;
-            color: #ef4444;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 13px;
-            margin-bottom: 20px;
-            display: none;
-            text-align: center;
-        }
-
-        /* Mode sombre */
-        body.dark .login-container {
-            background: #1a1a1a;
-        }
-
-        body.dark h1 {
-            color: white;
-        }
-
-        body.dark .form-group label {
-            color: #aaa;
-        }
-
-        body.dark .form-group input {
-            background: #0f0f0f;
-            border-color: #333;
-            color: white;
-        }
-
-        body.dark .error-message {
-            background: rgba(239, 68, 68, 0.2);
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 1024px) {
-            .hero-text {
-                left: 5%;
-            }
-            .hero-text h1 {
-                font-size: 36px;
-            }
-            .login-container {
-                margin-right: 40px;
-                padding: 40px 35px;
-            }
-        }
-
-        @media (max-width: 850px) {
-            body {
-                justify-content: center;
-            }
-            .hero-text {
-                display: none;
-            }
-            .login-container {
-                margin: 40px auto;
-                width: 95%;
-                padding: 35px 25px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 30px 20px;
-            }
-            h1 {
-                font-size: 24px;
-            }
-        }
-    </style>
+    /* RESPONSIVE */
+    @media(max-width:1024px){.hero-text{left:5%}.hero-text h1{font-size:36px}.login-container{margin-right:40px;padding:40px 32px}}
+    @media(max-width:850px){body{justify-content:center}.hero-text{display:none}.login-container{margin:40px auto;width:95%;padding:36px 26px}}
+    @media(max-width:480px){.login-container{padding:28px 18px;border-radius:24px}.login-container h1{font-size:22px}}
+  </style>
 </head>
 <body>
 
-    <!-- Texte à gauche -->
-    <div class="hero-text">
-        <h1>Connecte-toi et <span>fais livrer</span><br>ton article en un clic</h1>
-        <p>Livoo connecte vos clients à vos livreurs en quelques secondes. Simple, rapide et sécurisé.</p>
+  <!-- Contrôles haut droite -->
+  <div class="top-controls">
+    <button class="ctrl-btn" id="lang-btn" onclick="toggleLang()" title="Langue">FR</button>
+    <button class="ctrl-btn" onclick="toggleTheme()" title="Thème"><span id="theme-icon">☀️</span></button>
+  </div>
+
+  <!-- Texte gauche -->
+  <div class="hero-text">
+    <h1>
+      <span data-fr="Connecte-toi et " data-en="Log in and ">Connecte-toi et </span>
+      <span style="color:var(--orange)" data-fr="fais livrer" data-en="get it delivered">fais livrer</span>
+      <br><span data-fr="ton article en un clic" data-en="your item in one click">ton article en un clic</span>
+    </h1>
+    <p data-fr="Livoo connecte vos clients à vos livreurs en quelques secondes. Simple, rapide et sécurisé."
+       data-en="Livoo connects your customers to your riders in seconds. Simple, fast and secure.">
+      Livoo connecte vos clients à vos livreurs en quelques secondes. Simple, rapide et sécurisé.
+    </p>
+  </div>
+
+  <!-- Carte connexion -->
+  <div class="login-container">
+    <div class="logo">
+      <a href="index.html"><img src="images/logo/logo_transparent.png" alt="Livoo"></a>
     </div>
 
-    <!-- Carte de connexion à droite -->
-    <div class="login-container">
-        <div class="logo">
-            <img src="/images/logo/logo_transparent.png" alt="Livoo">
-        </div>
+    <h1 data-fr="🔐 Connexion" data-en="🔐 Login">🔐 Connexion</h1>
+    <p class="subtitle" data-fr="Accédez à votre espace Livoo" data-en="Access your Livoo space">Accédez à votre espace Livoo</p>
 
-        <h1 data-i18n="loginTitle">🔐 Connexion</h1>
-        <p class="subtitle" data-i18n="loginSubtitle">Accédez à votre espace Livoo</p>
-
-        <div class="error-message" id="errorMessage">
-            <i class="fas fa-exclamation-triangle"></i> <span data-i18n="errorInvalid">Numéro ou mot de passe incorrect</span>
-        </div>
-
-        <form id="loginForm">
-            <div class="form-group">
-                <label data-i18n="phoneLabel">📱 Numéro de téléphone</label>
-                <div class="input-wrapper">
-                    <i class="fas fa-phone"></i>
-                    <input type="tel" id="telephone" placeholder="6XXXXXXXX" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label data-i18n="passwordLabel">🔒 Mot de passe</label>
-                <div class="input-wrapper">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="password" placeholder="••••••••" required>
-                    <i class="fas fa-eye toggle-password" id="togglePassword"></i>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-connexion">
-                <i class="fas fa-arrow-right"></i> <span data-i18n="loginBtn">Se connecter</span>
-            </button>
-        </form>
-
-        <div class="separator">
-            <span data-i18n="or">ou</span>
-        </div>
-
-        <div class="create-account">
-            <p><span data-i18n="noAccount">Vous n'avez pas de compte ?</span> <a href="/inscription-vendeur.html" data-i18n="createLink">Créer un compte</a></p>
-        </div>
+    <!-- Sélecteur de rôle -->
+    <div class="role-selector">
+      <button class="role-btn active" onclick="setRole('vendeur',this)">🛍️ <span data-fr="Vendeur" data-en="Seller">Vendeur</span></button>
+      <button class="role-btn"        onclick="setRole('livreur',this)">🏍️ <span data-fr="Livreur" data-en="Rider">Livreur</span></button>
+      <button class="role-btn"        onclick="setRole('agence',this)">🏢 <span data-fr="Agence" data-en="Agency">Agence</span></button>
     </div>
 
-    <script>
-        // Afficher/masquer le mot de passe
-        const togglePassword = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('password');
+    <div class="error-message" id="errorMessage">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span id="error-text" data-fr="Numéro ou mot de passe incorrect" data-en="Incorrect phone number or password">Numéro ou mot de passe incorrect</span>
+    </div>
 
-        togglePassword.addEventListener('click', function() {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.classList.toggle('fa-eye');
-            this.classList.toggle('fa-eye-slash');
-        });
+    <form id="loginForm" onsubmit="seConnecter(event)">
+      <div class="form-group">
+        <label data-fr="📱 Numéro de téléphone" data-en="📱 Phone number">📱 Numéro de téléphone</label>
+        <div class="input-wrapper">
+          <i class="fas fa-phone fa-icon-left"></i>
+          <input type="tel" id="telephone" placeholder="6XXXXXXXX" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label data-fr="🔒 Mot de passe" data-en="🔒 Password">🔒 Mot de passe</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock fa-icon-left"></i>
+          <input type="password" id="password" data-fr-placeholder="••••••••" data-en-placeholder="••••••••" placeholder="••••••••" required>
+          <button type="button" class="toggle-pw" onclick="togglePw()"><i class="fas fa-eye" id="pw-eye"></i></button>
+        </div>
+      </div>
+      <button type="submit" class="btn-connexion">
+        <i class="fas fa-arrow-right"></i> <span data-fr="Se connecter" data-en="Log in">Se connecter</span>
+      </button>
+    </form>
 
-// Gestionnaire de connexion
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+    <div class="separator"><span data-fr="ou" data-en="or">ou</span></div>
 
-    const telephone = document.getElementById('telephone').value;
-    const password = document.getElementById('password').value;
+    <div class="create-account">
+      <p>
+        <span data-fr="Vous n'avez pas de compte ?" data-en="Don't have an account?">Vous n'avez pas de compte ?</span>
+        <a href="inscription-vendeur.html" data-fr="Créer un compte" data-en="Create an account">Créer un compte</a>
+      </p>
+    </div>
+  </div>
 
-    // Vérifier dans localStorage si l'utilisateur existe
-    const userData = localStorage.getItem('user_' + telephone);
-    
-    if (userData) {
-        const user = JSON.parse(userData);
-        if (user.password === password) {
-            // Connexion réussie
-            localStorage.setItem('userConnected', 'true');
-            localStorage.setItem('userPhone', telephone);
-            localStorage.setItem('userRole', user.role);
-            
-            // Redirection selon le rôle
-            if (user.role === 'vendeur') {
-                window.location.href = '/dashboard-vendeur.html';
-            } else if (user.role === 'livreur') {
-                window.location.href = '/dashboard-livreur.html';
-            } else {
-                window.location.href = '/index.html';
-            }
-        } else {
-            document.getElementById('errorMessage').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('errorMessage').style.display = 'none';
-            }, 3000);
-        }
-    } else {
-        document.getElementById('errorMessage').style.display = 'block';
-        setTimeout(() => {
-            document.getElementById('errorMessage').style.display = 'none';
-        }, 3000);
+  <script src="global.js"></script>
+  <script>
+    let selectedRole = 'vendeur';
+    function setRole(role, btn) {
+      selectedRole = role;
+      document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
-});
+    function togglePw() {
+      const el = document.getElementById('password');
+      const ic = document.getElementById('pw-eye');
+      const hidden = el.type === 'password';
+      el.type = hidden ? 'text' : 'password';
+      ic.classList.toggle('fa-eye', !hidden);
+      ic.classList.toggle('fa-eye-slash', hidden);
+    }
+    function showError(msg) {
+      const el = document.getElementById('errorMessage');
+      document.getElementById('error-text').textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 3500);
+    }
+    function seConnecter(e) {
+      e.preventDefault();
+      const tel  = document.getElementById('telephone').value.trim();
+      const pw   = document.getElementById('password').value;
+      const lang = localStorage.getItem('livoo_lang') || 'fr';
 
-        // Traductions
-        const translationsPage = {
-            fr: {
-                loginTitle: "🔐 Connexion",
-                loginSubtitle: "Accédez à votre espace Livoo",
-                phoneLabel: "📱 Numéro de téléphone",
-                passwordLabel: "🔒 Mot de passe",
-                loginBtn: "Se connecter",
-                or: "ou",
-                noAccount: "Vous n'avez pas de compte ?",
-                createLink: "Créer un compte",
-                errorInvalid: "Numéro ou mot de passe incorrect"
-            },
-            en: {
-                loginTitle: "🔐 Login",
-                loginSubtitle: "Access your Livoo space",
-                phoneLabel: "📱 Phone number",
-                passwordLabel: "🔒 Password",
-                loginBtn: "Login",
-                or: "or",
-                noAccount: "Don't have an account?",
-                createLink: "Create an account",
-                errorInvalid: "Incorrect phone number or password"
-            }
-        };
-
-        function applyLoginLanguage() {
-            const currentLang = localStorage.getItem('lang') || 'fr';
-            const t = translationsPage[currentLang];
-            document.querySelector('[data-i18n="loginTitle"]').textContent = t.loginTitle;
-            document.querySelector('[data-i18n="loginSubtitle"]').textContent = t.loginSubtitle;
-            document.querySelector('[data-i18n="phoneLabel"]').textContent = t.phoneLabel;
-            document.querySelector('[data-i18n="passwordLabel"]').textContent = t.passwordLabel;
-            document.querySelector('[data-i18n="loginBtn"]').textContent = t.loginBtn;
-            document.querySelector('[data-i18n="or"]').textContent = t.or;
-            document.querySelector('[data-i18n="noAccount"]').textContent = t.noAccount;
-            document.querySelector('[data-i18n="createLink"]').textContent = t.createLink;
-            document.querySelector('[data-i18n="errorInvalid"]').textContent = t.errorInvalid;
+      // Vérification dans localStorage (comptes créés lors de l'inscription)
+      const userData = localStorage.getItem('user_' + tel);
+      if (userData) {
+        const user = JSON.parse(userData);
+        if (user.password === pw) {
+          localStorage.setItem('userConnected','true');
+          localStorage.setItem('userPhone', tel);
+          localStorage.setItem('userRole', user.role || selectedRole);
+          const role = user.role || selectedRole;
+          if (role === 'vendeur')      window.location.href = 'dashboard-vendeur.html';
+          else if (role === 'livreur') window.location.href = 'dashboard-livreur.html';
+          else if (role === 'agence')  window.location.href = 'dashboard-agence.html';
+          else                         window.location.href = 'index.html';
+          return;
         }
-
-        applyLoginLanguage();
-    </script>
-
+      }
+      // Compte de démonstration
+      const demos = { vendeur:{ tel:'600000001', pw:'vendeur123' }, livreur:{ tel:'600000002', pw:'livreur123' }, agence:{ tel:'600000003', pw:'agence123' } };
+      const demo = demos[selectedRole];
+      if (tel === demo.tel && pw === demo.pw) {
+        localStorage.setItem('userConnected','true');
+        localStorage.setItem('userPhone', tel);
+        localStorage.setItem('userRole', selectedRole);
+        if (selectedRole === 'vendeur')      window.location.href = 'dashboard-vendeur.html';
+        else if (selectedRole === 'livreur') window.location.href = 'dashboard-livreur.html';
+        else                                 window.location.href = 'dashboard-agence.html';
+        return;
+      }
+      showError(lang === 'fr' ? 'Numéro ou mot de passe incorrect' : 'Incorrect phone number or password');
+    }
+  </script>
 </body>
 </html>

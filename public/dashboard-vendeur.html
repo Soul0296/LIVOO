@@ -1,317 +1,194 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Livoo — Dashboard Vendeur</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background: #f4f6f9; color: #1a1a1a; }
+    :root {
+      --orange:#FF6B00; --orange-light:rgba(255,107,0,0.12); --orange-shadow:rgba(255,107,0,0.3);
+      --bg:#f4f6f9; --bg-card:#ffffff; --bg-sidebar:#0f0f0f;
+      --border:#eee; --border-sidebar:#222;
+      --text:#1a1a1a; --text-muted:#888; --text-sidebar:#888;
+      --input-bg:#f4f6f9; --input-border:#eee; --input-text:#1a1a1a; --input-ph:#bbb;
+      --sidebar-active-bg:#FF6B00;
+    }
+    [data-theme="dark"] {
+      --bg:#0f0f0f; --bg-card:#1a1a1a;
+      --border:#2a2a2a;
+      --text:#ffffff; --text-muted:#888;
+      --input-bg:#111; --input-border:#2a2a2a; --input-text:#fff; --input-ph:#555;
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);transition:background .35s,color .35s;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}
 
-    /* SIDEBAR */
-    .sidebar {
-      position: fixed; left: 0; top: 0; bottom: 0; width: 260px;
-      background: #0f0f0f; padding: 30px 20px;
-      display: flex; flex-direction: column; gap: 8px;
-      border-right: 1px solid #222;
-      transition: transform 0.3s ease;
-      z-index: 100;
-    }
-    .sidebar-logo { padding: 10px 15px 30px; }
-    .sidebar-logo img { height: 50px; width: auto; mix-blend-mode: lighten; }
-    .sidebar-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 15px; border-radius: 12px;
-      color: #888; text-decoration: none; font-size: 14px;
-      font-weight: 600; transition: all 0.3s;
-    }
-    .sidebar-item:hover { background: #1a1a1a; color: white; }
-    .sidebar-item.active { background: #FF6B00; color: white; }
-    .sidebar-item i { width: 20px; text-align: center; font-size: 16px; }
-    .sidebar-bottom {
-      margin-top: auto; border-top: 1px solid #222; padding-top: 20px;
-    }
+    /* ── SIDEBAR ── */
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:255px;background:var(--bg-sidebar);padding:28px 18px;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--border-sidebar);z-index:200;transition:transform .3s}
+    .sidebar-logo{padding:8px 14px 26px}
+    .sidebar-logo img{height:46px;width:auto;object-fit:contain}
+    .sidebar-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;color:var(--text-sidebar);font-size:13px;font-weight:600;transition:all .25s}
+    .sidebar-item:hover{background:#1a1a1a;color:white}
+    .sidebar-item.active{background:var(--orange);color:white}
+    .sidebar-item i{width:18px;text-align:center;font-size:15px}
+    .sidebar-bottom{margin-top:auto;border-top:1px solid var(--border-sidebar);padding-top:18px}
 
-    /* MENU TOGGLE */
-    .menu-toggle {
-      display: none;
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      z-index: 101;
-      background: #FF6B00;
-      color: white;
-      width: 45px;
-      height: 45px;
-      border-radius: 12px;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      cursor: pointer;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
+    /* ── TOPBAR (mobile) ── */
+    .topbar{display:none;position:fixed;top:0;left:0;right:0;height:60px;background:var(--bg-sidebar);border-bottom:1px solid var(--border-sidebar);align-items:center;justify-content:space-between;padding:0 18px;z-index:300}
+    .topbar img{height:38px;object-fit:contain}
+    .topbar-right{display:flex;align-items:center;gap:8px}
+    .burger{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:4px}
+    .burger span{display:block;width:22px;height:2px;background:#ccc;border-radius:2px;transition:all .3s}
 
-    /* SIDEBAR MOBILE */
-    @media (max-width: 768px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-      .sidebar.open {
-        transform: translateX(0);
-      }
-      .menu-toggle {
-        display: flex;
-      }
-      .main {
-        margin-left: 0;
-        padding: 20px;
-        padding-top: 70px;
-      }
-    }
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:199}
+    .sidebar-overlay.show{display:block}
 
-    /* MAIN */
-    .main {
-      margin-left: 260px;
-      padding: 40px;
-      transition: margin-left 0.3s ease;
-    }
+    /* ── CONTRÔLES THÈME/LANGUE ── */
+    .btn-icon{background:#1a1a1a;border:1px solid #333;color:#ccc;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'Poppins',sans-serif}
+    .btn-icon:hover{border-color:var(--orange);color:var(--orange)}
 
-    /* HEADER */
-    .header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 35px;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    .header-left h1 { font-size: 26px; font-weight: 800; color: #1a1a1a; }
-    .header-left p { color: #888; font-size: 14px; margin-top: 4px; }
-    .btn-nouvelle {
-      background: #FF6B00; color: white; padding: 14px 28px;
-      border-radius: 12px; font-size: 14px; font-weight: 700;
-      border: none; cursor: pointer; font-family: 'Poppins', sans-serif;
-      transition: all 0.3s; display: flex; align-items: center; gap: 10px;
-    }
-    .btn-nouvelle:hover { background: #cc5500; transform: translateY(-2px); }
+    /* ── MAIN ── */
+    .main{margin-left:255px;padding:38px;transition:margin-left .3s}
 
-    /* STATS CARDS */
-    .stats-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 20px; margin-bottom: 35px;
-    }
-    .stat-card {
-      background: white; border-radius: 16px; padding: 25px;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.06);
-    }
-    .stat-card .stat-icon {
-      width: 45px; height: 45px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; margin-bottom: 15px;
-    }
-    .stat-card .stat-icon.orange { background: rgba(255,107,0,0.15); color: #FF6B00; }
-    .stat-card .stat-icon.green { background: rgba(34,197,94,0.15); color: #22c55e; }
-    .stat-card .stat-icon.blue { background: rgba(59,130,246,0.15); color: #3b82f6; }
-    .stat-card .stat-icon.purple { background: rgba(168,85,247,0.15); color: #a855f7; }
-    .stat-card h3 { font-size: 28px; font-weight: 800; color: #1a1a1a; }
-    .stat-card p { font-size: 13px; color: #888; margin-top: 4px; }
+    /* ── HEADER ── */
+    .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:wrap;gap:14px}
+    .header-left h1{font-size:24px;font-weight:800}
+    .header-left p{color:var(--text-muted);font-size:13px;margin-top:4px}
+    .header-right{display:flex;align-items:center;gap:10px}
+    .btn-nouvelle{background:var(--orange);color:white;padding:12px 24px;border-radius:12px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .3s;display:flex;align-items:center;gap:8px}
+    .btn-nouvelle:hover{background:#cc5500;transform:translateY(-2px)}
 
-    /* GRILLE PRINCIPALE */
-    .grid-main { display: grid; grid-template-columns: 1fr 380px; gap: 25px; }
+    /* ── STATS ── */
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:30px}
+    .stat-card{background:var(--bg-card);border-radius:16px;padding:22px;border:1px solid var(--border);transition:background .35s,border-color .35s}
+    .stat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:14px}
+    .stat-icon.orange{background:rgba(255,107,0,.13);color:var(--orange)}
+    .stat-icon.green{background:rgba(34,197,94,.13);color:#22c55e}
+    .stat-icon.blue{background:rgba(59,130,246,.13);color:#3b82f6}
+    .stat-icon.purple{background:rgba(168,85,247,.13);color:#a855f7}
+    .stat-card h3{font-size:26px;font-weight:800}
+    .stat-card p{font-size:12px;color:var(--text-muted);margin-top:3px}
 
-    /* TABLEAU COMMANDES */
-    .card {
-      background: white; border-radius: 16px; padding: 25px;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.06);
-    }
-    .card-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .card-header h2 { font-size: 16px; font-weight: 800; }
-    .card-header a { color: #FF6B00; font-size: 13px; text-decoration: none; font-weight: 600; }
-    table { width: 100%; border-collapse: collapse; }
-    th {
-      text-align: left; padding: 12px 15px;
-      font-size: 12px; color: #888; font-weight: 600;
-      border-bottom: 1px solid #f0f0f0; text-transform: uppercase;
-    }
-    td { padding: 14px 15px; font-size: 13px; border-bottom: 1px solid #f9f9f9; }
-    tr:last-child td { border-bottom: none; }
-    .badge {
-      padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;
-      display: inline-block;
-    }
-    .badge.en-cours { background: rgba(59,130,246,0.15); color: #3b82f6; }
-    .badge.livre { background: rgba(34,197,94,0.15); color: #22c55e; }
-    .badge.attente { background: rgba(255,107,0,0.15); color: #FF6B00; }
-    .badge.litige { background: rgba(239,68,68,0.15); color: #ef4444; }
-    .btn-lien {
-      background: #f4f6f9; border: none; padding: 7px 14px;
-      border-radius: 8px; font-size: 12px; font-weight: 600;
-      cursor: pointer; color: #1a1a1a; transition: all 0.3s;
-      font-family: 'Poppins', sans-serif;
-    }
-    .btn-lien:hover { background: #FF6B00; color: white; }
+    /* ── GRILLE ── */
+    .grid-main{display:grid;grid-template-columns:1fr 360px;gap:22px}
 
-    /* PANEL DROITE */
-    .panel-right { display: flex; flex-direction: column; gap: 25px; }
+    /* ── CARD ── */
+    .card{background:var(--bg-card);border-radius:16px;padding:22px;border:1px solid var(--border);transition:background .35s,border-color .35s}
+    .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:8px}
+    .card-header h2{font-size:15px;font-weight:800}
+    .card-header a{color:var(--orange);font-size:13px;font-weight:600}
 
-    /* CRÉER LIVRAISON */
-    .create-form label {
-      display: block; font-size: 12px; font-weight: 600;
-      color: #888; margin-bottom: 6px; text-transform: uppercase;
-    }
-    .create-form input,
-    .create-form select,
-    .create-form textarea {
-      width: 100%; padding: 12px 15px; background: #f4f6f9;
-      border: 1px solid #eee; border-radius: 10px;
-      font-size: 13px; font-family: 'Poppins', sans-serif;
-      color: #1a1a1a; margin-bottom: 15px; outline: none;
-    }
-    .create-form input:focus,
-    .create-form select:focus,
-    .create-form textarea:focus { border-color: #FF6B00; background: white; }
-    .create-form textarea { height: 80px; resize: none; }
-    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .btn-generer {
-      width: 100%; padding: 14px; background: #FF6B00;
-      border: none; border-radius: 10px; color: white;
-      font-size: 14px; font-weight: 700; cursor: pointer;
-      font-family: 'Poppins', sans-serif; transition: all 0.3s;
-    }
-    .btn-generer:hover { background: #cc5500; }
+    /* ── TABLE ── */
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse;min-width:480px}
+    th{text-align:left;padding:10px 14px;font-size:11px;color:var(--text-muted);font-weight:600;border-bottom:1px solid var(--border);text-transform:uppercase;white-space:nowrap}
+    td{padding:13px 14px;font-size:13px;border-bottom:1px solid var(--border)}
+    tr:last-child td{border-bottom:none}
+    .badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;white-space:nowrap}
+    .badge.en-cours{background:rgba(59,130,246,.13);color:#3b82f6}
+    .badge.livre{background:rgba(34,197,94,.13);color:#22c55e}
+    .badge.attente{background:rgba(255,107,0,.13);color:var(--orange)}
+    .badge.litige{background:rgba(239,68,68,.13);color:#ef4444}
+    .btn-lien{background:var(--input-bg);border:1px solid var(--border);padding:6px 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;color:var(--text);transition:all .25s;font-family:'Poppins',sans-serif;white-space:nowrap}
+    .btn-lien:hover{background:var(--orange);color:white;border-color:var(--orange)}
 
-    /* LIEN GÉNÉRÉ */
-    .lien-genere {
-      display: none; margin-top: 15px;
-      background: #f4f6f9; border-radius: 10px; padding: 15px;
-      border: 1px dashed #FF6B00;
-    }
-    .lien-genere p { font-size: 11px; color: #888; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
-    .lien-box {
-      display: flex; align-items: center; gap: 10px;
-      background: white; border-radius: 8px; padding: 10px 15px;
-      flex-wrap: wrap;
-    }
-    .lien-box span { flex: 1; font-size: 12px; color: #FF6B00; font-weight: 600; word-break: break-all; }
-    .btn-copier {
-      background: #FF6B00; color: white; border: none;
-      padding: 8px 14px; border-radius: 8px; font-size: 12px;
-      cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700;
-      white-space: nowrap;
-    }
+    /* ── PANEL DROIT ── */
+    .panel-right{display:flex;flex-direction:column;gap:22px}
+    .profil-card{display:flex;align-items:center;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--border);margin-bottom:18px;flex-wrap:wrap}
+    .profil-avatar{width:48px;height:48px;background:var(--orange);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:800;color:white;flex-shrink:0}
+    .profil-info h3{font-size:14px;font-weight:700}
+    .profil-info p{font-size:12px;color:var(--text-muted)}
+    .profil-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .profil-stat{background:var(--input-bg);border-radius:10px;padding:12px;text-align:center;border:1px solid var(--border);transition:background .35s}
+    .profil-stat h4{font-size:18px;font-weight:800;color:var(--orange)}
+    .profil-stat p{font-size:11px;color:var(--text-muted)}
 
-    /* PROFIL */
-    .profil-card {
-      display: flex; align-items: center; gap: 15px;
-      padding-bottom: 20px; border-bottom: 1px solid #f0f0f0; margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .profil-avatar {
-      width: 50px; height: 50px; background: #FF6B00;
-      border-radius: 12px; display: flex; align-items: center;
-      justify-content: center; font-size: 20px; font-weight: 800; color: white;
-    }
-    .profil-info h3 { font-size: 15px; font-weight: 700; }
-    .profil-info p { font-size: 12px; color: #888; }
-    .profil-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .profil-stat {
-      background: #f4f6f9; border-radius: 10px; padding: 12px;
-      text-align: center;
-    }
-    .profil-stat h4 { font-size: 20px; font-weight: 800; color: #FF6B00; }
-    .profil-stat p { font-size: 11px; color: #888; }
+    /* ── FORM RAPIDE ── */
+    .create-form label{display:block;font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase}
+    .create-form input,.create-form select,.create-form textarea{width:100%;padding:11px 14px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:10px;font-size:13px;font-family:'Poppins',sans-serif;color:var(--input-text);margin-bottom:13px;outline:none;transition:all .3s;appearance:none}
+    .create-form input:focus,.create-form select:focus,.create-form textarea:focus{border-color:var(--orange)}
+    .create-form input::placeholder,.create-form textarea::placeholder{color:var(--input-ph)}
+    .create-form textarea{height:76px;resize:none}
+    .row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .btn-generer{width:100%;padding:13px;background:var(--orange);border:none;border-radius:10px;color:white;font-size:13px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px}
+    .btn-generer:hover{background:#cc5500}
+    .lien-genere{display:none;margin-top:13px;background:var(--input-bg);border-radius:10px;padding:13px;border:1px dashed var(--orange)}
+    .lien-genere p{font-size:11px;color:var(--text-muted);margin-bottom:7px;font-weight:600;text-transform:uppercase}
+    .lien-box{display:flex;align-items:center;gap:8px;background:var(--bg-card);border-radius:8px;padding:9px 13px;flex-wrap:wrap;border:1px solid var(--border)}
+    .lien-box span{flex:1;font-size:12px;color:var(--orange);font-weight:600;word-break:break-all}
+    .btn-copier{background:var(--orange);color:white;border:none;padding:7px 12px;border-radius:7px;font-size:11px;cursor:pointer;font-family:'Poppins',sans-serif;font-weight:700;white-space:nowrap}
 
-    /* MODAL */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.5); z-index: 1000;
-      align-items: center; justify-content: center;
-    }
-    .modal-overlay.show { display: flex; }
-    .modal {
-      background: white; border-radius: 20px; padding: 35px;
-      max-width: 420px; width: 90%; text-align: center;
-    }
-    .modal-icon { font-size: 50px; margin-bottom: 15px; color: #FF6B00; }
-    .modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
-    .modal p { color: #888; font-size: 14px; margin-bottom: 25px; }
-    .modal-lien {
-      background: #f4f6f9; border-radius: 10px; padding: 15px;
-      display: flex; gap: 10px; align-items: center; margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .modal-lien span { flex: 1; font-size: 13px; color: #FF6B00; font-weight: 600; text-align: left; word-break: break-all; }
-    .modal-btns { display: flex; gap: 10px; flex-wrap: wrap; }
-    .modal-btns button {
-      flex: 1; padding: 12px; border-radius: 10px; font-size: 14px;
-      font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif;
-      border: none; transition: all 0.3s;
-    }
-    .btn-partager { background: #FF6B00; color: white; }
-    .btn-fermer { background: #f4f6f9; color: #1a1a1a; }
+    /* ── MODAL ── */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;align-items:center;justify-content:center;padding:20px}
+    .modal-overlay.show{display:flex}
+    .modal{background:var(--bg-card);border-radius:20px;padding:32px;max-width:400px;width:100%;text-align:center;border:1px solid var(--border)}
+    .modal-icon{font-size:46px;margin-bottom:14px;color:var(--orange)}
+    .modal h3{font-size:18px;font-weight:800;margin-bottom:9px}
+    .modal p{color:var(--text-muted);font-size:13px;margin-bottom:22px}
+    .modal-lien{background:var(--input-bg);border-radius:10px;padding:13px;display:flex;gap:8px;align-items:center;margin-bottom:18px;flex-wrap:wrap;border:1px solid var(--border)}
+    .modal-lien span{flex:1;font-size:12px;color:var(--orange);font-weight:600;text-align:left;word-break:break-all}
+    .modal-btns{display:flex;gap:10px;flex-wrap:wrap}
+    .modal-btns button{flex:1;padding:11px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;border:none;transition:all .3s}
+    .btn-partager{background:var(--orange);color:white}
+    .btn-fermer{background:var(--input-bg);color:var(--text);border:1px solid var(--border)}
 
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-      .grid-main { grid-template-columns: 1fr; }
-      .stat-card { padding: 20px; }
-      .card { padding: 20px; overflow-x: auto; }
-      table { font-size: 12px; }
-      th, td { padding: 10px; }
+    /* ── RESPONSIVE ── */
+    @media(max-width:1100px){.grid-main{grid-template-columns:1fr}}
+    @media(max-width:900px){
+      .stats-grid{grid-template-columns:repeat(2,1fr)}
+      .sidebar{transform:translateX(-100%)}
+      .sidebar.open{transform:translateX(0)}
+      .topbar{display:flex}
+      .main{margin-left:0;padding:20px;padding-top:76px}
     }
-    @media (max-width: 480px) {
-      .stats-grid { grid-template-columns: 1fr; }
-      .header-left h1 { font-size: 22px; }
-      .btn-nouvelle { padding: 12px 20px; font-size: 13px; }
-      .profil-stats { grid-template-columns: 1fr; }
+    @media(max-width:480px){
+      .stats-grid{grid-template-columns:1fr}
+      .header-left h1{font-size:20px}
+      .row-2{grid-template-columns:1fr}
+      .profil-stats{grid-template-columns:1fr 1fr}
     }
-
-    /* MODE SOMBRE */
-    body.dark { background: #0f0f0f !important; color: white !important; }
-    body.dark .card { background: #1a1a1a !important; border-color: #2a2a2a !important; }
-    body.dark .card h2 { color: white !important; }
-    body.dark table { color: white !important; }
-    body.dark td, body.dark th { color: #ccc !important; border-color: #2a2a2a !important; }
-    body.dark input, body.dark select, body.dark textarea { background: #0f0f0f !important; border-color: #333 !important; color: white !important; }
-    body.dark .stat-card { background: #1a1a1a !important; }
-    body.dark .stat-card p { color: #888 !important; }
   </style>
 </head>
 <body>
 
-  <!-- MENU BURGER -->
-  <div class="menu-toggle" onclick="toggleSidebar()">☰</div>
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-  <!-- SIDEBAR -->
-  <div class="sidebar" id="sidebar">
-    <div class="sidebar-logo" style="line-height: 0;">
-      <a href="/index.html">
-        <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
-      </a>
-    </div>
-    <a class="sidebar-item active" href="/dashboard-vendeur.html">
-      <i class="fas fa-home"></i> Tableau de bord
-    </a>
-    <a class="sidebar-item" href="/nouvelle-livraison.html"><i class="fas fa-plus-circle"></i> Nouvelle livraison</a>
-    <a class="sidebar-item" href="/mes-commandes.html"><i class="fas fa-box"></i> Mes commandes</a>
-    <a class="sidebar-item" href="/messages.html"><i class="fas fa-comments"></i> Messages</a>
-    <a class="sidebar-item" href="/statistiques.html"><i class="fas fa-chart-bar"></i> Statistiques</a>
-    <div class="sidebar-bottom">
-      <a class="sidebar-item" href="/parametres.html"><i class="fas fa-cog"></i> Paramètres</a>
-      <a class="sidebar-item" href="/index.html"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+  <!-- TOPBAR MOBILE -->
+  <div class="topbar">
+    <button class="burger" onclick="openSidebar()"><span></span><span></span><span></span></button>
+    <img src="images/logo/logo_transparent.png" alt="Livoo">
+    <div class="topbar-right">
+      <button class="btn-icon" id="lang-btn" onclick="toggleLang()">FR</button>
+      <button class="btn-icon" onclick="toggleTheme()"><span id="theme-icon">☀️</span></button>
     </div>
   </div>
 
-  <script>
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
-    }
-  </script>
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <a href="index.html"><img src="images/logo/logo_transparent.png" alt="Livoo"></a>
+    </div>
+
+    <!-- Contrôles thème/langue (desktop) -->
+    <div style="display:flex;gap:8px;padding:0 14px 18px;border-bottom:1px solid #222;margin-bottom:6px">
+      <button class="btn-icon" id="lang-btn-desk" onclick="toggleLang()" style="flex:1;width:auto;border-radius:10px;font-size:12px" data-fr="FR" data-en="EN">FR</button>
+      <button class="btn-icon" onclick="toggleTheme()" style="flex:1;width:auto;border-radius:10px">
+        <span id="theme-icon-desk">☀️</span>
+      </button>
+    </div>
+
+    <a class="sidebar-item active" href="dashboard-vendeur.html"><i class="fas fa-home"></i> <span data-fr="Tableau de bord" data-en="Dashboard">Tableau de bord</span></a>
+    <a class="sidebar-item" href="nouvelle-livraison.html"><i class="fas fa-plus-circle"></i> <span data-fr="Nouvelle livraison" data-en="New delivery">Nouvelle livraison</span></a>
+    <a class="sidebar-item" href="mes-commandes.html"><i class="fas fa-box"></i> <span data-fr="Mes commandes" data-en="My orders">Mes commandes</span></a>
+    <a class="sidebar-item" href="messages.html"><i class="fas fa-comments"></i> <span data-fr="Messages" data-en="Messages">Messages</span></a>
+    <a class="sidebar-item" href="statistiques.html"><i class="fas fa-chart-bar"></i> <span data-fr="Statistiques" data-en="Statistics">Statistiques</span></a>
+    <div class="sidebar-bottom">
+      <a class="sidebar-item" href="parametres.html"><i class="fas fa-cog"></i> <span data-fr="Paramètres" data-en="Settings">Paramètres</span></a>
+      <a class="sidebar-item" href="connexion.html" onclick="localStorage.removeItem('userConnected')"><i class="fas fa-sign-out-alt"></i> <span data-fr="Déconnexion" data-en="Logout">Déconnexion</span></a>
+    </div>
+  </div>
 
   <!-- MAIN -->
   <div class="main">
@@ -319,77 +196,105 @@
     <!-- HEADER -->
     <div class="header">
       <div class="header-left">
-        <h1>👋 Bonjour, Jean Baptiste !</h1>
-        <p>Voici un aperçu de votre activité aujourd'hui</p>
+        <h1 data-fr="👋 Bonjour, Jean Baptiste !" data-en="👋 Hello, Jean Baptiste!">👋 Bonjour, Jean Baptiste !</h1>
+        <p data-fr="Voici un aperçu de votre activité aujourd'hui" data-en="Here's an overview of your activity today">Voici un aperçu de votre activité aujourd'hui</p>
       </div>
-      <button class="btn-nouvelle" onclick="document.getElementById('modal-overlay').classList.add('show')">
-        <i class="fas fa-plus"></i> Nouvelle livraison
-      </button>
+      <div class="header-right">
+        <button class="btn-nouvelle" onclick="document.getElementById('modal-overlay').classList.add('show')">
+          <i class="fas fa-plus"></i> <span data-fr="Nouvelle livraison" data-en="New delivery">Nouvelle livraison</span>
+        </button>
+      </div>
     </div>
 
     <!-- STATS -->
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-box"></i></div><h3>12</h3><p>Commandes totales</p></div>
-      <div class="stat-card"><div class="stat-icon green"><i class="fas fa-check-circle"></i></div><h3>9</h3><p>Livraisons réussies</p></div>
-      <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-motorcycle"></i></div><h3>2</h3><p>En cours</p></div>
-      <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-star"></i></div><h3>4.8</h3><p>Note moyenne</p></div>
+      <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-box"></i></div><h3>12</h3><p data-fr="Commandes totales" data-en="Total orders">Commandes totales</p></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fas fa-check-circle"></i></div><h3>9</h3><p data-fr="Livraisons réussies" data-en="Successful deliveries">Livraisons réussies</p></div>
+      <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-motorcycle"></i></div><h3>2</h3><p data-fr="En cours" data-en="In progress">En cours</p></div>
+      <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-star"></i></div><h3>4.8</h3><p data-fr="Note moyenne" data-en="Average rating">Note moyenne</p></div>
     </div>
 
-    <!-- GRILLE PRINCIPALE -->
+    <!-- GRILLE -->
     <div class="grid-main">
 
-      <!-- TABLEAU COMMANDES -->
+      <!-- TABLEAU -->
       <div class="card">
         <div class="card-header">
-          <h2>Commandes récentes</h2>
-          <a href="/mes-commandes.html">Voir tout →</a>
+          <h2 data-fr="Commandes récentes" data-en="Recent orders">Commandes récentes</h2>
+          <a href="mes-commandes.html" data-fr="Voir tout →" data-en="View all →">Voir tout →</a>
         </div>
-        <div style="overflow-x: auto;">
+        <div class="table-wrap">
           <table>
             <thead>
-              <tr><th>Commande</th><th>Client</th><th>Zone</th><th>Statut</th><th>Lien</th></tr>
+              <tr>
+                <th data-fr="Commande" data-en="Order">Commande</th>
+                <th data-fr="Client"   data-en="Customer">Client</th>
+                <th data-fr="Zone"     data-en="Area">Zone</th>
+                <th data-fr="Statut"   data-en="Status">Statut</th>
+                <th data-fr="Lien"     data-en="Link">Lien</th>
+              </tr>
             </thead>
             <tbody>
-              <tr><td><strong>#LV-001</strong></td><td>Marie K.</td><td>Akwa, Douala</td><td><span class="badge livre">Livré</span></td><td><button class="btn-lien" onclick="copierLien('LV-001')"><i class="fas fa-copy"></i> Copier</button></td></tr>
-              <tr><td><strong>#LV-002</strong></td><td>Paul N.</td><td>Bonapriso</td><td><span class="badge en-cours">En cours</span></td><td><button class="btn-lien" onclick="copierLien('LV-002')"><i class="fas fa-copy"></i> Copier</button></td></tr>
-              <tr><td><strong>#LV-003</strong></td><td>Sylvie M.</td><td>Bastos, Yaoundé</td><td><span class="badge attente">En attente</span></td><td><button class="btn-lien" onclick="copierLien('LV-003')"><i class="fas fa-copy"></i> Copier</button></td></tr>
-              <tr><td><strong>#LV-004</strong></td><td>Eric T.</td><td>Deido, Douala</td><td><span class="badge livre">Livré</span></td><td><button class="btn-lien" onclick="copierLien('LV-004')"><i class="fas fa-copy"></i> Copier</button></td></tr>
-              <tr><td><strong>#LV-005</strong></td><td>Aïcha B.</td><td>Omnisport</td><td><span class="badge litige">Litige</span></td><td><button class="btn-lien" onclick="copierLien('LV-005')"><i class="fas fa-copy"></i> Copier</button></td></tr>
+              <tr><td><strong>#LV-001</strong></td><td>Marie K.</td><td>Akwa, Douala</td><td><span class="badge livre" data-fr="Livré" data-en="Delivered">Livré</span></td><td><button class="btn-lien" onclick="copierLien('LV-001')"><i class="fas fa-copy"></i> <span data-fr="Copier" data-en="Copy">Copier</span></button></td></tr>
+              <tr><td><strong>#LV-002</strong></td><td>Paul N.</td><td>Bonapriso</td><td><span class="badge en-cours" data-fr="En cours" data-en="In progress">En cours</span></td><td><button class="btn-lien" onclick="copierLien('LV-002')"><i class="fas fa-copy"></i> <span data-fr="Copier" data-en="Copy">Copier</span></button></td></tr>
+              <tr><td><strong>#LV-003</strong></td><td>Sylvie M.</td><td>Bastos, Yaoundé</td><td><span class="badge attente" data-fr="En attente" data-en="Waiting">En attente</span></td><td><button class="btn-lien" onclick="copierLien('LV-003')"><i class="fas fa-copy"></i> <span data-fr="Copier" data-en="Copy">Copier</span></button></td></tr>
+              <tr><td><strong>#LV-004</strong></td><td>Eric T.</td><td>Deido, Douala</td><td><span class="badge livre" data-fr="Livré" data-en="Delivered">Livré</span></td><td><button class="btn-lien" onclick="copierLien('LV-004')"><i class="fas fa-copy"></i> <span data-fr="Copier" data-en="Copy">Copier</span></button></td></tr>
+              <tr><td><strong>#LV-005</strong></td><td>Aïcha B.</td><td>Omnisport</td><td><span class="badge litige" data-fr="Litige" data-en="Dispute">Litige</span></td><td><button class="btn-lien" onclick="copierLien('LV-005')"><i class="fas fa-copy"></i> <span data-fr="Copier" data-en="Copy">Copier</span></button></td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- PANEL DROITE -->
+      <!-- PANEL DROIT -->
       <div class="panel-right">
         <div class="card">
           <div class="profil-card">
             <div class="profil-avatar">J</div>
-            <div class="profil-info"><h3>Jean Baptiste</h3><p>Vendeur — Douala</p></div>
+            <div class="profil-info"><h3>Jean Baptiste</h3><p data-fr="Vendeur — Douala" data-en="Seller — Douala">Vendeur — Douala</p></div>
           </div>
           <div class="profil-stats">
-            <div class="profil-stat"><h4>12</h4><p>Commandes</p></div>
-            <div class="profil-stat"><h4>9</h4><p>Livrées</p></div>
-            <div class="profil-stat"><h4>4.8★</h4><p>Note</p></div>
-            <div class="profil-stat"><h4>0</h4><p>Litiges</p></div>
+            <div class="profil-stat"><h4>12</h4><p data-fr="Commandes" data-en="Orders">Commandes</p></div>
+            <div class="profil-stat"><h4>9</h4><p data-fr="Livrées" data-en="Delivered">Livrées</p></div>
+            <div class="profil-stat"><h4>4.8★</h4><p data-fr="Note" data-en="Rating">Note</p></div>
+            <div class="profil-stat"><h4>0</h4><p data-fr="Litiges" data-en="Disputes">Litiges</p></div>
           </div>
         </div>
 
         <div class="card">
-          <div class="card-header"><h2>Livraison rapide</h2></div>
+          <div class="card-header"><h2 data-fr="Livraison rapide" data-en="Quick delivery">Livraison rapide</h2></div>
           <div class="create-form">
-            <label>Description du colis</label>
-            <textarea id="description" placeholder="Ex: Robe rouge taille M, emballée..."></textarea>
+            <label data-fr="Description du colis" data-en="Package description">Description du colis</label>
+            <textarea id="description" data-fr-placeholder="Ex: Robe rouge taille M, emballée..." data-en-placeholder="E.g. Red dress size M, wrapped..." placeholder="Ex: Robe rouge taille M, emballée..."></textarea>
             <div class="row-2">
-              <div><label>Volume</label><select id="volume"><option value="petit">Petit</option><option value="moyen">Moyen</option><option value="grand">Grand</option></select></div>
-              <div><label>Poids</label><select id="poids"><option value="leger">Léger</option><option value="moyen">Moyen</option><option value="lourd">Lourd</option></select></div>
+              <div>
+                <label data-fr="Volume" data-en="Volume">Volume</label>
+                <select id="volume">
+                  <option value="petit"  data-fr="Petit"  data-en="Small">Petit</option>
+                  <option value="moyen"  data-fr="Moyen"  data-en="Medium">Moyen</option>
+                  <option value="grand"  data-fr="Grand"  data-en="Large">Grand</option>
+                </select>
+              </div>
+              <div>
+                <label data-fr="Poids" data-en="Weight">Poids</label>
+                <select id="poids">
+                  <option value="leger"  data-fr="Léger"  data-en="Light">Léger</option>
+                  <option value="moyen"  data-fr="Moyen"  data-en="Medium">Moyen</option>
+                  <option value="lourd"  data-fr="Lourd"  data-en="Heavy">Lourd</option>
+                </select>
+              </div>
             </div>
-            <label>Adresse de retrait</label>
-            <input type="text" id="adresse" placeholder="Ex: Rue Flatters, Akwa">
-            <button class="btn-generer" onclick="genererLien()"><i class="fas fa-link"></i> Générer le lien client</button>
+            <label data-fr="Adresse de retrait" data-en="Pickup address">Adresse de retrait</label>
+            <input type="text" id="adresse" data-fr-placeholder="Ex: Rue Flatters, Akwa" data-en-placeholder="E.g. Rue Flatters, Akwa" placeholder="Ex: Rue Flatters, Akwa">
+            <button class="btn-generer" onclick="genererLien()">
+              <i class="fas fa-link"></i>
+              <span data-fr="Générer le lien client" data-en="Generate customer link">Générer le lien client</span>
+            </button>
             <div class="lien-genere" id="lien-genere">
-              <p>Lien à envoyer au client</p>
-              <div class="lien-box"><span id="lien-texte"></span><button class="btn-copier" onclick="copierLienRapide()">Copier</button></div>
+              <p data-fr="Lien à envoyer au client" data-en="Link to send to customer">Lien à envoyer au client</p>
+              <div class="lien-box">
+                <span id="lien-texte"></span>
+                <button class="btn-copier" onclick="copierLienRapide()" data-fr="Copier" data-en="Copy">Copier</button>
+              </div>
             </div>
           </div>
         </div>
@@ -401,31 +306,45 @@
   <div class="modal-overlay" id="modal-overlay" onclick="fermerModal(event)">
     <div class="modal">
       <div class="modal-icon"><i class="fas fa-box"></i></div>
-      <h3>Nouvelle livraison créée !</h3>
-      <p>Copiez ce lien et envoyez-le à votre client sur WhatsApp, Instagram ou Facebook.</p>
-      <div class="modal-lien"><span id="modal-lien-texte">livoo.cm/commande/LV-006</span><button class="btn-copier" onclick="copierModalLien()">Copier</button></div>
-      <div class="modal-btns"><button class="btn-partager" onclick="partager()"><i class="fas fa-share"></i> Partager</button><button class="btn-fermer" onclick="fermerModalBtn()">Fermer</button></div>
+      <h3 data-fr="Nouvelle livraison créée !" data-en="New delivery created!">Nouvelle livraison créée !</h3>
+      <p data-fr="Copiez ce lien et envoyez-le à votre client sur WhatsApp, Instagram ou Facebook." data-en="Copy this link and send it to your customer on WhatsApp, Instagram or Facebook.">Copiez ce lien et envoyez-le à votre client sur WhatsApp, Instagram ou Facebook.</p>
+      <div class="modal-lien">
+        <span id="modal-lien-texte">livoo.cm/commande/LV-006</span>
+        <button class="btn-copier" onclick="copierModalLien()" data-fr="Copier" data-en="Copy">Copier</button>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-partager" onclick="partager()"><i class="fas fa-share"></i> <span data-fr="Partager" data-en="Share">Partager</span></button>
+        <button class="btn-fermer"   onclick="fermerModalBtn()" data-fr="Fermer" data-en="Close">Fermer</button>
+      </div>
     </div>
   </div>
 
+  <script src="global.js"></script>
   <script>
+    // Sidebar mobile
+    function openSidebar()  { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebar-overlay').classList.add('show'); document.body.style.overflow='hidden'; }
+    function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('show'); document.body.style.overflow=''; }
+
+    // Sync des boutons thème/langue desktop & mobile
+    const origToggleTheme = window.toggleTheme;
+    const origToggleLang  = window.toggleLang;
+
+    // Livraison rapide
     function genererLien() {
-      const description = document.getElementById('description').value;
+      const desc    = document.getElementById('description').value;
       const adresse = document.getElementById('adresse').value;
-      if (!description || !adresse) { alert('Veuillez remplir la description et l\'adresse !'); return; }
-      const code = 'LV-' + Math.random().toString(36).substring(2, 7).toUpperCase();
-      const lien = 'livoo.cm/commande/' + code;
-      document.getElementById('lien-texte').textContent = lien;
+      const lang    = localStorage.getItem('livoo_lang') || 'fr';
+      if (!desc || !adresse) { alert(lang==='fr' ? 'Veuillez remplir la description et l\'adresse !' : 'Please fill in the description and address!'); return; }
+      const code = 'LV-' + Math.random().toString(36).substring(2,7).toUpperCase();
+      document.getElementById('lien-texte').textContent = 'livoo.cm/commande/' + code;
       document.getElementById('lien-genere').style.display = 'block';
     }
-    function copierLienRapide() { const lien = document.getElementById('lien-texte').textContent; navigator.clipboard.writeText(lien); alert('Lien copié ! Envoyez-le à votre client 🎉'); }
-    function copierLien(code) { navigator.clipboard.writeText('livoo.cm/commande/' + code); alert('Lien copié !'); }
-    function copierModalLien() { const lien = document.getElementById('modal-lien-texte').textContent; navigator.clipboard.writeText(lien); alert('Lien copié !'); }
-    function partager() { const lien = document.getElementById('modal-lien-texte').textContent; if (navigator.share) { navigator.share({ title: 'Ma livraison Livoo', url: lien }); } else { navigator.clipboard.writeText(lien); alert('Lien copié pour partage !'); } }
-    function fermerModal(event) { if (event.target === document.getElementById('modal-overlay')) { document.getElementById('modal-overlay').classList.remove('show'); } }
-    function fermerModalBtn() { document.getElementById('modal-overlay').classList.remove('show'); }
-    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+    function copierLienRapide() { const l = document.getElementById('lien-texte').textContent; navigator.clipboard.writeText(l); const lang=localStorage.getItem('livoo_lang')||'fr'; alert(lang==='fr'?'Lien copié ! Envoyez-le à votre client 🎉':'Link copied! Send it to your customer 🎉'); }
+    function copierLien(code)   { navigator.clipboard.writeText('livoo.cm/commande/'+code); const lang=localStorage.getItem('livoo_lang')||'fr'; alert(lang==='fr'?'Lien copié !':'Link copied!'); }
+    function copierModalLien()  { const l = document.getElementById('modal-lien-texte').textContent; navigator.clipboard.writeText(l); const lang=localStorage.getItem('livoo_lang')||'fr'; alert(lang==='fr'?'Lien copié !':'Link copied!'); }
+    function partager()         { const l = document.getElementById('modal-lien-texte').textContent; if(navigator.share){navigator.share({title:'Ma livraison Livoo',url:l})}else{navigator.clipboard.writeText(l);} }
+    function fermerModal(e)     { if(e.target===document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('show'); }
+    function fermerModalBtn()   { document.getElementById('modal-overlay').classList.remove('show'); }
   </script>
-
 </body>
 </html>

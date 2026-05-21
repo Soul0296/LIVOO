@@ -1,265 +1,368 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Livoo — Inscription Livreur</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background: #0f0f0f; color: white; min-height: 100vh; }
+    :root {
+      --orange: #FF6B00; --orange-light: rgba(255,107,0,0.12); --orange-shadow: rgba(255,107,0,0.3);
+      --bg: #0f0f0f; --bg-alt: #111; --bg-card: #1a1a1a; --border: #2a2a2a;
+      --text: #fff; --text-muted: #888; --text-sub: #aaa;
+      --nav-bg: rgba(10,10,10,0.97);
+      --input-bg: #111; --input-border: #2a2a2a; --input-text: #fff; --input-ph: #555; --label-color: #aaa;
+    }
+    [data-theme="light"] {
+      --bg: #f4f6fb; --bg-alt: #fff7f2; --bg-card: #fff; --border: #eee;
+      --text: #1a1a1a; --text-muted: #777; --text-sub: #555;
+      --nav-bg: rgba(10,10,10,0.97);
+      --input-bg: #f8f9fc; --input-border: #e0e0e0; --input-text: #1a1a1a; --input-ph: #bbb; --label-color: #444;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; transition:background .35s,color .35s; overflow-x:hidden; }
+    a { text-decoration:none; color:inherit; }
 
     /* NAVBAR */
-    nav {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 15px 60px; background: rgba(0,0,0,0.95);
-      border-bottom: 1px solid #222;
-      position: relative;
-    }
-    .logo img { height: 50px; width: auto; mix-blend-mode: lighten; }
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 25px;
-    }
-    .nav-links a {
-      color: white; text-decoration: none;
-      font-weight: 600; font-size: 14px;
-    }
-    .nav-links a:hover { color: #FF6B00; }
-    .btn-nav {
-      background: #FF6B00; color: white; padding: 8px 22px;
-      border-radius: 25px; font-weight: 700;
-    }
-    .btn-nav:hover { background: white; color: #FF6B00; }
+    nav { display:flex; align-items:center; justify-content:space-between; padding:0 60px; height:70px; background:var(--nav-bg); position:sticky; top:0; z-index:1000; backdrop-filter:blur(14px); border-bottom:1px solid #222; }
+    .logo img { height:46px; width:auto; object-fit:contain; }
+    .nav-links { display:flex; align-items:center; gap:30px; }
+    .nav-links a { color:#ccc; font-weight:600; font-size:14px; transition:color .2s; white-space:nowrap; }
+    .nav-links a:hover, .nav-links a.active { color:var(--orange); }
+    .btn-nav { background:var(--orange); color:white !important; padding:9px 22px; border-radius:25px; font-weight:700; font-size:13px; transition:all .25s; }
+    .btn-nav:hover { opacity:.88; transform:scale(1.04); }
+    .nav-controls { display:flex; align-items:center; gap:8px; }
+    .btn-icon { background:#1a1a1a; border:1px solid #333; color:#ccc; width:38px; height:38px; border-radius:50%; cursor:pointer; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; transition:all .2s; font-family:'Poppins',sans-serif; }
+    .btn-icon:hover { border-color:var(--orange); color:var(--orange); }
+    .menu-toggle { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; margin-right:8px; }
+    .menu-toggle span { display:block; width:24px; height:2px; background:#ccc; border-radius:2px; transition:all .3s; }
+    #nav-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:998; }
+    #nav-overlay.show { display:block; }
 
-    /* MENU BURGER */
-    .menu-toggle {
-      display: none;
-      font-size: 28px;
-      cursor: pointer;
-      color: white;
-    }
+    /* MAIN */
+    .main { flex:1; display:flex; align-items:flex-start; justify-content:center; padding:50px 20px; background:var(--bg); transition:background .35s; }
+    .container { display:flex; gap:55px; max-width:1100px; width:100%; align-items:flex-start; }
 
-    .main {
-      display: flex; align-items: flex-start; justify-content: center;
-      padding: 60px 20px; gap: 60px; max-width: 1100px; margin: 0 auto;
-    }
-    .left { flex: 1; padding-top: 20px; }
-    .tag {
-      display: inline-block; background: rgba(255,107,0,0.15);
-      border: 1px solid #FF6B00; color: #FF6B00;
-      padding: 6px 18px; border-radius: 20px; font-size: 13px; margin-bottom: 20px;
-    }
-    .left h1 { font-size: 38px; font-weight: 800; line-height: 1.2; margin-bottom: 15px; }
-    .left h1 span { color: #FF6B00; }
-    .left p { color: #888; font-size: 15px; line-height: 1.7; margin-bottom: 30px; }
-    .avantages { display: flex; flex-direction: column; gap: 12px; }
-    .avantage {
-      display: flex; align-items: center; gap: 15px;
-      background: #1a1a1a; padding: 15px 20px; border-radius: 12px;
-      border: 1px solid #2a2a2a;
-    }
-    .av-icon { width: 40px; height: 40px; background: #FF6B00; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .av-text h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-    .av-text p { font-size: 12px; color: #888; margin: 0; }
+    /* LEFT */
+    .left { flex:1; min-width:280px; padding-top:10px; }
+    .tag { display:inline-flex; align-items:center; gap:8px; background:var(--orange-light); border:1px solid var(--orange); color:var(--orange); padding:7px 16px; border-radius:20px; font-size:12px; font-weight:600; margin-bottom:22px; }
+    .left h1 { font-size:36px; font-weight:800; line-height:1.2; margin-bottom:14px; }
+    .left h1 span { color:var(--orange); }
+    .left > p { color:var(--text-muted); font-size:15px; line-height:1.75; margin-bottom:28px; }
+    .avantages { display:flex; flex-direction:column; gap:12px; }
+    .avantage { display:flex; align-items:center; gap:14px; background:var(--bg-card); padding:14px 18px; border-radius:14px; border:1px solid var(--border); transition:all .3s; }
+    .avantage:hover { border-color:var(--orange); transform:translateX(4px); }
+    .av-icon { width:42px; height:42px; background:var(--orange); border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-size:16px; flex-shrink:0; }
+    .av-text h4 { font-size:13px; font-weight:700; margin-bottom:2px; }
+    .av-text p { font-size:12px; color:var(--text-muted); margin:0; }
 
-    .form-card { flex: 1; background: #1a1a1a; border-radius: 24px; padding: 40px; border: 1px solid #2a2a2a; }
-    .form-card h2 { font-size: 22px; font-weight: 800; margin-bottom: 5px; }
-    .form-card > p { color: #888; font-size: 13px; margin-bottom: 25px; }
-    .etapes { display: flex; gap: 5px; margin-bottom: 30px; }
-    .etape { flex: 1; height: 4px; background: #2a2a2a; border-radius: 2px; }
-    .etape.active { background: #FF6B00; }
-    .section-label { font-size: 11px; font-weight: 700; color: #FF6B00; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; margin-top: 20px; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .form-group { margin-bottom: 5px; }
-    .form-group.full { grid-column: 1 / -1; }
-    label { display: block; font-size: 12px; font-weight: 600; color: #aaa; margin-bottom: 6px; }
+    /* FORM CARD */
+    .form-card { flex:1; min-width:300px; background:var(--bg-card); border-radius:24px; padding:40px 36px; border:1px solid var(--border); box-shadow:0 20px 60px var(--orange-shadow); transition:background .35s,border-color .35s; }
+    .form-card h2 { font-size:22px; font-weight:800; margin-bottom:5px; }
+    .form-card > p { color:var(--text-muted); font-size:13px; margin-bottom:24px; }
+    .etapes { display:flex; gap:5px; margin-bottom:28px; }
+    .etape { flex:1; height:4px; background:var(--border); border-radius:2px; }
+    .etape.active { background:var(--orange); }
+    .section-label { font-size:11px; font-weight:700; color:var(--orange); text-transform:uppercase; letter-spacing:1px; margin-bottom:14px; margin-top:20px; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .form-group { margin-bottom:4px; }
+    .form-group.full { grid-column:1 / -1; }
+    label { display:block; font-size:12px; font-weight:600; color:var(--label-color); margin-bottom:6px; }
     input, select {
-      width: 100%; padding: 13px 15px; background: #0f0f0f;
-      border: 1.5px solid #333; border-radius: 10px;
-      font-size: 14px; font-family: 'Poppins', sans-serif; color: white; outline: none;
+      width:100%; padding:12px 14px; background:var(--input-bg); border:1.5px solid var(--input-border);
+      border-radius:10px; font-size:13px; font-family:'Poppins',sans-serif;
+      color:var(--input-text); outline:none; transition:all .3s; appearance:none;
     }
-    input:focus, select:focus { border-color: #FF6B00; }
-    .cgu-box { background: #0f0f0f; border: 1px solid #333; border-radius: 12px; padding: 20px; margin: 20px 0; }
-    .cgu-box h4 { font-size: 14px; font-weight: 700; margin-bottom: 15px; color: #FF6B00; }
-    .cgu-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
-    .cgu-item input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; accent-color: #FF6B00; }
-    .cgu-item label { font-size: 13px; color: #aaa; cursor: pointer; margin: 0; }
-    .cgu-item label a { color: #FF6B00; text-decoration: none; }
-    .btn-submit { width: 100%; padding: 16px; background: #FF6B00; border: none; border-radius: 12px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 10px; }
-    .btn-submit:hover { background: #cc5500; }
-    .form-footer { text-align: center; margin-top: 15px; font-size: 13px; color: #666; }
-    .form-footer a { color: #FF6B00; text-decoration: none; }
-    .success { display: none; text-align: center; padding: 20px; }
-    .success-icon { font-size: 60px; color: #FF6B00; margin-bottom: 20px; }
-    .success h3 { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
-    .success p { color: #888; font-size: 14px; }
+    input::placeholder { color:var(--input-ph); }
+    input:focus, select:focus { border-color:var(--orange); box-shadow:0 0 0 4px var(--orange-light); }
+    select option { background:var(--bg-card); color:var(--text); }
+
+    /* CGU */
+    .cgu-box { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:18px; margin:18px 0; }
+    .cgu-box h4 { font-size:13px; font-weight:700; color:var(--orange); margin-bottom:14px; }
+    .cgu-item { display:flex; align-items:flex-start; gap:12px; margin-bottom:11px; }
+    .cgu-item input[type="checkbox"] { width:17px; height:17px; margin-top:2px; accent-color:var(--orange); flex-shrink:0; }
+    .cgu-item label { font-size:12px; color:var(--text-sub); cursor:pointer; margin:0; line-height:1.5; }
+    .cgu-item label a { color:var(--orange); }
+
+    /* ERROR */
+    .error-msg { display:none; background:rgba(255,60,60,.1); border:1px solid rgba(255,60,60,.3); color:#ff4444; padding:10px 14px; border-radius:10px; font-size:13px; margin-bottom:14px; text-align:center; }
+    .error-msg.show { display:block; }
+
+    .btn-submit { width:100%; padding:15px; background:linear-gradient(135deg,#FF6B00,#ff8c00); border:none; border-radius:12px; color:white; font-size:15px; font-weight:700; cursor:pointer; font-family:'Poppins',sans-serif; transition:all .3s; margin-top:8px; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 10px 30px var(--orange-shadow); }
+    .btn-submit:hover { transform:translateY(-2px); box-shadow:0 15px 40px rgba(255,107,0,.45); }
+    .form-footer { text-align:center; margin-top:14px; font-size:13px; color:var(--text-muted); }
+    .form-footer a { color:var(--orange); font-weight:600; }
+
+    /* SUCCESS */
+    .success { display:none; text-align:center; padding:28px 10px; }
+    .success-icon { font-size:56px; color:var(--orange); margin-bottom:18px; }
+    .success h3 { font-size:22px; font-weight:800; margin-bottom:10px; }
+    .success p { color:var(--text-muted); font-size:14px; line-height:1.7; }
+
+    /* ANIMATIONS */
+    .anim { opacity:0; transform:translateY(24px); transition:opacity .55s ease,transform .55s ease; }
+    .anim.visible { opacity:1; transform:translateY(0); }
+    .anim-d1{transition-delay:.05s} .anim-d2{transition-delay:.12s} .anim-d3{transition-delay:.19s} .anim-d4{transition-delay:.26s}
 
     /* RESPONSIVE */
-    @media (max-width: 768px) {
-      nav { padding: 15px 20px; }
-      .menu-toggle { display: block; }
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 70px;
-        left: 0;
-        width: 100%;
-        background: #0f0f0f;
-        flex-direction: column;
-        padding: 20px;
-        gap: 15px;
-        border-bottom: 1px solid #222;
-        z-index: 99;
-      }
-      .nav-links.show { display: flex; }
-      .nav-links a { margin: 0; }
-      .main { flex-direction: column; padding: 30px 15px; gap: 30px; }
-      .left { text-align: center; }
-      .left h1 { font-size: 28px; }
-      .form-card { padding: 25px 20px; }
-      .form-grid { grid-template-columns: 1fr; }
-      input, select { padding: 12px; }
-      .cgu-box { padding: 15px; }
-      .cgu-item label { font-size: 12px; }
+    @media(max-width:900px){
+      nav { padding:0 20px; }
+      .nav-links { display:none; position:fixed; top:70px; left:0; width:100%; height:calc(100vh - 70px); background:var(--nav-bg); flex-direction:column; align-items:flex-start; padding:30px 24px; gap:22px; z-index:999; overflow-y:auto; backdrop-filter:blur(14px); border-top:1px solid #222; }
+      .nav-links.show { display:flex; }
+      .nav-links a { font-size:17px; }
+      .btn-nav { width:100%; text-align:center; padding:13px; font-size:15px; }
+      .menu-toggle { display:flex; }
+      .container { flex-direction:column; gap:36px; }
+      .left { padding-top:0; }
+      .left h1 { font-size:28px; }
+      .form-card { padding:28px 22px; }
+      .form-grid { grid-template-columns:1fr; }
     }
-    @media (max-width: 480px) {
-      .left h1 { font-size: 24px; }
-      .form-card { padding: 20px 15px; }
+    @media(max-width:480px){
+      .left h1 { font-size:24px; }
+      .form-card { padding:22px 16px; border-radius:18px; }
     }
   </style>
 </head>
 <body>
+  <div id="nav-overlay" onclick="closeMenu()"></div>
+  <nav>
+    <a href="index.html" class="logo"><img src="images/logo/logo_transparent.png" alt="Livoo"></a>
+    <div class="menu-toggle" onclick="toggleMenu()" role="button"><span></span><span></span><span></span></div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html"               data-fr="Accueil"           data-en="Home">Accueil</a>
+      <a href="comment-ca-marche.html"   data-fr="Comment ça marche" data-en="How it works">Comment ça marche</a>
+      <a href="inscription-livreur.html" class="active" data-fr="Devenir livreur" data-en="Become a rider">Devenir livreur</a>
+      <a href="inscription-vendeur.html" class="btn-nav" data-fr="Je suis vendeur" data-en="I'm a seller">Je suis vendeur</a>
+    </div>
+    <div class="nav-controls">
+      <button class="btn-icon" id="lang-btn" onclick="toggleLang()">FR</button>
+      <button class="btn-icon" onclick="toggleTheme()"><span id="theme-icon">☀️</span></button>
+    </div>
+  </nav>
 
-<nav>
-  <div class="logo" style="line-height: 0;">
-    <a href="/index.html">
-      <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
-    </a>
-  </div>
-  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-  <div class="nav-links" id="navLinks">
-    <a href="/index.html">Accueil</a>
-    <a href="/comment-ca-marche.html">Comment ça marche</a>
-    <a href="/inscription-livreur.html">Devenir livreur</a>
-    <a href="/inscription-vendeur.html" class="btn-nav">Je suis vendeur</a>
-  </div>
-</nav>
+  <div class="main">
+    <div class="container">
+      <!-- LEFT -->
+      <div class="left">
+        <div class="tag">🏍️ <span data-fr="Espace Livreur" data-en="Rider Space">Espace Livreur</span></div>
+        <h1>
+          <span data-fr="Gagnez de l'argent<br>" data-en="Earn money<br>">Gagnez de l'argent<br></span>
+          <span style="color:var(--orange)" data-fr="à votre rythme." data-en="at your own pace.">à votre rythme.</span>
+        </h1>
+        <p data-fr="Rejoignez le réseau Livoo et commencez à livrer dans votre quartier. Vous choisissez vos horaires, votre zone et vos commandes."
+           data-en="Join the Livoo network and start delivering in your neighbourhood. You choose your hours, your area and your orders.">
+          Rejoignez le réseau Livoo et commencez à livrer dans votre quartier. Vous choisissez vos horaires, votre zone et vos commandes.
+        </p>
+        <div class="avantages">
+          <div class="avantage anim anim-d1">
+            <div class="av-icon"><i class="fas fa-wallet"></i></div>
+            <div class="av-text">
+              <h4 data-fr="Revenus quotidiens"     data-en="Daily earnings">Revenus quotidiens</h4>
+              <p   data-fr="Paiement direct après chaque livraison" data-en="Direct payment after each delivery">Paiement direct après chaque livraison</p>
+            </div>
+          </div>
+          <div class="avantage anim anim-d2">
+            <div class="av-icon"><i class="fas fa-clock"></i></div>
+            <div class="av-text">
+              <h4 data-fr="Horaires libres"        data-en="Flexible hours">Horaires libres</h4>
+              <p   data-fr="Travaillez quand vous voulez, sans contrainte" data-en="Work whenever you want, no constraints">Travaillez quand vous voulez, sans contrainte</p>
+            </div>
+          </div>
+          <div class="avantage anim anim-d3">
+            <div class="av-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="av-text">
+              <h4 data-fr="Votre quartier"         data-en="Your neighbourhood">Votre quartier</h4>
+              <p   data-fr="Livrez uniquement dans les zones que vous connaissez" data-en="Deliver only in areas you know">Livrez uniquement dans les zones que vous connaissez</p>
+            </div>
+          </div>
+          <div class="avantage anim anim-d4">
+            <div class="av-icon"><i class="fas fa-star"></i></div>
+            <div class="av-text">
+              <h4 data-fr="Plus de commandes"      data-en="More orders">Plus de commandes</h4>
+              <p   data-fr="Meilleure note = plus de commandes et montants plus élevés" data-en="Better rating = more orders and higher amounts">Meilleure note = plus de commandes et montants plus élevés</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-<script>
-  function toggleMenu() {
-    document.getElementById('navLinks').classList.toggle('show');
-  }
-</script>
+      <!-- FORM -->
+      <div class="form-card anim">
+        <div id="form-content">
+          <h2 data-fr="INSCRIPTION LIVREUR" data-en="RIDER REGISTRATION">INSCRIPTION LIVREUR</h2>
+          <p  data-fr="Remplissez toutes les informations ci-dessous" data-en="Fill in all the information below">Remplissez toutes les informations ci-dessous</p>
+          <div class="etapes"><div class="etape active"></div><div class="etape active"></div><div class="etape active"></div></div>
 
-<div class="main">
-  <div class="left">
-    <div class="tag">🏍️ Espace Livreur</div>
-    <h1>Gagnez de l'argent<br><span>à votre rythme.</span></h1>
-    <p>Rejoignez le réseau Livoo et commencez à livrer dans votre quartier. Vous choisissez vos horaires, votre zone et vos commandes.</p>
-    <div class="avantages">
-      <div class="avantage"><div class="av-icon"><i class="fas fa-wallet"></i></div><div class="av-text"><h4>Revenus quotidiens</h4><p>Recevez votre paiement directement après chaque livraison</p></div></div>
-      <div class="avantage"><div class="av-icon"><i class="fas fa-clock"></i></div><div class="av-text"><h4>Horaires libres</h4><p>Travaillez quand vous voulez, sans contrainte</p></div></div>
-      <div class="avantage"><div class="av-icon"><i class="fas fa-map-marker-alt"></i></div><div class="av-text"><h4>Votre quartier</h4><p>Livrez uniquement dans les zones que vous connaissez</p></div></div>
-      <div class="avantage"><div class="av-icon"><i class="fas fa-star"></i></div><div class="av-text"><h4>Plus de commandes</h4><p>Meilleure note = plus de commandes et montants plus élevés</p></div></div>
+          <div class="error-msg" id="error-msg"><i class="fas fa-exclamation-circle"></i> <span id="error-text" data-fr="Veuillez remplir tous les champs obligatoires !" data-en="Please fill in all required fields!">Veuillez remplir tous les champs obligatoires !</span></div>
+
+          <!-- Infos personnelles -->
+          <div class="section-label"><i class="fas fa-user"></i> <span data-fr="Informations personnelles" data-en="Personal information">Informations personnelles</span></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label data-fr="Nom complet"         data-en="Full name">Nom complet</label>
+              <input type="text" id="nom" data-fr-placeholder="Jean Dupont" data-en-placeholder="John Doe" placeholder="Jean Dupont">
+            </div>
+            <div class="form-group">
+              <label data-fr="Date de naissance"   data-en="Date of birth">Date de naissance</label>
+              <input type="date" id="naissance">
+            </div>
+            <div class="form-group">
+              <label data-fr="Téléphone principal" data-en="Main phone">Téléphone principal</label>
+              <input type="tel" id="telephone" placeholder="6XXXXXXXX">
+            </div>
+            <div class="form-group">
+              <label data-fr="Téléphone secondaire (optionnel)" data-en="Secondary phone (optional)">Téléphone secondaire (optionnel)</label>
+              <input type="tel" id="telephone2" placeholder="6XXXXXXXX">
+            </div>
+            <div class="form-group full">
+              <label data-fr="Quartier de résidence" data-en="Home neighbourhood">Quartier de résidence</label>
+              <input type="text" id="adresse" data-fr-placeholder="Ex: Akwa, Douala" data-en-placeholder="E.g. Akwa, Douala" placeholder="Ex: Akwa, Douala">
+            </div>
+          </div>
+
+          <!-- Véhicule -->
+          <div class="section-label"><i class="fas fa-motorcycle"></i> <span data-fr="Informations du véhicule" data-en="Vehicle information">Informations du véhicule</span></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label data-fr="Type de véhicule" data-en="Vehicle type">Type de véhicule</label>
+              <select id="vehicule">
+                <option value=""    data-fr="Sélectionnez"  data-en="Select">Sélectionnez</option>
+                <option value="moto"      data-fr="Moto"       data-en="Motorbike">Moto</option>
+                <option value="tricycle"  data-fr="Tricycle"   data-en="Tricycle">Tricycle</option>
+                <option value="voiture"   data-fr="Voiture"    data-en="Car">Voiture</option>
+                <option value="velo"      data-fr="Vélo"       data-en="Bicycle">Vélo</option>
+                <option value="pied"      data-fr="À pied"     data-en="On foot">À pied</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-fr="Immatriculation" data-en="Plate number">Immatriculation</label>
+              <input type="text" id="immatriculation" data-fr-placeholder="Ex: LT 1234 A" data-en-placeholder="E.g. LT 1234 A" placeholder="Ex: LT 1234 A">
+            </div>
+            <div class="form-group full">
+              <label data-fr="Zone de livraison principale" data-en="Main delivery area">Zone de livraison principale</label>
+              <select id="zone" onchange="mettreAJourAgences()">
+                <option value=""                data-fr="Sélectionnez votre zone" data-en="Select your area">Sélectionnez votre zone</option>
+                <option>Akwa, Douala</option>
+                <option>Bonapriso, Douala</option>
+                <option>Deido, Douala</option>
+                <option>Bassa, Douala</option>
+                <option>Bastos, Yaoundé</option>
+                <option>Omnisport, Yaoundé</option>
+                <option>Centre-ville, Yaoundé</option>
+                <option data-fr="Autre zone" data-en="Other area">Autre zone</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label data-fr="Agence de rattachement" data-en="Affiliated agency">Agence de rattachement</label>
+              <select id="agence">
+                <option value="" data-fr="Sélectionnez d'abord votre zone" data-en="Select your area first">Sélectionnez d'abord votre zone</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Paiement -->
+          <div class="section-label"><i class="fas fa-mobile-alt"></i> <span data-fr="Paiement mobile" data-en="Mobile payment">Paiement mobile</span></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label data-fr="Opérateur Mobile Money" data-en="Mobile Money operator">Opérateur Mobile Money</label>
+              <select id="operateur">
+                <option value=""          data-fr="Sélectionnez"    data-en="Select">Sélectionnez</option>
+                <option value="mtn">MTN MoMo</option>
+                <option value="orange">Orange Money</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-fr="Numéro Mobile Money" data-en="Mobile Money number">Numéro Mobile Money</label>
+              <input type="tel" id="momo" placeholder="6XXXXXXXX">
+            </div>
+          </div>
+
+          <!-- CGU -->
+          <div class="cgu-box">
+            <h4><i class="fas fa-file-contract"></i> <span data-fr="Conditions générales" data-en="Terms & conditions">Conditions générales</span></h4>
+            <div class="cgu-item"><input type="checkbox" id="cgu1"><label for="cgu1" data-fr="J'accepte les <a href='#'>Conditions Générales d'Utilisation</a> de la plateforme Livoo" data-en="I accept the <a href='#'>Terms of Use</a> of the Livoo platform">J'accepte les <a href="#">Conditions Générales d'Utilisation</a> de la plateforme Livoo</label></div>
+            <div class="cgu-item"><input type="checkbox" id="cgu2"><label for="cgu2" data-fr="Je m'engage à prendre des <strong>photos obligatoires</strong> avant et après chaque livraison" data-en="I commit to taking <strong>mandatory photos</strong> before and after each delivery">Je m'engage à prendre des <strong>photos obligatoires</strong> avant et après chaque livraison</label></div>
+            <div class="cgu-item"><input type="checkbox" id="cgu3"><label for="cgu3" data-fr="Je comprends que mon <strong>solde de compte</strong> doit être rechargé pour recevoir des commandes" data-en="I understand my <strong>account balance</strong> must be topped up to receive orders">Je comprends que mon <strong>solde de compte</strong> doit être rechargé pour recevoir des commandes</label></div>
+            <div class="cgu-item"><input type="checkbox" id="cgu4"><label for="cgu4" data-fr="J'accepte la <strong>politique de notation</strong> : les mauvaises notes réduisent mes commandes reçues" data-en="I accept the <strong>rating policy</strong>: bad ratings reduce my orders received">J'accepte la <strong>politique de notation</strong> : les mauvaises notes réduisent mes commandes reçues</label></div>
+            <div class="cgu-item"><input type="checkbox" id="cgu5"><label for="cgu5" data-fr="Je certifie que toutes les informations fournies sont <strong>exactes et véridiques</strong>" data-en="I certify that all information provided is <strong>accurate and truthful</strong>">Je certifie que toutes les informations fournies sont <strong>exactes et véridiques</strong></label></div>
+          </div>
+
+          <button class="btn-submit" onclick="inscrire()">
+            <i class="fas fa-check"></i>
+            <span data-fr="Créer mon compte livreur" data-en="Create my rider account">Créer mon compte livreur</span>
+          </button>
+          <div class="form-footer">
+            <span data-fr="Déjà inscrit ?" data-en="Already registered?">Déjà inscrit ?</span>
+            <a href="connexion.html" data-fr="Se connecter" data-en="Log in">Se connecter</a>
+          </div>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="success" id="success">
+          <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+          <h3 data-fr="Bienvenue chez Livoo !" data-en="Welcome to Livoo!">Bienvenue chez Livoo !</h3>
+          <p data-fr="Votre compte livreur a été créé.<br>Rechargez votre solde pour commencer à recevoir des commandes."
+             data-en="Your rider account has been created.<br>Top up your balance to start receiving orders.">
+            Votre compte livreur a été créé.<br>Rechargez votre solde pour commencer à recevoir des commandes.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="form-card">
-    <div id="form-content">
-      <h2>INSCRIPTION LIVREUR</h2>
-      <p>Remplissez toutes les informations ci-dessous</p>
-      <div class="etapes"><div class="etape active"></div><div class="etape active"></div><div class="etape active"></div></div>
-
-      <div class="section-label"><i class="fas fa-user"></i> Informations personnelles</div>
-      <div class="form-grid">
-        <div class="form-group"><label>Nom complet</label><input type="text" id="nom" placeholder="Jean Dupont"></div>
-        <div class="form-group"><label>Date de naissance</label><input type="date" id="naissance"></div>
-        <div class="form-group"><label>Téléphone principal</label><input type="tel" id="telephone" placeholder="6XXXXXXXX"></div>
-        <div class="form-group"><label>Téléphone secondaire</label><input type="tel" id="telephone2" placeholder="6XXXXXXXX (optionnel)"></div>
-        <div class="form-group full"><label>Quartier de résidence</label><input type="text" id="adresse" placeholder="Ex: Akwa, Douala"></div>
-      </div>
-
-      <div class="section-label"><i class="fas fa-motorcycle"></i> Informations du véhicule</div>
-      <div class="form-grid">
-        <div class="form-group"><label>Type de véhicule</label><select id="vehicule"><option value="">Sélectionnez</option><option value="moto">Moto</option><option value="tricycle">Tricycle</option><option value="voiture">Voiture</option><option value="velo">Vélo</option><option value="pied">À pied</option></select></div>
-        <div class="form-group"><label>Immatriculation</label><input type="text" id="immatriculation" placeholder="Ex: LT 1234 A"></div>
-        <div class="form-group full"><label><i class="fas fa-building"></i> Agence de rattachement</label><select id="agence"><option value="">Sélectionnez d'abord votre ville</option></select></div>
-        <div class="form-group full"><label>Zone de livraison principale</label><select id="zone"><option value="">Sélectionnez votre zone</option><option>Akwa, Douala</option><option>Bonapriso, Douala</option><option>Deido, Douala</option><option>Bassa, Douala</option><option>Bastos, Yaoundé</option><option>Omnisport, Yaoundé</option><option>Centre-ville, Yaoundé</option><option>Autre zone</option></select></div>
-      </div>
-
-      <div class="section-label"><i class="fas fa-mobile-alt"></i> Paiement mobile</div>
-      <div class="form-grid">
-        <div class="form-group"><label>Opérateur Mobile Money</label><select id="operateur"><option value="">Sélectionnez</option><option value="mtn">MTN MoMo</option><option value="orange">Orange Money</option></select></div>
-        <div class="form-group"><label>Numéro Mobile Money</label><input type="tel" id="momo" placeholder="6XXXXXXXX"></div>
-      </div>
-
-      <div class="cgu-box">
-        <h4><i class="fas fa-file-contract"></i> Conditions générales</h4>
-        <div class="cgu-item"><input type="checkbox" id="cgu1"><label for="cgu1">J'accepte les <a href="#">Conditions Générales d'Utilisation</a> de la plateforme Livoo</label></div>
-        <div class="cgu-item"><input type="checkbox" id="cgu2"><label for="cgu2">Je m'engage à prendre des <strong>photos obligatoires</strong> avant et après chaque livraison</label></div>
-        <div class="cgu-item"><input type="checkbox" id="cgu3"><label for="cgu3">Je comprends que mon <strong>solde de compte</strong> doit être rechargé pour recevoir des commandes</label></div>
-        <div class="cgu-item"><input type="checkbox" id="cgu4"><label for="cgu4">J'accepte la <strong>politique de notation</strong> : les mauvaises notes réduisent mes commandes reçues</label></div>
-        <div class="cgu-item"><input type="checkbox" id="cgu5"><label for="cgu5">Je certifie que toutes les informations fournies sont <strong>exactes et véridiques</strong></label></div>
-      </div>
-
-      <button class="btn-submit" onclick="inscrire()"><i class="fas fa-check"></i> Créer mon compte livreur</button>
-      <div class="form-footer">Déjà inscrit ? <a href="#">Se connecter</a></div>
-    </div>
-    <div class="success" id="success">
-      <div class="success-icon"><i class="fas fa-check-circle"></i></div>
-      <h3>Bienvenue chez Livoo !</h3>
-      <p>Votre compte livreur a été créé.<br>Rechargez votre solde pour commencer à recevoir des commandes.</p>
-    </div>
-  </div>
-</div>
-
-<script>
-  const agencesParVille = {
-    "Akwa, Douala": ["Agence Livoo Douala (Akwa)", "Agence Livoo Douala (Bonapriso)"],
-    "Bonapriso, Douala": ["Agence Livoo Douala (Akwa)", "Agence Livoo Douala (Bonapriso)"],
-    "Deido, Douala": ["Agence Livoo Douala (Deido)", "Agence Livoo Douala (Akwa)"],
-    "Bassa, Douala": ["Agence Livoo Douala (Bassa)", "Agence Livoo Douala (Akwa)"],
-    "Bastos, Yaoundé": ["Agence Livoo Yaoundé (Bastos)", "Agence Livoo Yaoundé (Mvog-Mbi)"],
-    "Omnisport, Yaoundé": ["Agence Livoo Yaoundé (Omnisport)", "Agence Livoo Yaoundé (Bastos)"],
-    "Centre-ville, Yaoundé": ["Agence Livoo Yaoundé (Centre-ville)", "Agence Livoo Yaoundé (Mvog-Mbi)"],
-    "Autre zone": ["Agence Livoo Nationale"]
-  };
-
-  function mettreAJourAgences() {
-    const zone = document.getElementById('zone').value;
-    const agenceSelect = document.getElementById('agence');
-    agenceSelect.innerHTML = '<option value="">Sélectionnez une agence</option>';
-    if (zone && agencesParVille[zone]) {
-      agencesParVille[zone].forEach(agence => {
-        const option = document.createElement('option');
-        option.value = agence;
-        option.textContent = agence;
-        agenceSelect.appendChild(option);
-      });
+  <script src="global.js"></script>
+  <script>
+    const agencesParZone = {
+      "Akwa, Douala":           ["Agence Livoo Douala (Akwa)","Agence Livoo Douala (Bonapriso)"],
+      "Bonapriso, Douala":      ["Agence Livoo Douala (Akwa)","Agence Livoo Douala (Bonapriso)"],
+      "Deido, Douala":          ["Agence Livoo Douala (Deido)","Agence Livoo Douala (Akwa)"],
+      "Bassa, Douala":          ["Agence Livoo Douala (Bassa)","Agence Livoo Douala (Akwa)"],
+      "Bastos, Yaoundé":        ["Agence Livoo Yaoundé (Bastos)","Agence Livoo Yaoundé (Mvog-Mbi)"],
+      "Omnisport, Yaoundé":     ["Agence Livoo Yaoundé (Omnisport)","Agence Livoo Yaoundé (Bastos)"],
+      "Centre-ville, Yaoundé":  ["Agence Livoo Yaoundé (Centre-ville)","Agence Livoo Yaoundé (Mvog-Mbi)"],
+      "Autre zone":             ["Agence Livoo Nationale"]
+    };
+    function mettreAJourAgences() {
+      const zone = document.getElementById('zone').value;
+      const sel  = document.getElementById('agence');
+      const lang = localStorage.getItem('livoo_lang') || 'fr';
+      sel.innerHTML = `<option value="">${lang==='fr'?'Sélectionnez une agence':'Select an agency'}</option>`;
+      if (zone && agencesParZone[zone]) {
+        agencesParZone[zone].forEach(a => {
+          const o = document.createElement('option');
+          o.value = a; o.textContent = a;
+          sel.appendChild(o);
+        });
+      }
     }
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    const zoneSelect = document.getElementById('zone');
-    if (zoneSelect) zoneSelect.addEventListener('change', mettreAJourAgences);
-  });
-
-  function inscrire() {
-    const champs = ['nom', 'naissance', 'telephone', 'adresse', 'vehicule', 'zone', 'operateur', 'momo', 'agence'];
-    for (let id of champs) {
-      if (!document.getElementById(id).value) { alert('Veuillez remplir tous les champs obligatoires !'); return; }
+    function inscrire() {
+      const champs = ['nom','naissance','telephone','adresse','vehicule','zone','operateur','momo','agence'];
+      const errEl  = document.getElementById('error-msg');
+      const lang   = localStorage.getItem('livoo_lang') || 'fr';
+      for (let id of champs) {
+        if (!document.getElementById(id).value) {
+          errEl.classList.add('show');
+          document.getElementById('error-text').textContent = lang==='fr' ? 'Veuillez remplir tous les champs obligatoires !' : 'Please fill in all required fields!';
+          return;
+        }
+      }
+      for (let i = 1; i <= 5; i++) {
+        if (!document.getElementById('cgu'+i).checked) {
+          errEl.classList.add('show');
+          document.getElementById('error-text').textContent = lang==='fr' ? 'Veuillez accepter toutes les conditions !' : 'Please accept all the terms!';
+          return;
+        }
+      }
+      errEl.classList.remove('show');
+      document.getElementById('form-content').style.display = 'none';
+      const s = document.getElementById('success');
+      s.style.display = 'block';
+      if (typeof applyLang === 'function') applyLang(lang);
+      setTimeout(() => { window.location.href = 'dashboard-livreur.html'; }, 2800);
     }
-    const cgus = ['cgu1', 'cgu2', 'cgu3', 'cgu4', 'cgu5'];
-    for (let id of cgus) {
-      if (!document.getElementById(id).checked) { alert('Veuillez accepter toutes les conditions !'); return; }
-    }
-    document.getElementById('form-content').style.display = 'none';
-    document.getElementById('success').style.display = 'block';
-  }
-</script>
-
+  </script>
 </body>
 </html>
