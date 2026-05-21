@@ -176,11 +176,27 @@
       el.style.display = 'block';
       setTimeout(() => { el.style.display = 'none'; }, 3500);
     }
-    function seConnecter(e) {
+    async function seConnecter(e) {
       e.preventDefault();
       const tel  = document.getElementById('telephone').value.trim();
       const pw   = document.getElementById('password').value;
       const lang = localStorage.getItem('livoo_lang') || 'fr';
+
+      try {
+        const data = await livooApi('/api/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ telephone: tel, password: pw, role: selectedRole })
+        });
+        saveLivooSession(data);
+        const role = data.user.role || selectedRole;
+        if (role === 'vendeur')      window.location.href = 'dashboard-vendeur.html';
+        else if (role === 'livreur') window.location.href = 'dashboard-livreur.html';
+        else if (role === 'agence')  window.location.href = 'dashboard-agence.html';
+        else                         window.location.href = 'admin.html';
+        return;
+      } catch (_error) {
+        // Ancien mode local, conserve pour les comptes crees avant le backend.
+      }
 
       // Vérification dans localStorage (comptes créés lors de l'inscription)
       const userData = localStorage.getItem('user_' + tel);

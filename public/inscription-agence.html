@@ -254,7 +254,7 @@
       ic.classList.toggle('fa-eye', !isHidden);
       ic.classList.toggle('fa-eye-slash', isHidden);
     }
-    function inscrire() {
+    async function inscrire() {
       const champs = ['nom-agence','ville','zone','adresse','responsable','telephone','email','momo','password','password2'];
       const errEl  = document.getElementById('error-msg');
       const errTxt = document.getElementById('error-text');
@@ -280,6 +280,28 @@
           errTxt.textContent = lang==='fr' ? 'Veuillez accepter toutes les conditions !' : 'Please accept all terms!';
           errEl.classList.add('show'); return;
         }
+      }
+      try {
+        await livooApi('/api/auth/register', {
+          method: 'POST',
+          body: JSON.stringify({
+            nom: document.getElementById('nom-agence').value,
+            nom_agence: document.getElementById('nom-agence').value,
+            ville: document.getElementById('ville').value,
+            zone: document.getElementById('zone').value,
+            adresse: document.getElementById('adresse').value,
+            responsable: document.getElementById('responsable').value,
+            telephone: document.getElementById('telephone').value,
+            email: document.getElementById('email').value,
+            numero_momo: document.getElementById('momo').value,
+            password: pw,
+            role: 'agence'
+          })
+        });
+      } catch (error) {
+        errTxt.textContent = error.message;
+        errEl.classList.add('show');
+        return;
       }
       errEl.classList.remove('show');
       document.getElementById('form-content').style.display = 'none';

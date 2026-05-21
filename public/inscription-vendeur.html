@@ -237,7 +237,7 @@
     }
   }
 
-  function inscrire() {
+  async function inscrire() {
     const nom = document.getElementById('nom').value;
     const telephone = document.getElementById('telephone').value;
     const ville = document.getElementById('ville').value;
@@ -261,15 +261,23 @@
       return;
     }
 
-    // Simulation d'inscription - sauvegarde en localStorage
-    localStorage.setItem('user_' + telephone, JSON.stringify({
-      nom: nom,
-      telephone: telephone,
-      ville: ville,
-      zone: zone,
-      password: password,
-      role: 'vendeur'
-    }));
+    try {
+      await livooApi('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          nom,
+          telephone,
+          ville,
+          zone,
+          password,
+          role: 'vendeur',
+          plateforme: 'WhatsApp'
+        })
+      });
+    } catch (error) {
+      alert(error.message);
+      return;
+    }
 
     document.getElementById('form-content').style.display = 'none';
     document.getElementById('success').style.display = 'block';

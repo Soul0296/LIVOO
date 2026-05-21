@@ -1,10 +1,12 @@
 {
   "name": "livoo",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Plateforme Livoo de gestion de livraisons",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "test": "node test-db.js"
   },
   "keywords": [],
   "author": "",
@@ -15,9 +17,6 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "mongodb-memory-server": "^11.0.1",
-    "mongoose": "^9.4.1",
-    "sqlite3": "^6.0.1"
+    "jsonwebtoken": "^9.0.3"
   }
 }

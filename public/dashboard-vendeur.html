@@ -330,14 +330,28 @@
     const origToggleLang  = window.toggleLang;
 
     // Livraison rapide
-    function genererLien() {
+    async function genererLien() {
       const desc    = document.getElementById('description').value;
       const adresse = document.getElementById('adresse').value;
       const lang    = localStorage.getItem('livoo_lang') || 'fr';
       if (!desc || !adresse) { alert(lang==='fr' ? 'Veuillez remplir la description et l\'adresse !' : 'Please fill in the description and address!'); return; }
-      const code = 'LV-' + Math.random().toString(36).substring(2,7).toUpperCase();
-      document.getElementById('lien-texte').textContent = 'livoo.cm/commande/' + code;
-      document.getElementById('lien-genere').style.display = 'block';
+      try {
+        const data = await livooApi('/api/commandes', {
+          method: 'POST',
+          body: JSON.stringify({
+            description: desc,
+            adresseRetrait: adresse,
+            ville: 'Douala',
+            distanceKm: 3,
+            volume: 'petit',
+            poids: 'leger'
+          })
+        });
+        document.getElementById('lien-texte').textContent = window.location.origin + data.lien;
+        document.getElementById('lien-genere').style.display = 'block';
+      } catch (error) {
+        alert(error.message);
+      }
     }
     function copierLienRapide() { const l = document.getElementById('lien-texte').textContent; navigator.clipboard.writeText(l); const lang=localStorage.getItem('livoo_lang')||'fr'; alert(lang==='fr'?'Lien copié ! Envoyez-le à votre client 🎉':'Link copied! Send it to your customer 🎉'); }
     function copierLien(code)   { navigator.clipboard.writeText('livoo.cm/commande/'+code); const lang=localStorage.getItem('livoo_lang')||'fr'; alert(lang==='fr'?'Lien copié !':'Link copied!'); }

@@ -252,6 +252,36 @@
 </nav>
 
 <script>
+  let positionClient = null;
+
+  function getCommandeCode() {
+    const params = new URLSearchParams(window.location.search);
+    const fromQuery = params.get('code');
+    if (fromQuery) return fromQuery;
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    return parts[parts.length - 1] || '';
+  }
+
+  async function chargerCommande() {
+    const code = getCommandeCode();
+    if (!code || code === 'commande.html') return;
+    try {
+      const commande = await livooApi('/api/commandes/' + code);
+      const details = document.querySelector('.article-details');
+      if (details) {
+        details.querySelector('h3').textContent = commande.reference;
+        details.querySelector('p').textContent = commande.description || 'Commande Livoo';
+      }
+      const vendeur = document.querySelector('.vendeur-info span');
+      const vendeurSmall = document.querySelector('.vendeur-info small');
+      if (vendeur) vendeur.textContent = commande.vendeur_nom || 'Vendeur Livoo';
+      if (vendeurSmall) vendeurSmall.textContent = 'Vendeur - ' + (commande.ville || 'Cameroun');
+      const prix = document.querySelector('.prix-box h2');
+      if (prix) prix.textContent = Number(commande.prix_final || 0).toLocaleString('fr-FR') + ' FCFA';
+    } catch (error) {
+      alert(error.message);
+    }
+  }
   function toggleMenu() {
     document.getElementById('navLinks').classList.toggle('show');
   }
@@ -388,6 +418,10 @@
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         function(pos) {
+          positionClient = {
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude
+          };
           document.getElementById('geo-loading').classList.remove('show');
           document.getElementById('geo-status').classList.add('show');
           document.getElementById('geo-adresse').textContent = 'Position détectée : ' + pos.coords.latitude.toFixed(4) + ', ' + pos.coords.longitude.toFixed(4);
@@ -401,7 +435,7 @@
     }
   }
 
-  function confirmer() {
+  async function confirmer() {
     const mode = document.getElementById('btn-manuel').classList.contains('active') ? 'manuel' : 'geo';
     if (mode === 'manuel') {
       const adresse = document.getElementById('adresse-input').value;

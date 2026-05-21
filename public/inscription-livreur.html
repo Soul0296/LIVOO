@@ -217,6 +217,14 @@
               <label data-fr="Téléphone secondaire (optionnel)" data-en="Secondary phone (optional)">Téléphone secondaire (optionnel)</label>
               <input type="tel" id="telephone2" placeholder="6XXXXXXXX">
             </div>
+            <div class="form-group">
+              <label>Mot de passe</label>
+              <input type="password" id="password" placeholder="Minimum 6 caracteres">
+            </div>
+            <div class="form-group">
+              <label>Confirmer le mot de passe</label>
+              <input type="password" id="password2" placeholder="Repetez le mot de passe">
+            </div>
             <div class="form-group full">
               <label data-fr="Quartier de résidence" data-en="Home neighbourhood">Quartier de résidence</label>
               <input type="text" id="adresse" data-fr-placeholder="Ex: Akwa, Douala" data-en-placeholder="E.g. Akwa, Douala" placeholder="Ex: Akwa, Douala">
@@ -338,8 +346,8 @@
         });
       }
     }
-    function inscrire() {
-      const champs = ['nom','naissance','telephone','adresse','vehicule','zone','operateur','momo','agence'];
+    async function inscrire() {
+      const champs = ['nom','naissance','telephone','password','password2','adresse','vehicule','zone','operateur','momo','agence'];
       const errEl  = document.getElementById('error-msg');
       const lang   = localStorage.getItem('livoo_lang') || 'fr';
       for (let id of champs) {
@@ -349,12 +357,42 @@
           return;
         }
       }
+      const password = document.getElementById('password').value;
+      const password2 = document.getElementById('password2').value;
+      if (password.length < 6 || password !== password2) {
+        errEl.classList.add('show');
+        document.getElementById('error-text').textContent = lang==='fr' ? 'Verifiez le mot de passe.' : 'Please check the password.';
+        return;
+      }
       for (let i = 1; i <= 5; i++) {
         if (!document.getElementById('cgu'+i).checked) {
           errEl.classList.add('show');
           document.getElementById('error-text').textContent = lang==='fr' ? 'Veuillez accepter toutes les conditions !' : 'Please accept all the terms!';
           return;
         }
+      }
+      try {
+        await livooApi('/api/auth/register', {
+          method: 'POST',
+          body: JSON.stringify({
+            nom: document.getElementById('nom').value,
+            naissance: document.getElementById('naissance').value,
+            telephone: document.getElementById('telephone').value,
+            telephone_secondaire: document.getElementById('telephone2').value,
+            password,
+            adresse: document.getElementById('adresse').value,
+            vehicule_type: document.getElementById('vehicule').value,
+            immatriculation: document.getElementById('immatriculation').value,
+            zone: document.getElementById('zone').value,
+            operateur_momo: document.getElementById('operateur').value,
+            numero_momo: document.getElementById('momo').value,
+            role: 'livreur'
+          })
+        });
+      } catch (error) {
+        errEl.classList.add('show');
+        document.getElementById('error-text').textContent = error.message;
+        return;
       }
       errEl.classList.remove('show');
       document.getElementById('form-content').style.display = 'none';

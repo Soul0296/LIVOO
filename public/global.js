@@ -91,3 +91,56 @@ document.addEventListener('DOMContentLoaded', () => {
     a.addEventListener('click', closeMenu);
   });
 });
+
+// ── 6. API LIVOO ─────────────────────────────────────────────
+async function livooApi(path, options = {}) {
+  const token = localStorage.getItem('livoo_token');
+  const headers = {
+    ...(options.headers || {})
+  };
+
+  if (!(options.body instanceof FormData)) {
+    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+  }
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const response = await fetch(path, {
+    ...options,
+    headers
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.message || 'Erreur Livoo');
+  }
+  return data;
+}
+
+function saveLivooSession(data) {
+  if (data.token) localStorage.setItem('livoo_token', data.token);
+  if (data.user) {
+    localStorage.setItem('livoo_user', JSON.stringify(data.user));
+    localStorage.setItem('userConnected', 'true');
+    localStorage.setItem('userPhone', data.user.telephone || '');
+    localStorage.setItem('userRole', data.user.role || '');
+  }
+}
+
+function getLivooUser() {
+  try {
+    return JSON.parse(localStorage.getItem('livoo_user') || 'null');
+  } catch (_error) {
+    return null;
+  }
+}
+
+function clearLivooSession() {
+  localStorage.removeItem('livoo_token');
+  localStorage.removeItem('livoo_user');
+  localStorage.removeItem('userConnected');
+  localStorage.removeItem('userPhone');
+  localStorage.removeItem('userRole');
+}
