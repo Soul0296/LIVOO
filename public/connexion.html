@@ -37,11 +37,10 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            filter: blur(4px);
+            filter: blur(1px);
             transform: scale(1.05);
             z-index: -2;
         }
-
         /* Overlay sombre pour lisibilité */
         body::after {
             content: '';
@@ -365,26 +364,45 @@
             this.classList.toggle('fa-eye-slash');
         });
 
-        // Gestionnaire de connexion
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+// Gestionnaire de connexion
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-            const telephone = document.getElementById('telephone').value;
-            const password = document.getElementById('password').value;
+    const telephone = document.getElementById('telephone').value;
+    const password = document.getElementById('password').value;
 
-            // Simulation de connexion
-            if (telephone === "690000000" && password === "admin123") {
-                localStorage.setItem('userConnected', 'true');
-                localStorage.setItem('userPhone', telephone);
-                localStorage.setItem('userRole', 'vendeur');
+    // Vérifier dans localStorage si l'utilisateur existe
+    const userData = localStorage.getItem('user_' + telephone);
+    
+    if (userData) {
+        const user = JSON.parse(userData);
+        if (user.password === password) {
+            // Connexion réussie
+            localStorage.setItem('userConnected', 'true');
+            localStorage.setItem('userPhone', telephone);
+            localStorage.setItem('userRole', user.role);
+            
+            // Redirection selon le rôle
+            if (user.role === 'vendeur') {
                 window.location.href = '/dashboard-vendeur.html';
+            } else if (user.role === 'livreur') {
+                window.location.href = '/dashboard-livreur.html';
             } else {
-                document.getElementById('errorMessage').style.display = 'block';
-                setTimeout(() => {
-                    document.getElementById('errorMessage').style.display = 'none';
-                }, 3000);
+                window.location.href = '/index.html';
             }
-        });
+        } else {
+            document.getElementById('errorMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('errorMessage').style.display = 'none';
+            }, 3000);
+        }
+    } else {
+        document.getElementById('errorMessage').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('errorMessage').style.display = 'none';
+        }, 3000);
+    }
+});
 
         // Traductions
         const translationsPage = {

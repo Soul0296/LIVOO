@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Livoo — Inscription Vendeur</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/mobile.css">
+  <script src="/global.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background: #f4f6fb; color: #1a1a1a; min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* NAVBAR */
     nav {
       display: flex; justify-content: space-between; align-items: center;
       padding: 15px 60px; background: #0f0f0f;
       border-bottom: 1px solid #222;
+      flex-wrap: wrap;
+      gap: 15px;
     }
-    .logo img { height: 45px; mix-blend-mode: lighten; }
+    .logo img { height: 50px; width: auto; mix-blend-mode: lighten; }
 
-    /* MAIN */
     .main {
       flex: 1; display: flex; align-items: center; justify-content: center;
       padding: 60px 20px;
       background: linear-gradient(135deg, #fff7f2 0%, #f4f6fb 100%);
     }
     .container {
-      display: flex; gap: 60px; max-width: 1050px;
+      display: flex; gap: 60px; max-width: 1100px;
       width: 100%; align-items: center;
+      flex-wrap: wrap;
     }
 
-    /* GAUCHE */
-    .left { flex: 1; }
+    .left { flex: 1; min-width: 280px; }
     .left .tag {
       display: inline-flex; align-items: center; gap: 8px;
       background: rgba(255,107,0,0.1);
@@ -48,6 +49,7 @@
       background: white; padding: 18px 22px; border-radius: 16px;
       border: 1px solid #eee; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
       transition: all 0.3s;
+      flex-wrap: wrap;
     }
     .avantage:hover { border-color: #FF6B00; transform: translateX(5px); }
     .avantage-icon {
@@ -58,11 +60,11 @@
     .avantage-text h4 { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 3px; }
     .avantage-text p { font-size: 12px; color: #999; margin: 0; }
 
-    /* FORMULAIRE */
     .form-card {
       flex: 1; background: white; border-radius: 24px;
       padding: 45px 40px; border: 1px solid #eee;
       box-shadow: 0 20px 60px rgba(255,107,0,0.1);
+      min-width: 280px;
     }
     .form-header { margin-bottom: 30px; }
     .form-header h2 { font-size: 26px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px; }
@@ -74,7 +76,7 @@
     }
     .form-group label i { color: #FF6B00; font-size: 14px; }
     .input-wrapper { position: relative; }
-    .input-wrapper i {
+    .input-wrapper i:first-child {
       position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
       color: #ccc; font-size: 15px;
     }
@@ -86,11 +88,14 @@
       font-family: 'Poppins', sans-serif; transition: all 0.3s;
       outline: none;
     }
+    .toggle-password {
+      position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+      cursor: pointer; color: #aaa; z-index: 1;
+    }
     .form-group input:focus,
     .form-group select:focus { border-color: #FF6B00; background: white; box-shadow: 0 0 0 4px rgba(255,107,0,0.08); }
-    .form-group input::placeholder { color: #bbb; }
-    .form-row { display: flex; gap: 15px; }
-    .form-row .form-group { flex: 1; }
+    .form-row { display: flex; gap: 15px; flex-wrap: wrap; }
+    .form-row .form-group { flex: 1; min-width: 150px; }
     .btn-submit {
       width: 100%; padding: 16px; background: linear-gradient(135deg, #FF6B00, #ff8c00);
       border: none; border-radius: 12px; color: white;
@@ -113,7 +118,6 @@
       content: ''; flex: 1; height: 1px; background: #eee;
     }
 
-    /* SUCCESS */
     .success {
       display: none; text-align: center; padding: 30px 20px;
     }
@@ -132,190 +136,147 @@
       height: 100%; background: #FF6B00; border-radius: 2px;
       width: 0%; transition: width 2.5s ease;
     }
-  body.dark { background: #0f0f0f !important; color: white !important; }
-body.dark .card { background: #1a1a1a !important; border-color: #2a2a2a !important; }
-body.dark .card h2 { color: white !important; }
-body.dark table { color: white !important; }
-body.dark td, body.dark th { color: #ccc !important; border-color: #2a2a2a !important; }
-body.dark input, body.dark select, body.dark textarea { background: #0f0f0f !important; border-color: #333 !important; color: white !important; }
-body.dark .stat-card { background: #1a1a1a !important; }
-body.dark .stat-card p { color: #888 !important; }
+
+    .error-message {
+      background: #fee2e2;
+      color: #ef4444;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      margin-bottom: 20px;
+      display: none;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 15px 20px; justify-content: center; }
+      .main { padding: 40px 15px; }
+      .container { gap: 30px; }
+      .left { text-align: center; }
+      .left h1 { font-size: 32px; }
+      .form-card { padding: 30px 25px; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
- <nav>
-    <div class="logo" style="line-height: 0;">
-  <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
-</div>
+<nav>
+  <div class="logo" style="line-height: 0;">
+    <a href="/index.html">
+      <img src="/images/logo/logo_transparent.png" alt="Livoo" style="height: 50px; width: auto;">
+    </a>
+  </div>
 </nav>
 
-  <!-- MAIN -->
-  <div class="main">
-    <div class="container">
+<div class="main">
+  <div class="container">
+    <div class="left">
+      <div class="tag"><i class="fas fa-store"></i> Espace Vendeur</div>
+      <h1>Commencez à livrer<br><span>dès aujourd'hui.</span></h1>
+      <p>Rejoignez des centaines de vendeurs qui font confiance à Livoo.</p>
+      <div class="avantages">
+        <div class="avantage"><div class="avantage-icon"><i class="fas fa-check"></i></div><div class="avantage-text"><h4>Inscription 100% gratuite</h4><p>Aucun frais pour créer votre compte</p></div></div>
+        <div class="avantage"><div class="avantage-icon"><i class="fas fa-bolt"></i></div><div class="avantage-text"><h4>Livreur trouvé en 2 minutes</h4><p>Algorithme de matching intelligent</p></div></div>
+        <div class="avantage"><div class="avantage-icon"><i class="fas fa-link"></i></div><div class="avantage-text"><h4>Un lien suffit</h4><p>Envoyez le lien à votre client</p></div></div>
+      </div>
+    </div>
 
-      <!-- GAUCHE -->
-      <div class="left">
-        <div class="tag">
-          <i class="fas fa-store"></i>
-          Espace Vendeur
+    <div class="form-card">
+      <div id="form-content">
+        <div class="form-header">
+          <h2>Créer mon compte</h2>
+          <p>Remplissez le formulaire ci-dessous</p>
         </div>
-        <h1>Commencez à livrer<br><span>dès aujourd'hui.</span></h1>
-        <p>Rejoignez des centaines de vendeurs qui font confiance à Livoo pour livrer leurs clients rapidement et en toute sécurité.</p>
-        <div class="avantages">
-          <div class="avantage">
-            <div class="avantage-icon"><i class="fas fa-check"></i></div>
-            <div class="avantage-text">
-              <h4>Inscription 100% gratuite</h4>
-              <p>Aucun frais pour créer votre compte vendeur</p>
-            </div>
-          </div>
-          <div class="avantage">
-            <div class="avantage-icon"><i class="fas fa-bolt"></i></div>
-            <div class="avantage-text">
-              <h4>Livreur trouvé en 2 minutes</h4>
-              <p>Notre algorithme localise le livreur le plus proche</p>
-            </div>
-          </div>
-          <div class="avantage">
-            <div class="avantage-icon"><i class="fas fa-link"></i></div>
-            <div class="avantage-text">
-              <h4>Un lien suffit</h4>
-              <p>Envoyez le lien à votre client sur WhatsApp ou Instagram</p>
-            </div>
-          </div>
-          <div class="avantage">
-            <div class="avantage-icon"><i class="fas fa-mobile-alt"></i></div>
-            <div class="avantage-text">
-              <h4>Paiement via MoMo</h4>
-              <p>MTN MoMo et Orange Money acceptés</p>
-            </div>
-          </div>
+
+        <div class="error-message" id="passwordError">
+          <i class="fas fa-exclamation-triangle"></i> Les mots de passe ne correspondent pas
         </div>
+
+        <div class="form-row">
+          <div class="form-group"><label><i class="fas fa-user"></i> Nom complet</label><div class="input-wrapper"><i class="fas fa-user"></i><input type="text" id="nom" placeholder="Jean Dupont"></div></div>
+          <div class="form-group"><label><i class="fas fa-phone"></i> Téléphone</label><div class="input-wrapper"><i class="fas fa-phone"></i><input type="tel" id="telephone" placeholder="6XXXXXXXX"></div></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group"><label><i class="fas fa-city"></i> Ville</label><div class="input-wrapper"><i class="fas fa-city"></i><select id="ville"><option value="">Votre ville</option><option value="douala">Douala</option><option value="yaounde">Yaoundé</option></select></div></div>
+          <div class="form-group"><label><i class="fas fa-map-marker-alt"></i> Zone de vente</label><div class="input-wrapper"><i class="fas fa-map-marker-alt"></i><input type="text" id="zone" placeholder="Ex: Akwa, Bastos..."></div></div>
+        </div>
+
+        <div class="form-group"><label><i class="fas fa-lock"></i> Mot de passe</label><div class="input-wrapper"><i class="fas fa-lock"></i><input type="password" id="password" placeholder="••••••••"><i class="fas fa-eye toggle-password" onclick="togglePassword('password')"></i></div></div>
+
+        <div class="form-group"><label><i class="fas fa-check-circle"></i> Confirmer le mot de passe</label><div class="input-wrapper"><i class="fas fa-check-circle"></i><input type="password" id="confirmPassword" placeholder="••••••••"><i class="fas fa-eye toggle-password" onclick="togglePassword('confirmPassword')"></i></div></div>
+
+        <button class="btn-submit" onclick="inscrire()"><i class="fas fa-rocket"></i> Créer mon compte gratuitement</button>
+
+        <div class="divider">ou</div>
+        <div class="form-footer">Déjà inscrit ? <a href="/connexion.html">Se connecter</a></div>
       </div>
 
-      <!-- FORMULAIRE -->
-      <div class="form-card">
-        <div id="form-content">
-          <div class="form-header">
-            <h2>Créer mon compte</h2>
-            <p>Remplissez le formulaire ci-dessous pour commencer</p>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label><i class="fas fa-user"></i> Nom complet</label>
-              <div class="input-wrapper">
-                <i class="fas fa-user"></i>
-                <input type="text" id="nom" placeholder="Jean Dupont">
-              </div>
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-phone"></i> Téléphone</label>
-              <div class="input-wrapper">
-                <i class="fas fa-phone"></i>
-                <input type="tel" id="telephone" placeholder="6XXXXXXXX">
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label><i class="fas fa-city"></i> Ville</label>
-              <div class="input-wrapper">
-                <i class="fas fa-city"></i>
-                <select id="ville">
-                  <option value="">Votre ville</option>
-                  <option value="douala">Douala</option>
-                  <option value="yaounde">Yaoundé</option>
-                  <option value="bafoussam">Bafoussam</option>
-                  <option value="garoua">Garoua</option>
-                  <option value="autre">Autre</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label><i class="fas fa-map-marker-alt"></i> Zone de vente</label>
-              <div class="input-wrapper">
-                <i class="fas fa-map-marker-alt"></i>
-                <input type="text" id="zone" placeholder="Ex: Akwa, Bastos...">
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label><i class="fas fa-share-alt"></i> Vous vendez principalement sur</label>
-            <div class="input-wrapper">
-              <i class="fas fa-share-alt"></i>
-              <select id="plateforme">
-                <option value="">Sélectionnez une plateforme</option>
-                <option value="whatsapp">WhatsApp</option>
-                <option value="facebook">Facebook</option>
-                <option value="instagram">Instagram</option>
-                <option value="snapchat">Snapchat</option>
-                <option value="plusieurs">Plusieurs plateformes</option>
-              </select>
-            </div>
-          </div>
-
-          <button class="btn-submit" onclick="inscrire()">
-            <i class="fas fa-rocket"></i>
-            Créer mon compte gratuitement
-          </button>
-
-          <div class="divider">ou</div>
-
-          <div class="form-footer">
-            Déjà inscrit ? <a href="#">Se connecter</a>
-          </div>
-        </div>
-
-        <!-- SUCCESS -->
-        <div class="success" id="success">
-          <div class="success-circle">
-            <i class="fas fa-check"></i>
-          </div>
-          <h3>Bienvenue sur Livoo !</h3>
-          <p>Votre compte vendeur a été créé avec succès.<br>Vous allez être redirigé vers votre dashboard.</p>
-          <div class="progress-bar">
-            <div class="progress-fill" id="progress"></div>
-          </div>
-        </div>
+      <div class="success" id="success">
+        <div class="success-circle"><i class="fas fa-check"></i></div>
+        <h3>Bienvenue sur Livoo !</h3>
+        <p>Votre compte vendeur a été créé avec succès.<br>Vous allez être redirigé vers votre dashboard.</p>
+        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
       </div>
-
     </div>
   </div>
-
-  <script>
-    function inscrire() {
-      const nom = document.getElementById('nom').value;
-      const telephone = document.getElementById('telephone').value;
-      const ville = document.getElementById('ville').value;
-      const zone = document.getElementById('zone').value;
-      const plateforme = document.getElementById('plateforme').value;
-
-      if (!nom || !telephone || !ville || !zone || !plateforme) {
-        alert('Veuillez remplir tous les champs !');
-        return;
-      }
-
-      document.getElementById('form-content').style.display = 'none';
-      document.getElementById('success').style.display = 'block';
-
-      setTimeout(() => {
-        document.getElementById('progress').style.width = '100%';
-      }, 100);
-
-      setTimeout(() => {
-        window.location.href = '/dashboard-vendeur.html';
-      }, 2800);
-    }
-  </script>
+</div>
 
 <script>
-if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
-</script>
+  function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    const icon = field.nextElementSibling;
+    if (field.type === 'password') {
+      field.type = 'text';
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      field.type = 'password';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
+  }
 
+  function inscrire() {
+    const nom = document.getElementById('nom').value;
+    const telephone = document.getElementById('telephone').value;
+    const ville = document.getElementById('ville').value;
+    const zone = document.getElementById('zone').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (!nom || !telephone || !ville || !zone || !password || !confirmPassword) {
+      alert('Veuillez remplir tous les champs !');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      document.getElementById('passwordError').style.display = 'block';
+      setTimeout(() => { document.getElementById('passwordError').style.display = 'none'; }, 3000);
+      return;
+    }
+
+    if (password.length < 6) {
+      alert('Le mot de passe doit contenir au moins 6 caractères');
+      return;
+    }
+
+    // Simulation d'inscription - sauvegarde en localStorage
+    localStorage.setItem('user_' + telephone, JSON.stringify({
+      nom: nom,
+      telephone: telephone,
+      ville: ville,
+      zone: zone,
+      password: password,
+      role: 'vendeur'
+    }));
+
+    document.getElementById('form-content').style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+
+    setTimeout(() => { document.getElementById('progress').style.width = '100%'; }, 100);
+    setTimeout(() => { window.location.href = '/connexion.html'; }, 2800);
+  }
+</script>
 </body>
 </html>
