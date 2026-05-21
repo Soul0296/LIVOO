@@ -251,6 +251,7 @@
   </div>
 </nav>
 
+<script src="global.js"></script>
 <script>
   let positionClient = null;
 
@@ -285,6 +286,51 @@
   function toggleMenu() {
     document.getElementById('navLinks').classList.toggle('show');
   }
+  async function confirmer() {
+    const mode = document.getElementById('btn-manuel').classList.contains('active') ? 'manuel' : 'geo';
+    let adresse = '';
+    let tel = '';
+
+    if (mode === 'manuel') {
+      adresse = document.getElementById('adresse-input').value;
+      tel = document.getElementById('telephone-input').value;
+      if (!adresse || !tel) {
+        alert('Veuillez renseigner votre adresse et votre numero de telephone !');
+        return;
+      }
+    } else {
+      tel = document.getElementById('telephone-geo').value;
+      const geoOk = document.getElementById('geo-status').classList.contains('show');
+      if (!geoOk || !tel) {
+        alert('Veuillez detecter votre position et renseigner votre numero !');
+        return;
+      }
+      adresse = document.getElementById('geo-adresse').textContent;
+    }
+
+    try {
+      await livooApi('/api/commandes/' + getCommandeCode() + '/client-confirm', {
+        method: 'POST',
+        body: JSON.stringify({
+          adresse,
+          telephone: tel,
+          latitude: positionClient && positionClient.latitude,
+          longitude: positionClient && positionClient.longitude
+        })
+      });
+    } catch (error) {
+      alert(error.message);
+      return;
+    }
+
+    document.getElementById('contenu-principal').style.display = 'none';
+    document.getElementById('confirmation').style.display = 'block';
+    document.getElementById('dot2').className = 'etape-dot done';
+    document.getElementById('line2').className = 'etape-line done';
+    document.getElementById('dot3').className = 'etape-dot active';
+  }
+
+  document.addEventListener('DOMContentLoaded', chargerCommande);
 </script>
 
 <div class="main">
@@ -454,5 +500,50 @@
   }
 </script>
 
+<script>
+  async function confirmer() {
+    const mode = document.getElementById('btn-manuel').classList.contains('active') ? 'manuel' : 'geo';
+    let adresse = '';
+    let tel = '';
+
+    if (mode === 'manuel') {
+      adresse = document.getElementById('adresse-input').value;
+      tel = document.getElementById('telephone-input').value;
+      if (!adresse || !tel) {
+        alert('Veuillez renseigner votre adresse et votre numero de telephone !');
+        return;
+      }
+    } else {
+      tel = document.getElementById('telephone-geo').value;
+      const geoOk = document.getElementById('geo-status').classList.contains('show');
+      if (!geoOk || !tel) {
+        alert('Veuillez detecter votre position et renseigner votre numero !');
+        return;
+      }
+      adresse = document.getElementById('geo-adresse').textContent;
+    }
+
+    try {
+      await livooApi('/api/commandes/' + getCommandeCode() + '/client-confirm', {
+        method: 'POST',
+        body: JSON.stringify({
+          adresse,
+          telephone: tel,
+          latitude: positionClient && positionClient.latitude,
+          longitude: positionClient && positionClient.longitude
+        })
+      });
+    } catch (error) {
+      alert(error.message);
+      return;
+    }
+
+    document.getElementById('contenu-principal').style.display = 'none';
+    document.getElementById('confirmation').style.display = 'block';
+    document.getElementById('dot2').className = 'etape-dot done';
+    document.getElementById('line2').className = 'etape-line done';
+    document.getElementById('dot3').className = 'etape-dot active';
+  }
+</script>
 </body>
 </html>
